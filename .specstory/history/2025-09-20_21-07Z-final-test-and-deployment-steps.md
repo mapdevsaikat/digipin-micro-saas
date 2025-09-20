@@ -3377,3 +3377,23 @@ Your DigiPin API is production-ready and tested! Let's get it live and generatin
 
 ---
 
+_**User (2025-09-20 21:07Z)**_
+
+first create a gitignore file to avoid uploading unnecessary files and folder in github repository. - like @building-assets/ @landing-page-template.html , etc
+
+---
+
+_**Assistant**_
+
+Excellent point! Let me create a comprehensive `.gitignore` file to keep your repository clean and avoid uploading unnecessary files.
+
+---
+
+
+
+---
+
+
+
+---
+

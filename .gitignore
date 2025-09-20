@@ -110,8 +110,8 @@ deploy-quantaroute.sh
 nginx-quantaroute.conf
 DEPLOYMENT_CHECKLIST.md
 
-# PM2 ecosystem files for local development
-ecosystem.config.js
+# PM2 ecosystem files for local development (keep production version)
+# ecosystem.config.js
 
 # Test and development scripts
 test-api.sh
