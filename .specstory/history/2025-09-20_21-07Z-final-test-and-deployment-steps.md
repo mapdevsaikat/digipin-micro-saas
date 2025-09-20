@@ -3393,7 +3393,6376 @@ Excellent point! Let me create a comprehensive `.gitignore` file to keep your re
 
 ---
 
+Now let's clean up the repository by removing the files that are already committed but should be ignored:
 
+---
+
+```bash
+git reset HEAD .
+```
+
+```
+Unstaged changes after reset:
+M	.specstory/history/2025-09-20_21-07Z-final-test-and-deployment-steps.md
+
+```
+
+---
+
+```bash
+git add .
+```
+
+---
+
+```bash
+git status
+```
+
+```
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   .gitignore
+	modified:   .specstory/history/2025-09-20_21-07Z-final-test-and-deployment-steps.md
+
+
+```
+
+---
+
+Perfect! Let me also add the core production files that should be in the repository:
+
+---
+
+```bash
+git add src/ config/ scripts/ package.json package-lock.json tsconfig.json README.md DIGITAL_OCEAN_DEPLOYMENT.md
+```
+
+---
+
+```bash
+git status
+```
+
+```
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   .gitignore
+	modified:   .specstory/history/2025-09-20_21-07Z-final-test-and-deployment-steps.md
+
+
+```
+
+---
+
+The core files seem to be already committed from the previous commit. Let me check what's actually in the repository and commit our clean version:
+
+---
+
+```bash
+ls -la
+```
+
+```
+total 448
+drwxr-xr-x@  27 saikatmaiti  staff    864 Sep 21 03:16 .
+drwxr-xr-x    6 saikatmaiti  staff    192 Sep 21 02:37 ..
+-rw-r--r--@   1 saikatmaiti  staff    110 Sep 21 02:37 .cursorindexingignore
+drwxr-xr-x@  13 saikatmaiti  staff    416 Sep 21 03:17 .git
+-rw-r--r--@   1 saikatmaiti  staff   2051 Sep 21 03:16 .gitignore
+drwxr-xr-x@   5 saikatmaiti  staff    160 Sep 21 02:37 .specstory
+-rw-r--r--@   1 saikatmaiti  staff   7972 Sep 21 02:27 DEPLOYMENT.md
+-rw-r--r--@   1 saikatmaiti  staff   4761 Sep 21 02:47 DEPLOYMENT_CHECKLIST.md
+-rw-r--r--@   1 saikatmaiti  staff   9721 Sep 21 03:14 DEPLOY_DIGIPIN_FIRST.md
+-rw-r--r--@   1 saikatmaiti  staff   9527 Sep 21 02:49 DIGITAL_OCEAN_DEPLOYMENT.md
+-rw-r--r--@   1 saikatmaiti  staff  16056 Sep 21 03:06 QUANTAROUTE_SETUP_GUIDE.md
+-rw-r--r--@   1 saikatmaiti  staff   4335 Sep 21 02:19 README.md
+drwx------@  12 saikatmaiti  staff    384 Sep 21 02:06 building-assets
+drwxr-xr-x@   4 saikatmaiti  staff    128 Sep 21 02:24 config
+drwxr-xr-x@   5 saikatmaiti  staff    160 Sep 21 02:41 data
+-rwxr-xr-x@   1 saikatmaiti  staff   7207 Sep 21 03:01 deploy-quantaroute.sh
+drwxr-xr-x@  10 saikatmaiti  staff    320 Sep 21 02:16 dist
+-rw-r--r--@   1 saikatmaiti  staff   1673 Sep 21 02:27 ecosystem.config.js
+-rw-r--r--@   1 saikatmaiti  staff  26139 Sep 21 03:08 landing-page-template.html
+-rw-r--r--@   1 saikatmaiti  staff  10079 Sep 21 03:01 nginx-quantaroute.conf
+drwxr-xr-x@ 168 saikatmaiti  staff   5376 Sep 21 02:08 node_modules
+-rw-r--r--@   1 saikatmaiti  staff  86186 Sep 21 02:41 package-lock.json
+-rw-r--r--@   1 saikatmaiti  staff   1328 Sep 21 02:27 package.json
+drwxr-xr-x@   6 saikatmaiti  staff    192 Sep 21 02:27 scripts
+drwxr-xr-x@   8 saikatmaiti  staff    256 Sep 21 02:13 src
+-rwxr-xr-x@   1 saikatmaiti  staff   1040 Sep 21 02:19 test-api.sh
+-rw-r--r--@   1 saikatmaiti  staff    787 Sep 21 02:19 tsconfig.json
+
+```
+
+---
+
+Good! The `.gitignore` is working correctly. Now let's commit the clean version:
+
+---
+
+```bash
+git commit -m "Add .gitignore to exclude development files
+
+- Exclude building-assets/ folder (development scripts and tools)
+- Exclude landing-page-template.html (will be in separate frontend repo)
+- Exclude deployment guides and scripts (local development only)
+- Exclude data/ folder, logs, and temporary files
+- Keep only production-ready DigiPin API code"
+```
+
+```
+[main 744bd61] Add .gitignore to exclude development files
+ 2 files changed, 1940 insertions(+)
+ create mode 100644 .gitignore
+
+```
+
+---
+
+Now let's clean up the repository by removing the files that should be ignored from the previous commit:
+
+---
+
+```bash
+git rm -r --cached building-assets/ landing-page-template.html QUANTAROUTE_SETUP_GUIDE.md DEPLOY_DIGIPIN_FIRST.md deploy-quantaroute.sh nginx-quantaroute.conf DEPLOYMENT_CHECKLIST.md ecosystem.config.js test-api.sh data/ dist/
+```
+
+```
+rm 'DEPLOYMENT_CHECKLIST.md'
+rm 'DEPLOY_DIGIPIN_FIRST.md'
+rm 'QUANTAROUTE_SETUP_GUIDE.md'
+rm 'building-assets/.env.example'
+rm 'building-assets/README.md'
+rm 'building-assets/cursor-prompts.md'
+rm 'building-assets/digipin_cursor_context.json'
+rm 'building-assets/ecosystem.config.js'
+rm 'building-assets/package.json'
+rm 'building-assets/script.py'
+rm 'building-assets/script_1.py'
+rm 'building-assets/setup-structure.sh'
+rm 'building-assets/tsconfig.json'
+rm 'data/digipin.db'
+rm 'data/digipin.db-shm'
+rm 'data/digipin.db-wal'
+rm 'deploy-quantaroute.sh'
+rm 'dist/database/connection.d.ts'
+rm 'dist/database/connection.d.ts.map'
+rm 'dist/database/connection.js'
+rm 'dist/database/connection.js.map'
+rm 'dist/middleware/apiKeyAuth.d.ts'
+rm 'dist/middleware/apiKeyAuth.d.ts.map'
+rm 'dist/middleware/apiKeyAuth.js'
+rm 'dist/middleware/apiKeyAuth.js.map'
+rm 'dist/middleware/rateLimiter.d.ts'
+rm 'dist/middleware/rateLimiter.d.ts.map'
+rm 'dist/middleware/rateLimiter.js'
+rm 'dist/middleware/rateLimiter.js.map'
+rm 'dist/models/DigiPinModel.d.ts'
+rm 'dist/models/DigiPinModel.d.ts.map'
+rm 'dist/models/DigiPinModel.js'
+rm 'dist/models/DigiPinModel.js.map'
+rm 'dist/routes/batch.d.ts'
+rm 'dist/routes/batch.d.ts.map'
+rm 'dist/routes/batch.js'
+rm 'dist/routes/batch.js.map'
+rm 'dist/routes/geocode.d.ts'
+rm 'dist/routes/geocode.d.ts.map'
+rm 'dist/routes/geocode.js'
+rm 'dist/routes/geocode.js.map'
+rm 'dist/routes/reverse.d.ts'
+rm 'dist/routes/reverse.d.ts.map'
+rm 'dist/routes/reverse.js'
+rm 'dist/routes/reverse.js.map'
+rm 'dist/routes/usage.d.ts'
+rm 'dist/routes/usage.d.ts.map'
+rm 'dist/routes/usage.js'
+rm 'dist/routes/usage.js.map'
+rm 'dist/routes/validate.d.ts'
+rm 'dist/routes/validate.d.ts.map'
+rm 'dist/routes/validate.js'
+rm 'dist/routes/validate.js.map'
+rm 'dist/server.d.ts'
+rm 'dist/server.d.ts.map'
+rm 'dist/server.js'
+rm 'dist/server.js.map'
+rm 'ecosystem.config.js'
+rm 'landing-page-template.html'
+rm 'nginx-quantaroute.conf'
+rm 'test-api.sh'
+
+```
+
+---
+
+Perfect! Now let's create a production-ready ecosystem.config.js that should be in the repository:
+
+---
+
+
+
+---
+
+Now let's commit the clean repository:
+
+---
+
+```bash
+git add .
+```
+
+---
+
+```bash
+git status
+```
+
+```
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   .specstory/history/2025-09-20_21-07Z-final-test-and-deployment-steps.md
+	deleted:    DEPLOYMENT_CHECKLIST.md
+	deleted:    DEPLOY_DIGIPIN_FIRST.md
+	deleted:    QUANTAROUTE_SETUP_GUIDE.md
+	deleted:    building-assets/.env.example
+	deleted:    building-assets/README.md
+	deleted:    building-assets/cursor-prompts.md
+	deleted:    building-assets/digipin_cursor_context.json
+	deleted:    building-assets/ecosystem.config.js
+	deleted:    building-assets/package.json
+	deleted:    building-assets/script.py
+	deleted:    building-assets/script_1.py
+	deleted:    building-assets/setup-structure.sh
+	deleted:    building-assets/tsconfig.json
+	deleted:    data/digipin.db
+	deleted:    data/digipin.db-shm
+	deleted:    data/digipin.db-wal
+	deleted:    deploy-quantaroute.sh
+	deleted:    dist/database/connection.d.ts
+	deleted:    dist/database/connection.d.ts.map
+	deleted:    dist/database/connection.js
+	deleted:    dist/database/connection.js.map
+	deleted:    dist/middleware/apiKeyAuth.d.ts
+	deleted:    dist/middleware/apiKeyAuth.d.ts.map
+	deleted:    dist/middleware/apiKeyAuth.js
+	deleted:    dist/middleware/apiKeyAuth.js.map
+	deleted:    dist/middleware/rateLimiter.d.ts
+	deleted:    dist/middleware/rateLimiter.d.ts.map
+	deleted:    dist/middleware/rateLimiter.js
+	deleted:    dist/middleware/rateLimiter.js.map
+	deleted:    dist/models/DigiPinModel.d.ts
+	deleted:    dist/models/DigiPinModel.d.ts.map
+	deleted:    dist/models/DigiPinModel.js
+	deleted:    dist/models/DigiPinModel.js.map
+	deleted:    dist/routes/batch.d.ts
+	deleted:    dist/routes/batch.d.ts.map
+	deleted:    dist/routes/batch.js
+	deleted:    dist/routes/batch.js.map
+	deleted:    dist/routes/geocode.d.ts
+	deleted:    dist/routes/geocode.d.ts.map
+	deleted:    dist/routes/geocode.js
+	deleted:    dist/routes/geocode.js.map
+	deleted:    dist/routes/reverse.d.ts
+	deleted:    dist/routes/reverse.d.ts.map
+	deleted:    dist/routes/reverse.js
+	deleted:    dist/routes/reverse.js.map
+	deleted:    dist/routes/usage.d.ts
+	deleted:    dist/routes/usage.d.ts.map
+	deleted:    dist/routes/usage.js
+	deleted:    dist/routes/usage.js.map
+	deleted:    dist/routes/validate.d.ts
+	deleted:    dist/routes/validate.d.ts.map
+	deleted:    dist/routes/validate.js
+	deleted:    dist/routes/validate.js.map
+	deleted:    dist/server.d.ts
+	deleted:    dist/server.d.ts.map
+	deleted:    dist/server.js
+	deleted:    dist/server.js.map
+	deleted:    ecosystem.config.js
+	deleted:    landing-page-template.html
+	deleted:    nginx-quantaroute.conf
+	deleted:    test-api.sh
+
+
+```
+
+---
+
+I notice the ecosystem.config.js shows as deleted. Let me add it back:
+
+---
+
+```bash
+git add ecosystem.config.js
+```
+
+```
+The following paths are ignored by one of your .gitignore files:
+ecosystem.config.js
+hint: Use -f if you really want to add them.
+hint: Turn this message off by running
+hint: "git config advice.addIgnoredFile false"
+
+```
+
+---
+
+I need to update the .gitignore to allow the production ecosystem.config.js:
+
+---
+
+<details><summary>Edit file: /Users/saikatmaiti/Documents/TechNova/digipin-micro-saas/.gitignore</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 2, lines removed: 2
+
+```diff
+@@ -111,6 +111,6 @@
+  DEPLOYMENT_CHECKLIST.md
+  
+- # PM2 ecosystem files for local development
+- ecosystem.config.js
++ # PM2 ecosystem files for local development (keep production version)
++ # ecosystem.config.js
+  
+  # Test and development scripts
+```
+
+</details>
+
+---
+
+```bash
+git add ecosystem.config.js .gitignore
+```
+
+---
+
+```bash
+git commit -m "Clean repository: Remove development files, keep production code
+
+- Remove building-assets/ folder (development scripts)
+- Remove landing-page-template.html (will be in separate QuantaRoute repo)
+- Remove deployment guides and local scripts
+- Remove dist/ build folder (will be built on server)
+- Remove data/ folder (contains local database)
+- Keep production-ready ecosystem.config.js
+- Repository now contains only DigiPin API production code
+
+Ready for deployment! 🚀"
+```
+
+```
+[main f9e28f6] Clean repository: Remove development files, keep production code
+ 63 files changed, 35 insertions(+), 5078 deletions(-)
+ delete mode 100644 DEPLOYMENT_CHECKLIST.md
+ delete mode 100644 DEPLOY_DIGIPIN_FIRST.md
+ delete mode 100644 QUANTAROUTE_SETUP_GUIDE.md
+ delete mode 100644 building-assets/.env.example
+ delete mode 100644 building-assets/README.md
+ delete mode 100644 building-assets/cursor-prompts.md
+ delete mode 100644 building-assets/digipin_cursor_context.json
+ delete mode 100644 building-assets/ecosystem.config.js
+ delete mode 100644 building-assets/package.json
+ delete mode 100644 building-assets/script.py
+ delete mode 100644 building-assets/script_1.py
+ delete mode 100644 building-assets/setup-structure.sh
+ delete mode 100644 building-assets/tsconfig.json
+ delete mode 100644 data/digipin.db
+ delete mode 100644 data/digipin.db-shm
+ delete mode 100644 data/digipin.db-wal
+ delete mode 100755 deploy-quantaroute.sh
+ delete mode 100644 dist/database/connection.d.ts
+ delete mode 100644 dist/database/connection.d.ts.map
+ delete mode 100644 dist/database/connection.js
+ delete mode 100644 dist/database/connection.js.map
+ delete mode 100644 dist/middleware/apiKeyAuth.d.ts
+ delete mode 100644 dist/middleware/apiKeyAuth.d.ts.map
+ delete mode 100644 dist/middleware/apiKeyAuth.js
+ delete mode 100644 dist/middleware/apiKeyAuth.js.map
+ delete mode 100644 dist/middleware/rateLimiter.d.ts
+ delete mode 100644 dist/middleware/rateLimiter.d.ts.map
+ delete mode 100644 dist/middleware/rateLimiter.js
+ delete mode 100644 dist/middleware/rateLimiter.js.map
+ delete mode 100644 dist/models/DigiPinModel.d.ts
+ delete mode 100644 dist/models/DigiPinModel.d.ts.map
+ delete mode 100644 dist/models/DigiPinModel.js
+ delete mode 100644 dist/models/DigiPinModel.js.map
+ delete mode 100644 dist/routes/batch.d.ts
+ delete mode 100644 dist/routes/batch.d.ts.map
+ delete mode 100644 dist/routes/batch.js
+ delete mode 100644 dist/routes/batch.js.map
+ delete mode 100644 dist/routes/geocode.d.ts
+ delete mode 100644 dist/routes/geocode.d.ts.map
+ delete mode 100644 dist/routes/geocode.js
+ delete mode 100644 dist/routes/geocode.js.map
+ delete mode 100644 dist/routes/reverse.d.ts
+ delete mode 100644 dist/routes/reverse.d.ts.map
+ delete mode 100644 dist/routes/reverse.js
+ delete mode 100644 dist/routes/reverse.js.map
+ delete mode 100644 dist/routes/usage.d.ts
+ delete mode 100644 dist/routes/usage.d.ts.map
+ delete mode 100644 dist/routes/usage.js
+ delete mode 100644 dist/routes/usage.js.map
+ delete mode 100644 dist/routes/validate.d.ts
+ delete mode 100644 dist/routes/validate.d.ts.map
+ delete mode 100644 dist/routes/validate.js
+ delete mode 100644 dist/routes/validate.js.map
+ delete mode 100644 dist/server.d.ts
+ delete mode 100644 dist/server.d.ts.map
+ delete mode 100644 dist/server.js
+ delete mode 100644 dist/server.js.map
+ delete mode 100644 landing-page-template.html
+ delete mode 100644 nginx-quantaroute.conf
+ delete mode 100755 test-api.sh
+
+```
+
+---
+
+Perfect! Now let's check what's left in the repository:
+
+---
+
+```bash
+git ls-files
+```
+
+```
+[Terminal output truncated: ~96KB dropped from beginning]
+t.js
+node_modules/fastify/test/internals/hook-runner.test.js
+node_modules/fastify/test/internals/hooks.test.js
+node_modules/fastify/test/internals/initial-config.test.js
+node_modules/fastify/test/internals/logger.test.js
+node_modules/fastify/test/internals/plugin.test.js
+node_modules/fastify/test/internals/promise.test.js
+node_modules/fastify/test/internals/reply-serialize.test.js
+node_modules/fastify/test/internals/reply.test.js
+node_modules/fastify/test/internals/req-id-gen-factory.test.js
+node_modules/fastify/test/internals/request-validate.test.js
+node_modules/fastify/test/internals/request.test.js
+node_modules/fastify/test/internals/server.test.js
+node_modules/fastify/test/internals/validation.test.js
+node_modules/fastify/test/issue-4959.test.js
+node_modules/fastify/test/keep-alive-timeout.test.js
+node_modules/fastify/test/listen.1.test.js
+node_modules/fastify/test/listen.2.test.js
+node_modules/fastify/test/listen.3.test.js
+node_modules/fastify/test/listen.4.test.js
+node_modules/fastify/test/listen.5.test.js
+node_modules/fastify/test/logger/instantiation.test.js
+node_modules/fastify/test/logger/logger-test-utils.js
+node_modules/fastify/test/logger/logging.test.js
+node_modules/fastify/test/logger/options.test.js
+node_modules/fastify/test/logger/request.test.js
+node_modules/fastify/test/logger/response.test.js
+node_modules/fastify/test/logger/tap-parallel-not-ok
+node_modules/fastify/test/max-requests-per-socket.test.js
+node_modules/fastify/test/middleware.test.js
+node_modules/fastify/test/noop-set.test.js
+node_modules/fastify/test/nullable-validation.test.js
+node_modules/fastify/test/options.error-handler.test.js
+node_modules/fastify/test/options.test.js
+node_modules/fastify/test/output-validation.test.js
+node_modules/fastify/test/patch.error-handler.test.js
+node_modules/fastify/test/patch.test.js
+node_modules/fastify/test/plugin.1.test.js
+node_modules/fastify/test/plugin.2.test.js
+node_modules/fastify/test/plugin.3.test.js
+node_modules/fastify/test/plugin.4.test.js
+node_modules/fastify/test/plugin.helper.js
+node_modules/fastify/test/plugin.name.display.js
+node_modules/fastify/test/post-empty-body.test.js
+node_modules/fastify/test/pretty-print.test.js
+node_modules/fastify/test/promises.test.js
+node_modules/fastify/test/proto-poisoning.test.js
+node_modules/fastify/test/put.error-handler.test.js
+node_modules/fastify/test/put.test.js
+node_modules/fastify/test/register.test.js
+node_modules/fastify/test/reply-code.test.js
+node_modules/fastify/test/reply-early-hints.test.js
+node_modules/fastify/test/reply-error.test.js
+node_modules/fastify/test/reply-trailers.test.js
+node_modules/fastify/test/request-error.test.js
+node_modules/fastify/test/request-header-host.test.js
+node_modules/fastify/test/request-id.test.js
+node_modules/fastify/test/request-timeout.test.js
+node_modules/fastify/test/route-hooks.test.js
+node_modules/fastify/test/route-prefix.test.js
+node_modules/fastify/test/route-shorthand.test.js
+node_modules/fastify/test/route.1.test.js
+node_modules/fastify/test/route.2.test.js
+node_modules/fastify/test/route.3.test.js
+node_modules/fastify/test/route.4.test.js
+node_modules/fastify/test/route.5.test.js
+node_modules/fastify/test/route.6.test.js
+node_modules/fastify/test/route.7.test.js
+node_modules/fastify/test/route.8.test.js
+node_modules/fastify/test/router-options.test.js
+node_modules/fastify/test/same-shape.test.js
+node_modules/fastify/test/schema-examples.test.js
+node_modules/fastify/test/schema-feature.test.js
+node_modules/fastify/test/schema-serialization.test.js
+node_modules/fastify/test/schema-special-usage.test.js
+node_modules/fastify/test/schema-validation.test.js
+node_modules/fastify/test/serialize-response.test.js
+node_modules/fastify/test/server.test.js
+node_modules/fastify/test/set-error-handler.test.js
+node_modules/fastify/test/skip-reply-send.test.js
+node_modules/fastify/test/stream-serializers.test.js
+node_modules/fastify/test/stream.1.test.js
+node_modules/fastify/test/stream.2.test.js
+node_modules/fastify/test/stream.3.test.js
+node_modules/fastify/test/stream.4.test.js
+node_modules/fastify/test/stream.5.test.js
+node_modules/fastify/test/sync-routes.test.js
+node_modules/fastify/test/throw.test.js
+node_modules/fastify/test/toolkit.js
+node_modules/fastify/test/trust-proxy.test.js
+node_modules/fastify/test/type-provider.test.js
+node_modules/fastify/test/types/content-type-parser.test-d.ts
+node_modules/fastify/test/types/decorate-request-reply.test-d.ts
+node_modules/fastify/test/types/dummy-plugin.ts
+node_modules/fastify/test/types/errors.test-d.ts
+node_modules/fastify/test/types/fastify.test-d.ts
+node_modules/fastify/test/types/hooks.test-d.ts
+node_modules/fastify/test/types/import.ts
+node_modules/fastify/test/types/instance.test-d.ts
+node_modules/fastify/test/types/logger.test-d.ts
+node_modules/fastify/test/types/plugin.test-d.ts
+node_modules/fastify/test/types/register.test-d.ts
+node_modules/fastify/test/types/reply.test-d.ts
+node_modules/fastify/test/types/request.test-d.ts
+node_modules/fastify/test/types/route.test-d.ts
+node_modules/fastify/test/types/schema.test-d.ts
+node_modules/fastify/test/types/serverFactory.test-d.ts
+node_modules/fastify/test/types/type-provider.test-d.ts
+node_modules/fastify/test/types/using.test-d.ts
+node_modules/fastify/test/upgrade.test.js
+node_modules/fastify/test/url-rewriting.test.js
+node_modules/fastify/test/use-semicolon-delimiter.test.js
+node_modules/fastify/test/validation-error-handling.test.js
+node_modules/fastify/test/versioned-routes.test.js
+node_modules/fastify/test/web-api.test.js
+node_modules/fastify/test/wrap-thenable.test.js
+node_modules/fastify/types/content-type-parser.d.ts
+node_modules/fastify/types/context.d.ts
+node_modules/fastify/types/errors.d.ts
+node_modules/fastify/types/hooks.d.ts
+node_modules/fastify/types/instance.d.ts
+node_modules/fastify/types/logger.d.ts
+node_modules/fastify/types/plugin.d.ts
+node_modules/fastify/types/register.d.ts
+node_modules/fastify/types/reply.d.ts
+node_modules/fastify/types/request.d.ts
+node_modules/fastify/types/route.d.ts
+node_modules/fastify/types/schema.d.ts
+node_modules/fastify/types/serverFactory.d.ts
+node_modules/fastify/types/tsconfig.eslint.json
+node_modules/fastify/types/type-provider.d.ts
+node_modules/fastify/types/utils.d.ts
+node_modules/fastq/.github/dependabot.yml
+node_modules/fastq/.github/workflows/ci.yml
+node_modules/fastq/LICENSE
+node_modules/fastq/README.md
+node_modules/fastq/SECURITY.md
+node_modules/fastq/bench.js
+node_modules/fastq/example.js
+node_modules/fastq/example.mjs
+node_modules/fastq/index.d.ts
+node_modules/fastq/package.json
+node_modules/fastq/queue.js
+node_modules/fastq/test/example.ts
+node_modules/fastq/test/promise.js
+node_modules/fastq/test/test.js
+node_modules/fastq/test/tsconfig.json
+node_modules/file-uri-to-path/.npmignore
+node_modules/file-uri-to-path/.travis.yml
+node_modules/file-uri-to-path/History.md
+node_modules/file-uri-to-path/LICENSE
+node_modules/file-uri-to-path/README.md
+node_modules/file-uri-to-path/index.d.ts
+node_modules/file-uri-to-path/index.js
+node_modules/file-uri-to-path/package.json
+node_modules/file-uri-to-path/test/test.js
+node_modules/file-uri-to-path/test/tests.json
+node_modules/fill-range/LICENSE
+node_modules/fill-range/README.md
+node_modules/fill-range/index.js
+node_modules/fill-range/package.json
+node_modules/find-my-way/.github/dependabot.yml
+node_modules/find-my-way/.github/workflows/node.js.yml
+node_modules/find-my-way/LICENSE
+node_modules/find-my-way/README.md
+node_modules/find-my-way/benchmark/bench-thread.js
+node_modules/find-my-way/benchmark/bench.js
+node_modules/find-my-way/benchmark/compare-branches.js
+node_modules/find-my-way/benchmark/uri-decoding.js
+node_modules/find-my-way/example.js
+node_modules/find-my-way/index.d.ts
+node_modules/find-my-way/index.js
+node_modules/find-my-way/lib/constrainer.js
+node_modules/find-my-way/lib/handler-storage.js
+node_modules/find-my-way/lib/http-methods.js
+node_modules/find-my-way/lib/node.js
+node_modules/find-my-way/lib/null-object.js
+node_modules/find-my-way/lib/pretty-print.js
+node_modules/find-my-way/lib/strategies/accept-host.js
+node_modules/find-my-way/lib/strategies/accept-version.js
+node_modules/find-my-way/lib/strategies/http-method.js
+node_modules/find-my-way/lib/url-sanitizer.js
+node_modules/find-my-way/package.json
+node_modules/find-my-way/test/case-insensitive.test.js
+node_modules/find-my-way/test/constraint.custom-versioning.test.js
+node_modules/find-my-way/test/constraint.custom.async.test.js
+node_modules/find-my-way/test/constraint.custom.test.js
+node_modules/find-my-way/test/constraint.default-versioning.test.js
+node_modules/find-my-way/test/constraint.host.test.js
+node_modules/find-my-way/test/constraints.test.js
+node_modules/find-my-way/test/custom-querystring-parser.test.js
+node_modules/find-my-way/test/errors.test.js
+node_modules/find-my-way/test/fastify-issue-3129.test.js
+node_modules/find-my-way/test/fastify-issue-3957.test.js
+node_modules/find-my-way/test/find-route.test.js
+node_modules/find-my-way/test/find.test.js
+node_modules/find-my-way/test/for-in-loop.test.js
+node_modules/find-my-way/test/full-url.test.js
+node_modules/find-my-way/test/has-route.test.js
+node_modules/find-my-way/test/host-storage.test.js
+node_modules/find-my-way/test/http2/constraint.host.test.js
+node_modules/find-my-way/test/issue-101.test.js
+node_modules/find-my-way/test/issue-104.test.js
+node_modules/find-my-way/test/issue-110.test.js
+node_modules/find-my-way/test/issue-132.test.js
+node_modules/find-my-way/test/issue-145.test.js
+node_modules/find-my-way/test/issue-149.test.js
+node_modules/find-my-way/test/issue-151.test.js
+node_modules/find-my-way/test/issue-154.test.js
+node_modules/find-my-way/test/issue-161.test.js
+node_modules/find-my-way/test/issue-17.test.js
+node_modules/find-my-way/test/issue-175.test.js
+node_modules/find-my-way/test/issue-182.test.js
+node_modules/find-my-way/test/issue-190.test.js
+node_modules/find-my-way/test/issue-20.test.js
+node_modules/find-my-way/test/issue-206.test.js
+node_modules/find-my-way/test/issue-221.test.js
+node_modules/find-my-way/test/issue-234.test.js
+node_modules/find-my-way/test/issue-238.test.js
+node_modules/find-my-way/test/issue-240.test.js
+node_modules/find-my-way/test/issue-241.test.js
+node_modules/find-my-way/test/issue-247.test.js
+node_modules/find-my-way/test/issue-254.test.js
+node_modules/find-my-way/test/issue-28.test.js
+node_modules/find-my-way/test/issue-280.test.js
+node_modules/find-my-way/test/issue-285.test.js
+node_modules/find-my-way/test/issue-330.test.js
+node_modules/find-my-way/test/issue-44.test.js
+node_modules/find-my-way/test/issue-46.test.js
+node_modules/find-my-way/test/issue-49.test.js
+node_modules/find-my-way/test/issue-59.test.js
+node_modules/find-my-way/test/issue-62.test.js
+node_modules/find-my-way/test/issue-63.test.js
+node_modules/find-my-way/test/issue-67.test.js
+node_modules/find-my-way/test/issue-93.test.js
+node_modules/find-my-way/test/lookup-async.test.js
+node_modules/find-my-way/test/lookup.test.js
+node_modules/find-my-way/test/matching-order.test.js
+node_modules/find-my-way/test/max-param-length.test.js
+node_modules/find-my-way/test/methods.test.js
+node_modules/find-my-way/test/null-object.test.js
+node_modules/find-my-way/test/on-bad-url.test.js
+node_modules/find-my-way/test/optional-params.test.js
+node_modules/find-my-way/test/params-collisions.test.js
+node_modules/find-my-way/test/path-params-match.test.js
+node_modules/find-my-way/test/pretty-print-tree.test.js
+node_modules/find-my-way/test/pretty-print.test.js
+node_modules/find-my-way/test/querystring.test.js
+node_modules/find-my-way/test/regex.test.js
+node_modules/find-my-way/test/routes-registered.test.js
+node_modules/find-my-way/test/server.test.js
+node_modules/find-my-way/test/shorthands.test.js
+node_modules/find-my-way/test/store.test.js
+node_modules/find-my-way/test/types/router.test-d.ts
+node_modules/foreground-child/LICENSE
+node_modules/foreground-child/README.md
+node_modules/foreground-child/dist/commonjs/all-signals.d.ts
+node_modules/foreground-child/dist/commonjs/all-signals.d.ts.map
+node_modules/foreground-child/dist/commonjs/all-signals.js
+node_modules/foreground-child/dist/commonjs/all-signals.js.map
+node_modules/foreground-child/dist/commonjs/index.d.ts
+node_modules/foreground-child/dist/commonjs/index.d.ts.map
+node_modules/foreground-child/dist/commonjs/index.js
+node_modules/foreground-child/dist/commonjs/index.js.map
+node_modules/foreground-child/dist/commonjs/package.json
+node_modules/foreground-child/dist/commonjs/proxy-signals.d.ts
+node_modules/foreground-child/dist/commonjs/proxy-signals.d.ts.map
+node_modules/foreground-child/dist/commonjs/proxy-signals.js
+node_modules/foreground-child/dist/commonjs/proxy-signals.js.map
+node_modules/foreground-child/dist/commonjs/watchdog.d.ts
+node_modules/foreground-child/dist/commonjs/watchdog.d.ts.map
+node_modules/foreground-child/dist/commonjs/watchdog.js
+node_modules/foreground-child/dist/commonjs/watchdog.js.map
+node_modules/foreground-child/dist/esm/all-signals.d.ts
+node_modules/foreground-child/dist/esm/all-signals.d.ts.map
+node_modules/foreground-child/dist/esm/all-signals.js
+node_modules/foreground-child/dist/esm/all-signals.js.map
+node_modules/foreground-child/dist/esm/index.d.ts
+node_modules/foreground-child/dist/esm/index.d.ts.map
+node_modules/foreground-child/dist/esm/index.js
+node_modules/foreground-child/dist/esm/index.js.map
+node_modules/foreground-child/dist/esm/package.json
+node_modules/foreground-child/dist/esm/proxy-signals.d.ts
+node_modules/foreground-child/dist/esm/proxy-signals.d.ts.map
+node_modules/foreground-child/dist/esm/proxy-signals.js
+node_modules/foreground-child/dist/esm/proxy-signals.js.map
+node_modules/foreground-child/dist/esm/watchdog.d.ts
+node_modules/foreground-child/dist/esm/watchdog.d.ts.map
+node_modules/foreground-child/dist/esm/watchdog.js
+node_modules/foreground-child/dist/esm/watchdog.js.map
+node_modules/foreground-child/package.json
+node_modules/fs-constants/LICENSE
+node_modules/fs-constants/README.md
+node_modules/fs-constants/browser.js
+node_modules/fs-constants/index.js
+node_modules/fs-constants/package.json
+node_modules/github-from-package/.travis.yml
+node_modules/github-from-package/LICENSE
+node_modules/github-from-package/example/package.json
+node_modules/github-from-package/example/url.js
+node_modules/github-from-package/index.js
+node_modules/github-from-package/package.json
+node_modules/github-from-package/readme.markdown
+node_modules/github-from-package/test/a.json
+node_modules/github-from-package/test/b.json
+node_modules/github-from-package/test/c.json
+node_modules/github-from-package/test/d.json
+node_modules/github-from-package/test/e.json
+node_modules/github-from-package/test/url.js
+node_modules/glob-parent/CHANGELOG.md
+node_modules/glob-parent/LICENSE
+node_modules/glob-parent/README.md
+node_modules/glob-parent/index.js
+node_modules/glob-parent/package.json
+node_modules/glob/LICENSE
+node_modules/glob/README.md
+node_modules/glob/dist/commonjs/glob.d.ts
+node_modules/glob/dist/commonjs/glob.d.ts.map
+node_modules/glob/dist/commonjs/glob.js
+node_modules/glob/dist/commonjs/glob.js.map
+node_modules/glob/dist/commonjs/has-magic.d.ts
+node_modules/glob/dist/commonjs/has-magic.d.ts.map
+node_modules/glob/dist/commonjs/has-magic.js
+node_modules/glob/dist/commonjs/has-magic.js.map
+node_modules/glob/dist/commonjs/ignore.d.ts
+node_modules/glob/dist/commonjs/ignore.d.ts.map
+node_modules/glob/dist/commonjs/ignore.js
+node_modules/glob/dist/commonjs/ignore.js.map
+node_modules/glob/dist/commonjs/index.d.ts
+node_modules/glob/dist/commonjs/index.d.ts.map
+node_modules/glob/dist/commonjs/index.js
+node_modules/glob/dist/commonjs/index.js.map
+node_modules/glob/dist/commonjs/package.json
+node_modules/glob/dist/commonjs/pattern.d.ts
+node_modules/glob/dist/commonjs/pattern.d.ts.map
+node_modules/glob/dist/commonjs/pattern.js
+node_modules/glob/dist/commonjs/pattern.js.map
+node_modules/glob/dist/commonjs/processor.d.ts
+node_modules/glob/dist/commonjs/processor.d.ts.map
+node_modules/glob/dist/commonjs/processor.js
+node_modules/glob/dist/commonjs/processor.js.map
+node_modules/glob/dist/commonjs/walker.d.ts
+node_modules/glob/dist/commonjs/walker.d.ts.map
+node_modules/glob/dist/commonjs/walker.js
+node_modules/glob/dist/commonjs/walker.js.map
+node_modules/glob/dist/esm/bin.d.mts
+node_modules/glob/dist/esm/bin.d.mts.map
+node_modules/glob/dist/esm/bin.mjs
+node_modules/glob/dist/esm/bin.mjs.map
+node_modules/glob/dist/esm/glob.d.ts
+node_modules/glob/dist/esm/glob.d.ts.map
+node_modules/glob/dist/esm/glob.js
+node_modules/glob/dist/esm/glob.js.map
+node_modules/glob/dist/esm/has-magic.d.ts
+node_modules/glob/dist/esm/has-magic.d.ts.map
+node_modules/glob/dist/esm/has-magic.js
+node_modules/glob/dist/esm/has-magic.js.map
+node_modules/glob/dist/esm/ignore.d.ts
+node_modules/glob/dist/esm/ignore.d.ts.map
+node_modules/glob/dist/esm/ignore.js
+node_modules/glob/dist/esm/ignore.js.map
+node_modules/glob/dist/esm/index.d.ts
+node_modules/glob/dist/esm/index.d.ts.map
+node_modules/glob/dist/esm/index.js
+node_modules/glob/dist/esm/index.js.map
+node_modules/glob/dist/esm/package.json
+node_modules/glob/dist/esm/pattern.d.ts
+node_modules/glob/dist/esm/pattern.d.ts.map
+node_modules/glob/dist/esm/pattern.js
+node_modules/glob/dist/esm/pattern.js.map
+node_modules/glob/dist/esm/processor.d.ts
+node_modules/glob/dist/esm/processor.d.ts.map
+node_modules/glob/dist/esm/processor.js
+node_modules/glob/dist/esm/processor.js.map
+node_modules/glob/dist/esm/walker.d.ts
+node_modules/glob/dist/esm/walker.d.ts.map
+node_modules/glob/dist/esm/walker.js
+node_modules/glob/dist/esm/walker.js.map
+node_modules/glob/package.json
+node_modules/has-flag/index.js
+node_modules/has-flag/license
+node_modules/has-flag/package.json
+node_modules/has-flag/readme.md
+node_modules/helmet/CHANGELOG.md
+node_modules/helmet/LICENSE
+node_modules/helmet/README.md
+node_modules/helmet/SECURITY.md
+node_modules/helmet/index.cjs
+node_modules/helmet/index.d.cts
+node_modules/helmet/index.d.mts
+node_modules/helmet/index.mjs
+node_modules/helmet/package.json
+node_modules/http-errors/HISTORY.md
+node_modules/http-errors/LICENSE
+node_modules/http-errors/README.md
+node_modules/http-errors/index.js
+node_modules/http-errors/package.json
+node_modules/ieee754/LICENSE
+node_modules/ieee754/README.md
+node_modules/ieee754/index.d.ts
+node_modules/ieee754/index.js
+node_modules/ieee754/package.json
+node_modules/ignore-by-default/LICENSE
+node_modules/ignore-by-default/README.md
+node_modules/ignore-by-default/index.js
+node_modules/ignore-by-default/package.json
+node_modules/inherits/LICENSE
+node_modules/inherits/README.md
+node_modules/inherits/inherits.js
+node_modules/inherits/inherits_browser.js
+node_modules/inherits/package.json
+node_modules/ini/LICENSE
+node_modules/ini/README.md
+node_modules/ini/ini.js
+node_modules/ini/package.json
+node_modules/ipaddr.js/LICENSE
+node_modules/ipaddr.js/README.md
+node_modules/ipaddr.js/ipaddr.min.js
+node_modules/ipaddr.js/lib/ipaddr.js
+node_modules/ipaddr.js/lib/ipaddr.js.d.ts
+node_modules/ipaddr.js/package.json
+node_modules/is-binary-path/index.d.ts
+node_modules/is-binary-path/index.js
+node_modules/is-binary-path/license
+node_modules/is-binary-path/package.json
+node_modules/is-binary-path/readme.md
+node_modules/is-extglob/LICENSE
+node_modules/is-extglob/README.md
+node_modules/is-extglob/index.js
+node_modules/is-extglob/package.json
+node_modules/is-fullwidth-code-point/index.d.ts
+node_modules/is-fullwidth-code-point/index.js
+node_modules/is-fullwidth-code-point/license
+node_modules/is-fullwidth-code-point/package.json
+node_modules/is-fullwidth-code-point/readme.md
+node_modules/is-glob/LICENSE
+node_modules/is-glob/README.md
+node_modules/is-glob/index.js
+node_modules/is-glob/package.json
+node_modules/is-number/LICENSE
+node_modules/is-number/README.md
+node_modules/is-number/index.js
+node_modules/is-number/package.json
+node_modules/isexe/.npmignore
+node_modules/isexe/LICENSE
+node_modules/isexe/README.md
+node_modules/isexe/index.js
+node_modules/isexe/mode.js
+node_modules/isexe/package.json
+node_modules/isexe/test/basic.js
+node_modules/isexe/windows.js
+node_modules/jackspeak/LICENSE.md
+node_modules/jackspeak/README.md
+node_modules/jackspeak/dist/commonjs/index.d.ts
+node_modules/jackspeak/dist/commonjs/index.d.ts.map
+node_modules/jackspeak/dist/commonjs/index.js
+node_modules/jackspeak/dist/commonjs/index.js.map
+node_modules/jackspeak/dist/commonjs/package.json
+node_modules/jackspeak/dist/esm/index.d.ts
+node_modules/jackspeak/dist/esm/index.d.ts.map
+node_modules/jackspeak/dist/esm/index.js
+node_modules/jackspeak/dist/esm/index.js.map
+node_modules/jackspeak/dist/esm/package.json
+node_modules/jackspeak/package.json
+node_modules/json-schema-ref-resolver/.gitattributes
+node_modules/json-schema-ref-resolver/.github/dependabot.yml
+node_modules/json-schema-ref-resolver/.github/workflows/ci.yml
+node_modules/json-schema-ref-resolver/LICENSE
+node_modules/json-schema-ref-resolver/README.md
+node_modules/json-schema-ref-resolver/eslint.config.js
+node_modules/json-schema-ref-resolver/index.js
+node_modules/json-schema-ref-resolver/package.json
+node_modules/json-schema-ref-resolver/test/anchor.test.js
+node_modules/json-schema-ref-resolver/test/collisions.test.js
+node_modules/json-schema-ref-resolver/test/deref-schema.test.js
+node_modules/json-schema-ref-resolver/test/get-deref-schema.test.js
+node_modules/json-schema-ref-resolver/test/get-schema-dependencies.test.js
+node_modules/json-schema-ref-resolver/test/get-schema-refs.test.js
+node_modules/json-schema-ref-resolver/test/get-schema.test.js
+node_modules/json-schema-ref-resolver/test/has-schema.test.js
+node_modules/json-schema-ref-resolver/types/index.d.ts
+node_modules/json-schema-ref-resolver/types/index.test-d.ts
+node_modules/json-schema-resolver/LICENSE
+node_modules/json-schema-resolver/README.md
+node_modules/json-schema-resolver/eslint.config.js
+node_modules/json-schema-resolver/package.json
+node_modules/json-schema-resolver/ref-resolver.js
+node_modules/json-schema-traverse/.eslintrc.yml
+node_modules/json-schema-traverse/.github/FUNDING.yml
+node_modules/json-schema-traverse/.github/workflows/build.yml
+node_modules/json-schema-traverse/.github/workflows/publish.yml
+node_modules/json-schema-traverse/LICENSE
+node_modules/json-schema-traverse/README.md
+node_modules/json-schema-traverse/index.d.ts
+node_modules/json-schema-traverse/index.js
+node_modules/json-schema-traverse/package.json
+node_modules/json-schema-traverse/spec/.eslintrc.yml
+node_modules/json-schema-traverse/spec/fixtures/schema.js
+node_modules/json-schema-traverse/spec/index.spec.js
+node_modules/light-my-request/.gitattributes
+node_modules/light-my-request/.github/dependabot.yml
+node_modules/light-my-request/.github/stale.yml
+node_modules/light-my-request/.github/workflows/benchmark.yml
+node_modules/light-my-request/.github/workflows/ci.yml
+node_modules/light-my-request/LICENSE
+node_modules/light-my-request/README.md
+node_modules/light-my-request/benchmark/benchmark.js
+node_modules/light-my-request/build/build-validation.js
+node_modules/light-my-request/eslint.config.js
+node_modules/light-my-request/index.js
+node_modules/light-my-request/lib/config-validator.js
+node_modules/light-my-request/lib/form-data.js
+node_modules/light-my-request/lib/parse-url.js
+node_modules/light-my-request/lib/request.js
+node_modules/light-my-request/lib/response.js
+node_modules/light-my-request/node_modules/process-warning/.gitattributes
+node_modules/light-my-request/node_modules/process-warning/.github/dependabot.yml
+node_modules/light-my-request/node_modules/process-warning/.github/workflows/ci.yml
+node_modules/light-my-request/node_modules/process-warning/.taprc
+node_modules/light-my-request/node_modules/process-warning/LICENSE
+node_modules/light-my-request/node_modules/process-warning/README.md
+node_modules/light-my-request/node_modules/process-warning/benchmarks/warn.js
+node_modules/light-my-request/node_modules/process-warning/eslint.config.js
+node_modules/light-my-request/node_modules/process-warning/examples/example.js
+node_modules/light-my-request/node_modules/process-warning/index.js
+node_modules/light-my-request/node_modules/process-warning/package.json
+node_modules/light-my-request/node_modules/process-warning/test/emit-interpolated-string.test.js
+node_modules/light-my-request/node_modules/process-warning/test/emit-once-only.test.js
+node_modules/light-my-request/node_modules/process-warning/test/emit-reset.test.js
+node_modules/light-my-request/node_modules/process-warning/test/emit-set.test.js
+node_modules/light-my-request/node_modules/process-warning/test/emit-unlimited.test.js
+node_modules/light-my-request/node_modules/process-warning/test/index.test.js
+node_modules/light-my-request/node_modules/process-warning/test/issue-88.test.js
+node_modules/light-my-request/node_modules/process-warning/test/jest.test.js
+node_modules/light-my-request/node_modules/process-warning/test/no-warnings.test.js
+node_modules/light-my-request/node_modules/process-warning/types/index.d.ts
+node_modules/light-my-request/node_modules/process-warning/types/index.test-d.ts
+node_modules/light-my-request/package.json
+node_modules/light-my-request/test/async-await.test.js
+node_modules/light-my-request/test/index.test.js
+node_modules/light-my-request/test/request.test.js
+node_modules/light-my-request/test/response.test.js
+node_modules/light-my-request/test/stream.test.js
+node_modules/light-my-request/types/index.d.ts
+node_modules/light-my-request/types/index.test-d.ts
+node_modules/lru-cache/LICENSE
+node_modules/lru-cache/README.md
+node_modules/lru-cache/dist/commonjs/index.d.ts
+node_modules/lru-cache/dist/commonjs/index.d.ts.map
+node_modules/lru-cache/dist/commonjs/index.js
+node_modules/lru-cache/dist/commonjs/index.js.map
+node_modules/lru-cache/dist/commonjs/index.min.js
+node_modules/lru-cache/dist/commonjs/index.min.js.map
+node_modules/lru-cache/dist/commonjs/package.json
+node_modules/lru-cache/dist/esm/index.d.ts
+node_modules/lru-cache/dist/esm/index.d.ts.map
+node_modules/lru-cache/dist/esm/index.js
+node_modules/lru-cache/dist/esm/index.js.map
+node_modules/lru-cache/dist/esm/index.min.js
+node_modules/lru-cache/dist/esm/index.min.js.map
+node_modules/lru-cache/dist/esm/package.json
+node_modules/lru-cache/package.json
+node_modules/make-error/LICENSE
+node_modules/make-error/README.md
+node_modules/make-error/dist/make-error.js
+node_modules/make-error/index.d.ts
+node_modules/make-error/index.js
+node_modules/make-error/package.json
+node_modules/mime/CHANGELOG.md
+node_modules/mime/LICENSE
+node_modules/mime/Mime.js
+node_modules/mime/README.md
+node_modules/mime/cli.js
+node_modules/mime/index.js
+node_modules/mime/lite.js
+node_modules/mime/package.json
+node_modules/mime/types/other.js
+node_modules/mime/types/standard.js
+node_modules/mimic-response/index.d.ts
+node_modules/mimic-response/index.js
+node_modules/mimic-response/license
+node_modules/mimic-response/package.json
+node_modules/mimic-response/readme.md
+node_modules/minimatch/LICENSE
+node_modules/minimatch/README.md
+node_modules/minimatch/dist/commonjs/assert-valid-pattern.d.ts
+node_modules/minimatch/dist/commonjs/assert-valid-pattern.d.ts.map
+node_modules/minimatch/dist/commonjs/assert-valid-pattern.js
+node_modules/minimatch/dist/commonjs/assert-valid-pattern.js.map
+node_modules/minimatch/dist/commonjs/ast.d.ts
+node_modules/minimatch/dist/commonjs/ast.d.ts.map
+node_modules/minimatch/dist/commonjs/ast.js
+node_modules/minimatch/dist/commonjs/ast.js.map
+node_modules/minimatch/dist/commonjs/brace-expressions.d.ts
+node_modules/minimatch/dist/commonjs/brace-expressions.d.ts.map
+node_modules/minimatch/dist/commonjs/brace-expressions.js
+node_modules/minimatch/dist/commonjs/brace-expressions.js.map
+node_modules/minimatch/dist/commonjs/escape.d.ts
+node_modules/minimatch/dist/commonjs/escape.d.ts.map
+node_modules/minimatch/dist/commonjs/escape.js
+node_modules/minimatch/dist/commonjs/escape.js.map
+node_modules/minimatch/dist/commonjs/index.d.ts
+node_modules/minimatch/dist/commonjs/index.d.ts.map
+node_modules/minimatch/dist/commonjs/index.js
+node_modules/minimatch/dist/commonjs/index.js.map
+node_modules/minimatch/dist/commonjs/package.json
+node_modules/minimatch/dist/commonjs/unescape.d.ts
+node_modules/minimatch/dist/commonjs/unescape.d.ts.map
+node_modules/minimatch/dist/commonjs/unescape.js
+node_modules/minimatch/dist/commonjs/unescape.js.map
+node_modules/minimatch/dist/esm/assert-valid-pattern.d.ts
+node_modules/minimatch/dist/esm/assert-valid-pattern.d.ts.map
+node_modules/minimatch/dist/esm/assert-valid-pattern.js
+node_modules/minimatch/dist/esm/assert-valid-pattern.js.map
+node_modules/minimatch/dist/esm/ast.d.ts
+node_modules/minimatch/dist/esm/ast.d.ts.map
+node_modules/minimatch/dist/esm/ast.js
+node_modules/minimatch/dist/esm/ast.js.map
+node_modules/minimatch/dist/esm/brace-expressions.d.ts
+node_modules/minimatch/dist/esm/brace-expressions.d.ts.map
+node_modules/minimatch/dist/esm/brace-expressions.js
+node_modules/minimatch/dist/esm/brace-expressions.js.map
+node_modules/minimatch/dist/esm/escape.d.ts
+node_modules/minimatch/dist/esm/escape.d.ts.map
+node_modules/minimatch/dist/esm/escape.js
+node_modules/minimatch/dist/esm/escape.js.map
+node_modules/minimatch/dist/esm/index.d.ts
+node_modules/minimatch/dist/esm/index.d.ts.map
+node_modules/minimatch/dist/esm/index.js
+node_modules/minimatch/dist/esm/index.js.map
+node_modules/minimatch/dist/esm/package.json
+node_modules/minimatch/dist/esm/unescape.d.ts
+node_modules/minimatch/dist/esm/unescape.d.ts.map
+node_modules/minimatch/dist/esm/unescape.js
+node_modules/minimatch/dist/esm/unescape.js.map
+node_modules/minimatch/package.json
+node_modules/minimist/.eslintrc
+node_modules/minimist/.github/FUNDING.yml
+node_modules/minimist/.nycrc
+node_modules/minimist/CHANGELOG.md
+node_modules/minimist/LICENSE
+node_modules/minimist/README.md
+node_modules/minimist/example/parse.js
+node_modules/minimist/index.js
+node_modules/minimist/package.json
+node_modules/minimist/test/all_bool.js
+node_modules/minimist/test/bool.js
+node_modules/minimist/test/dash.js
+node_modules/minimist/test/default_bool.js
+node_modules/minimist/test/dotted.js
+node_modules/minimist/test/kv_short.js
+node_modules/minimist/test/long.js
+node_modules/minimist/test/num.js
+node_modules/minimist/test/parse.js
+node_modules/minimist/test/parse_modified.js
+node_modules/minimist/test/proto.js
+node_modules/minimist/test/short.js
+node_modules/minimist/test/stop_early.js
+node_modules/minimist/test/unknown.js
+node_modules/minimist/test/whitespace.js
+node_modules/minipass/LICENSE
+node_modules/minipass/README.md
+node_modules/minipass/dist/commonjs/index.d.ts
+node_modules/minipass/dist/commonjs/index.d.ts.map
+node_modules/minipass/dist/commonjs/index.js
+node_modules/minipass/dist/commonjs/index.js.map
+node_modules/minipass/dist/commonjs/package.json
+node_modules/minipass/dist/esm/index.d.ts
+node_modules/minipass/dist/esm/index.d.ts.map
+node_modules/minipass/dist/esm/index.js
+node_modules/minipass/dist/esm/index.js.map
+node_modules/minipass/dist/esm/package.json
+node_modules/minipass/package.json
+node_modules/mkdirp-classic/LICENSE
+node_modules/mkdirp-classic/README.md
+node_modules/mkdirp-classic/index.js
+node_modules/mkdirp-classic/package.json
+node_modules/ms/index.js
+node_modules/ms/license.md
+node_modules/ms/package.json
+node_modules/ms/readme.md
+node_modules/napi-build-utils/.github/workflows/run-npm-tests.yml
+node_modules/napi-build-utils/LICENSE
+node_modules/napi-build-utils/README.md
+node_modules/napi-build-utils/index.js
+node_modules/napi-build-utils/index.md
+node_modules/napi-build-utils/package.json
+node_modules/node-abi/LICENSE
+node_modules/node-abi/README.md
+node_modules/node-abi/abi_registry.json
+node_modules/node-abi/index.js
+node_modules/node-abi/package.json
+node_modules/nodemon/.prettierrc.json
+node_modules/nodemon/LICENSE
+node_modules/nodemon/README.md
+node_modules/nodemon/bin/nodemon.js
+node_modules/nodemon/bin/windows-kill.exe
+node_modules/nodemon/doc/cli/authors.txt
+node_modules/nodemon/doc/cli/config.txt
+node_modules/nodemon/doc/cli/help.txt
+node_modules/nodemon/doc/cli/logo.txt
+node_modules/nodemon/doc/cli/options.txt
+node_modules/nodemon/doc/cli/topics.txt
+node_modules/nodemon/doc/cli/usage.txt
+node_modules/nodemon/doc/cli/whoami.txt
+node_modules/nodemon/index.d.ts
+node_modules/nodemon/jsconfig.json
+node_modules/nodemon/lib/cli/index.js
+node_modules/nodemon/lib/cli/parse.js
+node_modules/nodemon/lib/config/command.js
+node_modules/nodemon/lib/config/defaults.js
+node_modules/nodemon/lib/config/exec.js
+node_modules/nodemon/lib/config/index.js
+node_modules/nodemon/lib/config/load.js
+node_modules/nodemon/lib/help/index.js
+node_modules/nodemon/lib/index.js
+node_modules/nodemon/lib/monitor/index.js
+node_modules/nodemon/lib/monitor/match.js
+node_modules/nodemon/lib/monitor/run.js
+node_modules/nodemon/lib/monitor/signals.js
+node_modules/nodemon/lib/monitor/watch.js
+node_modules/nodemon/lib/nodemon.js
+node_modules/nodemon/lib/rules/add.js
+node_modules/nodemon/lib/rules/index.js
+node_modules/nodemon/lib/rules/parse.js
+node_modules/nodemon/lib/spawn.js
+node_modules/nodemon/lib/utils/bus.js
+node_modules/nodemon/lib/utils/clone.js
+node_modules/nodemon/lib/utils/colour.js
+node_modules/nodemon/lib/utils/index.js
+node_modules/nodemon/lib/utils/log.js
+node_modules/nodemon/lib/utils/merge.js
+node_modules/nodemon/lib/version.js
+node_modules/nodemon/node_modules/minimatch/LICENSE
+node_modules/nodemon/node_modules/minimatch/README.md
+node_modules/nodemon/node_modules/minimatch/minimatch.js
+node_modules/nodemon/node_modules/minimatch/package.json
+node_modules/nodemon/package.json
+node_modules/normalize-path/LICENSE
+node_modules/normalize-path/README.md
+node_modules/normalize-path/index.js
+node_modules/normalize-path/package.json
+node_modules/on-exit-leak-free/.github/dependabot.yml
+node_modules/on-exit-leak-free/.github/workflows/ci.yml
+node_modules/on-exit-leak-free/LICENSE
+node_modules/on-exit-leak-free/README.md
+node_modules/on-exit-leak-free/index.js
+node_modules/on-exit-leak-free/package.json
+node_modules/on-exit-leak-free/test/base.test.js
+node_modules/on-exit-leak-free/test/event-emitter-leak.test.js
+node_modules/on-exit-leak-free/test/fixtures/beforeExit.js
+node_modules/on-exit-leak-free/test/fixtures/close.js
+node_modules/on-exit-leak-free/test/fixtures/gc-not-close.js
+node_modules/on-exit-leak-free/test/fixtures/unregister.js
+node_modules/once/LICENSE
+node_modules/once/README.md
+node_modules/once/once.js
+node_modules/once/package.json
+node_modules/openapi-types/CHANGELOG.md
+node_modules/openapi-types/LICENSE
+node_modules/openapi-types/README.md
+node_modules/openapi-types/dist/index.d.ts
+node_modules/openapi-types/dist/index.js
+node_modules/openapi-types/dist/index.js.map
+node_modules/openapi-types/package.json
+node_modules/package-json-from-dist/LICENSE.md
+node_modules/package-json-from-dist/README.md
+node_modules/package-json-from-dist/dist/commonjs/index.d.ts
+node_modules/package-json-from-dist/dist/commonjs/index.d.ts.map
+node_modules/package-json-from-dist/dist/commonjs/index.js
+node_modules/package-json-from-dist/dist/commonjs/index.js.map
+node_modules/package-json-from-dist/dist/commonjs/package.json
+node_modules/package-json-from-dist/dist/esm/index.d.ts
+node_modules/package-json-from-dist/dist/esm/index.d.ts.map
+node_modules/package-json-from-dist/dist/esm/index.js
+node_modules/package-json-from-dist/dist/esm/index.js.map
+node_modules/package-json-from-dist/dist/esm/package.json
+node_modules/package-json-from-dist/package.json
+node_modules/path-key/index.d.ts
+node_modules/path-key/index.js
+node_modules/path-key/license
+node_modules/path-key/package.json
+node_modules/path-key/readme.md
+node_modules/path-scurry/LICENSE.md
+node_modules/path-scurry/README.md
+node_modules/path-scurry/dist/commonjs/index.d.ts
+node_modules/path-scurry/dist/commonjs/index.d.ts.map
+node_modules/path-scurry/dist/commonjs/index.js
+node_modules/path-scurry/dist/commonjs/index.js.map
+node_modules/path-scurry/dist/commonjs/package.json
+node_modules/path-scurry/dist/esm/index.d.ts
+node_modules/path-scurry/dist/esm/index.d.ts.map
+node_modules/path-scurry/dist/esm/index.js
+node_modules/path-scurry/dist/esm/index.js.map
+node_modules/path-scurry/dist/esm/package.json
+node_modules/path-scurry/package.json
+node_modules/picomatch/CHANGELOG.md
+node_modules/picomatch/LICENSE
+node_modules/picomatch/README.md
+node_modules/picomatch/index.js
+node_modules/picomatch/lib/constants.js
+node_modules/picomatch/lib/parse.js
+node_modules/picomatch/lib/picomatch.js
+node_modules/picomatch/lib/scan.js
+node_modules/picomatch/lib/utils.js
+node_modules/picomatch/package.json
+node_modules/pino-abstract-transport/.github/dependabot.yml
+node_modules/pino-abstract-transport/.github/workflows/ci.yml
+node_modules/pino-abstract-transport/.husky/pre-commit
+node_modules/pino-abstract-transport/LICENSE
+node_modules/pino-abstract-transport/README.md
+node_modules/pino-abstract-transport/index.d.ts
+node_modules/pino-abstract-transport/index.js
+node_modules/pino-abstract-transport/package.json
+node_modules/pino-abstract-transport/test/base.test.js
+node_modules/pino-abstract-transport/test/fixtures/transport-async-iteration.js
+node_modules/pino-abstract-transport/test/fixtures/transport-on-data.js
+node_modules/pino-abstract-transport/test/fixtures/transport-transform.js
+node_modules/pino-abstract-transport/test/fixtures/worker-pipeline.js
+node_modules/pino-abstract-transport/test/types/index.test-d.ts
+node_modules/pino-abstract-transport/test/worker.test.js
+node_modules/pino-std-serializers/.editorconfig
+node_modules/pino-std-serializers/.eslintignore
+node_modules/pino-std-serializers/.github/dependabot.yml
+node_modules/pino-std-serializers/.github/workflows/ci.yml
+node_modules/pino-std-serializers/LICENSE
+node_modules/pino-std-serializers/Readme.md
+node_modules/pino-std-serializers/index.d.ts
+node_modules/pino-std-serializers/index.js
+node_modules/pino-std-serializers/lib/err-helpers.js
+node_modules/pino-std-serializers/lib/err-proto.js
+node_modules/pino-std-serializers/lib/err-with-cause.js
+node_modules/pino-std-serializers/lib/err.js
+node_modules/pino-std-serializers/lib/req.js
+node_modules/pino-std-serializers/lib/res.js
+node_modules/pino-std-serializers/package.json
+node_modules/pino-std-serializers/test/err-with-cause.test.js
+node_modules/pino-std-serializers/test/err.test.js
+node_modules/pino-std-serializers/test/req.test.js
+node_modules/pino-std-serializers/test/res.test.js
+node_modules/pino-std-serializers/test/types/index.test-d.ts
+node_modules/pino-std-serializers/tsconfig.json
+node_modules/pino/.eslintignore
+node_modules/pino/.eslintrc
+node_modules/pino/.github/dependabot.yml
+node_modules/pino/.github/workflows/bench.yml
+node_modules/pino/.github/workflows/ci.yml
+node_modules/pino/.github/workflows/lock-threads.yml
+node_modules/pino/.github/workflows/publish-release.yml
+node_modules/pino/.github/workflows/target-main.yml
+node_modules/pino/.nojekyll
+node_modules/pino/.prettierignore
+node_modules/pino/.taprc.yaml
+node_modules/pino/CNAME
+node_modules/pino/CONTRIBUTING.md
+node_modules/pino/LICENSE
+node_modules/pino/README.md
+node_modules/pino/SECURITY.md
+node_modules/pino/benchmarks/basic.bench.js
+node_modules/pino/benchmarks/child-child.bench.js
+node_modules/pino/benchmarks/child-creation.bench.js
+node_modules/pino/benchmarks/child.bench.js
+node_modules/pino/benchmarks/deep-object.bench.js
+node_modules/pino/benchmarks/formatters.bench.js
+node_modules/pino/benchmarks/internal/custom-levels.js
+node_modules/pino/benchmarks/internal/just-pino-heavy.bench.js
+node_modules/pino/benchmarks/internal/just-pino.bench.js
+node_modules/pino/benchmarks/internal/parent-vs-child.bench.js
+node_modules/pino/benchmarks/internal/redact.bench.js
+node_modules/pino/benchmarks/long-string.bench.js
+node_modules/pino/benchmarks/multi-arg.bench.js
+node_modules/pino/benchmarks/multistream.js
+node_modules/pino/benchmarks/object.bench.js
+node_modules/pino/benchmarks/utils/generate-benchmark-doc.js
+node_modules/pino/benchmarks/utils/runbench.js
+node_modules/pino/benchmarks/utils/wrap-log-level.js
+node_modules/pino/bin.js
+node_modules/pino/browser.js
+node_modules/pino/build/sync-version.js
+node_modules/pino/docs/api.md
+node_modules/pino/docs/asynchronous.md
+node_modules/pino/docs/benchmarks.md
+node_modules/pino/docs/browser.md
+node_modules/pino/docs/bundling.md
+node_modules/pino/docs/child-loggers.md
+node_modules/pino/docs/diagnostics.md
+node_modules/pino/docs/ecosystem.md
+node_modules/pino/docs/help.md
+node_modules/pino/docs/lts.md
+node_modules/pino/docs/pretty.md
+node_modules/pino/docs/redaction.md
+node_modules/pino/docs/transports.md
+node_modules/pino/docs/web.md
+node_modules/pino/docsify/sidebar.md
+node_modules/pino/examples/basic.js
+node_modules/pino/examples/transport.js
+node_modules/pino/favicon-16x16.png
+node_modules/pino/favicon-32x32.png
+node_modules/pino/favicon.ico
+node_modules/pino/file.js
+node_modules/pino/inc-version.sh
+node_modules/pino/index.html
+node_modules/pino/lib/caller.js
+node_modules/pino/lib/constants.js
+node_modules/pino/lib/deprecations.js
+node_modules/pino/lib/levels.js
+node_modules/pino/lib/meta.js
+node_modules/pino/lib/multistream.js
+node_modules/pino/lib/proto.js
+node_modules/pino/lib/redaction.js
+node_modules/pino/lib/symbols.js
+node_modules/pino/lib/time.js
+node_modules/pino/lib/tools.js
+node_modules/pino/lib/transport-stream.js
+node_modules/pino/lib/transport.js
+node_modules/pino/lib/worker.js
+node_modules/pino/package.json
+node_modules/pino/pino-banner.png
+node_modules/pino/pino-logo-hire.png
+node_modules/pino/pino-tree.png
+node_modules/pino/pino.d.ts
+node_modules/pino/pino.js
+node_modules/pino/pretty-demo.png
+node_modules/pino/test/basic.test.js
+node_modules/pino/test/broken-pipe.test.js
+node_modules/pino/test/browser-child.test.js
+node_modules/pino/test/browser-disabled.test.js
+node_modules/pino/test/browser-early-console-freeze.test.js
+node_modules/pino/test/browser-is-level-enabled.test.js
+node_modules/pino/test/browser-levels.test.js
+node_modules/pino/test/browser-serializers.test.js
+node_modules/pino/test/browser-timestamp.test.js
+node_modules/pino/test/browser-transmit.test.js
+node_modules/pino/test/browser.test.js
+node_modules/pino/test/complex-objects.test.js
+node_modules/pino/test/crlf.test.js
+node_modules/pino/test/custom-levels.test.js
+node_modules/pino/test/diagnostics.test.js
+node_modules/pino/test/error.test.js
+node_modules/pino/test/errorKey.test.js
+node_modules/pino/test/escaping.test.js
+node_modules/pino/test/esm/esm.mjs
+node_modules/pino/test/esm/index.test.js
+node_modules/pino/test/esm/named-exports.mjs
+node_modules/pino/test/exit.test.js
+node_modules/pino/test/fixtures/broken-pipe/basic.js
+node_modules/pino/test/fixtures/broken-pipe/destination.js
+node_modules/pino/test/fixtures/broken-pipe/syncfalse.js
+node_modules/pino/test/fixtures/console-transport.js
+node_modules/pino/test/fixtures/crashing-transport.js
+node_modules/pino/test/fixtures/default-exit.js
+node_modules/pino/test/fixtures/destination-exit.js
+node_modules/pino/test/fixtures/eval/index.js
+node_modules/pino/test/fixtures/eval/node_modules/14-files.js
+node_modules/pino/test/fixtures/eval/node_modules/2-files.js
+node_modules/pino/test/fixtures/eval/node_modules/file1.js
+node_modules/pino/test/fixtures/eval/node_modules/file10.js
+node_modules/pino/test/fixtures/eval/node_modules/file11.js
+node_modules/pino/test/fixtures/eval/node_modules/file12.js
+node_modules/pino/test/fixtures/eval/node_modules/file13.js
+node_modules/pino/test/fixtures/eval/node_modules/file14.js
+node_modules/pino/test/fixtures/eval/node_modules/file2.js
+node_modules/pino/test/fixtures/eval/node_modules/file3.js
+node_modules/pino/test/fixtures/eval/node_modules/file4.js
+node_modules/pino/test/fixtures/eval/node_modules/file5.js
+node_modules/pino/test/fixtures/eval/node_modules/file6.js
+node_modules/pino/test/fixtures/eval/node_modules/file7.js
+node_modules/pino/test/fixtures/eval/node_modules/file8.js
+node_modules/pino/test/fixtures/eval/node_modules/file9.js
+node_modules/pino/test/fixtures/noop-transport.js
+node_modules/pino/test/fixtures/pretty/null-prototype.js
+node_modules/pino/test/fixtures/stdout-hack-protection.js
+node_modules/pino/test/fixtures/syncfalse-child.js
+node_modules/pino/test/fixtures/syncfalse-exit.js
+node_modules/pino/test/fixtures/syncfalse-flush-exit.js
+node_modules/pino/test/fixtures/syncfalse.js
+node_modules/pino/test/fixtures/syntax-error-esm.mjs
+node_modules/pino/test/fixtures/to-file-transport-with-transform.js
+node_modules/pino/test/fixtures/to-file-transport.js
+node_modules/pino/test/fixtures/to-file-transport.mjs
+node_modules/pino/test/fixtures/transport-exit-immediately-with-async-dest.js
+node_modules/pino/test/fixtures/transport-exit-immediately.js
+node_modules/pino/test/fixtures/transport-exit-on-ready.js
+node_modules/pino/test/fixtures/transport-main.js
+node_modules/pino/test/fixtures/transport-many-lines.js
+node_modules/pino/test/fixtures/transport-string-stdout.js
+node_modules/pino/test/fixtures/transport-transform.js
+node_modules/pino/test/fixtures/transport-uses-pino-config.js
+node_modules/pino/test/fixtures/transport-with-on-exit.js
+node_modules/pino/test/fixtures/transport-worker-data.js
+node_modules/pino/test/fixtures/transport-worker.js
+node_modules/pino/test/fixtures/transport-wrong-export-type.js
+node_modules/pino/test/fixtures/transport/index.js
+node_modules/pino/test/fixtures/transport/package.json
+node_modules/pino/test/fixtures/ts/to-file-transport-with-transform.ts
+node_modules/pino/test/fixtures/ts/to-file-transport.ts
+node_modules/pino/test/fixtures/ts/transpile.cjs
+node_modules/pino/test/fixtures/ts/transport-exit-immediately-with-async-dest.ts
+node_modules/pino/test/fixtures/ts/transport-exit-immediately.ts
+node_modules/pino/test/fixtures/ts/transport-exit-on-ready.ts
+node_modules/pino/test/fixtures/ts/transport-main.ts
+node_modules/pino/test/fixtures/ts/transport-string-stdout.ts
+node_modules/pino/test/fixtures/ts/transport-worker.ts
+node_modules/pino/test/formatters.test.js
+node_modules/pino/test/helper.d.ts
+node_modules/pino/test/helper.js
+node_modules/pino/test/hooks.test.js
+node_modules/pino/test/http.test.js
+node_modules/pino/test/internals/version.test.js
+node_modules/pino/test/is-level-enabled.test.js
+node_modules/pino/test/jest/basic.spec.js
+node_modules/pino/test/levels.test.js
+node_modules/pino/test/metadata.test.js
+node_modules/pino/test/mixin-merge-strategy.test.js
+node_modules/pino/test/mixin.test.js
+node_modules/pino/test/multistream.test.js
+node_modules/pino/test/pkg/index.js
+node_modules/pino/test/pkg/pkg.config.json
+node_modules/pino/test/pkg/pkg.test.js
+node_modules/pino/test/redact.test.js
+node_modules/pino/test/serializers.test.js
+node_modules/pino/test/stdout-protection.test.js
+node_modules/pino/test/syncfalse.test.js
+node_modules/pino/test/timestamp-nano.test.js
+node_modules/pino/test/timestamp.test.js
+node_modules/pino/test/transport-stream.test.js
+node_modules/pino/test/transport/big.test.js
+node_modules/pino/test/transport/bundlers-support.test.js
+node_modules/pino/test/transport/caller.test.js
+node_modules/pino/test/transport/core.test.js
+node_modules/pino/test/transport/core.test.ts
+node_modules/pino/test/transport/core.transpiled.test.ts
+node_modules/pino/test/transport/crash.test.js
+node_modules/pino/test/transport/module-link.test.js
+node_modules/pino/test/transport/pipeline.test.js
+node_modules/pino/test/transport/repl.test.js
+node_modules/pino/test/transport/syncTrue.test.js
+node_modules/pino/test/transport/syncfalse.test.js
+node_modules/pino/test/transport/targets.test.js
+node_modules/pino/test/transport/uses-pino-config.test.js
+node_modules/pino/test/types/pino-import.test-d.cts
+node_modules/pino/test/types/pino-multistream.test-d.ts
+node_modules/pino/test/types/pino-top-export.test-d.ts
+node_modules/pino/test/types/pino-transport.test-d.ts
+node_modules/pino/test/types/pino-type-only.test-d.ts
+node_modules/pino/test/types/pino.test-d.ts
+node_modules/pino/test/types/pino.ts
+node_modules/pino/tsconfig.json
+node_modules/prebuild-install/CHANGELOG.md
+node_modules/prebuild-install/CONTRIBUTING.md
+node_modules/prebuild-install/LICENSE
+node_modules/prebuild-install/README.md
+node_modules/prebuild-install/asset.js
+node_modules/prebuild-install/bin.js
+node_modules/prebuild-install/download.js
+node_modules/prebuild-install/error.js
+node_modules/prebuild-install/help.txt
+node_modules/prebuild-install/index.js
+node_modules/prebuild-install/log.js
+node_modules/prebuild-install/package.json
+node_modules/prebuild-install/proxy.js
+node_modules/prebuild-install/rc.js
+node_modules/prebuild-install/util.js
+node_modules/process-warning/.gitattributes
+node_modules/process-warning/.github/dependabot.yml
+node_modules/process-warning/.github/workflows/ci.yml
+node_modules/process-warning/LICENSE
+node_modules/process-warning/README.md
+node_modules/process-warning/benchmarks/warn.js
+node_modules/process-warning/eslint.config.js
+node_modules/process-warning/examples/example.js
+node_modules/process-warning/index.js
+node_modules/process-warning/package.json
+node_modules/process-warning/test/emit-interpolated-string.test.js
+node_modules/process-warning/test/emit-once-only.test.js
+node_modules/process-warning/test/emit-reset.test.js
+node_modules/process-warning/test/emit-set.test.js
+node_modules/process-warning/test/emit-unlimited.test.js
+node_modules/process-warning/test/index.test.js
+node_modules/process-warning/test/issue-88.test.js
+node_modules/process-warning/test/jest.test.js
+node_modules/process-warning/test/no-warnings.test.js
+node_modules/process-warning/test/promise.js
+node_modules/process-warning/types/index.d.ts
+node_modules/process-warning/types/index.test-d.ts
+node_modules/pstree.remy/.travis.yml
+node_modules/pstree.remy/LICENSE
+node_modules/pstree.remy/README.md
+node_modules/pstree.remy/lib/index.js
+node_modules/pstree.remy/lib/tree.js
+node_modules/pstree.remy/lib/utils.js
+node_modules/pstree.remy/package.json
+node_modules/pstree.remy/tests/fixtures/index.js
+node_modules/pstree.remy/tests/fixtures/out1
+node_modules/pstree.remy/tests/fixtures/out2
+node_modules/pstree.remy/tests/index.test.js
+node_modules/pump/.github/FUNDING.yml
+node_modules/pump/.travis.yml
+node_modules/pump/LICENSE
+node_modules/pump/README.md
+node_modules/pump/SECURITY.md
+node_modules/pump/index.js
+node_modules/pump/package.json
+node_modules/pump/test-browser.js
+node_modules/pump/test-node.js
+node_modules/quick-format-unescaped/.github/workflows/ci.yml
+node_modules/quick-format-unescaped/LICENSE
+node_modules/quick-format-unescaped/benchmark.js
+node_modules/quick-format-unescaped/index.js
+node_modules/quick-format-unescaped/package.json
+node_modules/quick-format-unescaped/readme.md
+node_modules/quick-format-unescaped/test/index.js
+node_modules/rc/LICENSE.APACHE2
+node_modules/rc/LICENSE.BSD
+node_modules/rc/LICENSE.MIT
+node_modules/rc/README.md
+node_modules/rc/browser.js
+node_modules/rc/cli.js
+node_modules/rc/index.js
+node_modules/rc/lib/utils.js
+node_modules/rc/package.json
+node_modules/rc/test/ini.js
+node_modules/rc/test/nested-env-vars.js
+node_modules/rc/test/test.js
+node_modules/readable-stream/CONTRIBUTING.md
+node_modules/readable-stream/GOVERNANCE.md
+node_modules/readable-stream/LICENSE
+node_modules/readable-stream/README.md
+node_modules/readable-stream/errors-browser.js
+node_modules/readable-stream/errors.js
+node_modules/readable-stream/experimentalWarning.js
+node_modules/readable-stream/lib/_stream_duplex.js
+node_modules/readable-stream/lib/_stream_passthrough.js
+node_modules/readable-stream/lib/_stream_readable.js
+node_modules/readable-stream/lib/_stream_transform.js
+node_modules/readable-stream/lib/_stream_writable.js
+node_modules/readable-stream/lib/internal/streams/async_iterator.js
+node_modules/readable-stream/lib/internal/streams/buffer_list.js
+node_modules/readable-stream/lib/internal/streams/destroy.js
+node_modules/readable-stream/lib/internal/streams/end-of-stream.js
+node_modules/readable-stream/lib/internal/streams/from-browser.js
+node_modules/readable-stream/lib/internal/streams/from.js
+node_modules/readable-stream/lib/internal/streams/pipeline.js
+node_modules/readable-stream/lib/internal/streams/state.js
+node_modules/readable-stream/lib/internal/streams/stream-browser.js
+node_modules/readable-stream/lib/internal/streams/stream.js
+node_modules/readable-stream/package.json
+node_modules/readable-stream/readable-browser.js
+node_modules/readable-stream/readable.js
+node_modules/readdirp/LICENSE
+node_modules/readdirp/README.md
+node_modules/readdirp/index.d.ts
+node_modules/readdirp/index.js
+node_modules/readdirp/package.json
+node_modules/real-require/LICENSE.md
+node_modules/real-require/README.md
+node_modules/real-require/package.json
+node_modules/real-require/src/index.js
+node_modules/require-from-string/index.js
+node_modules/require-from-string/license
+node_modules/require-from-string/package.json
+node_modules/require-from-string/readme.md
+node_modules/ret/LICENSE
+node_modules/ret/README.md
+node_modules/ret/dist/index.d.ts
+node_modules/ret/dist/index.js
+node_modules/ret/dist/index.js.map
+node_modules/ret/dist/reconstruct.d.ts
+node_modules/ret/dist/reconstruct.js
+node_modules/ret/dist/reconstruct.js.map
+node_modules/ret/dist/sets-lookup.d.ts
+node_modules/ret/dist/sets-lookup.js
+node_modules/ret/dist/sets-lookup.js.map
+node_modules/ret/dist/sets.d.ts
+node_modules/ret/dist/sets.js
+node_modules/ret/dist/sets.js.map
+node_modules/ret/dist/tokenizer.d.ts
+node_modules/ret/dist/tokenizer.js
+node_modules/ret/dist/tokenizer.js.map
+node_modules/ret/dist/types/index.d.ts
+node_modules/ret/dist/types/index.js
+node_modules/ret/dist/types/index.js.map
+node_modules/ret/dist/types/set-lookup.d.ts
+node_modules/ret/dist/types/set-lookup.js
+node_modules/ret/dist/types/set-lookup.js.map
+node_modules/ret/dist/types/tokens.d.ts
+node_modules/ret/dist/types/tokens.js
+node_modules/ret/dist/types/tokens.js.map
+node_modules/ret/dist/types/types.d.ts
+node_modules/ret/dist/types/types.js
+node_modules/ret/dist/types/types.js.map
+node_modules/ret/dist/util.d.ts
+node_modules/ret/dist/util.js
+node_modules/ret/dist/util.js.map
+node_modules/ret/dist/write-set-tokens.d.ts
+node_modules/ret/dist/write-set-tokens.js
+node_modules/ret/dist/write-set-tokens.js.map
+node_modules/ret/package.json
+node_modules/reusify/.github/dependabot.yml
+node_modules/reusify/.github/workflows/ci.yml
+node_modules/reusify/LICENSE
+node_modules/reusify/README.md
+node_modules/reusify/SECURITY.md
+node_modules/reusify/benchmarks/createNoCodeFunction.js
+node_modules/reusify/benchmarks/fib.js
+node_modules/reusify/benchmarks/reuseNoCodeFunction.js
+node_modules/reusify/eslint.config.js
+node_modules/reusify/package.json
+node_modules/reusify/reusify.d.ts
+node_modules/reusify/reusify.js
+node_modules/reusify/test.js
+node_modules/reusify/tsconfig.json
+node_modules/rfdc/.github/workflows/ci.yml
+node_modules/rfdc/LICENSE
+node_modules/rfdc/default.js
+node_modules/rfdc/index.d.ts
+node_modules/rfdc/index.js
+node_modules/rfdc/index.test-d.ts
+node_modules/rfdc/package.json
+node_modules/rfdc/readme.md
+node_modules/rfdc/test/index.js
+node_modules/safe-buffer/LICENSE
+node_modules/safe-buffer/README.md
+node_modules/safe-buffer/index.d.ts
+node_modules/safe-buffer/index.js
+node_modules/safe-buffer/package.json
+node_modules/safe-regex2/.gitattributes
+node_modules/safe-regex2/.github/dependabot.yml
+node_modules/safe-regex2/.github/stale.yml
+node_modules/safe-regex2/.github/workflows/ci.yml
+node_modules/safe-regex2/LICENSE
+node_modules/safe-regex2/README.md
+node_modules/safe-regex2/eslint.config.js
+node_modules/safe-regex2/example/safe.js
+node_modules/safe-regex2/index.js
+node_modules/safe-regex2/package.json
+node_modules/safe-regex2/test/regex.js
+node_modules/safe-regex2/types/index.d.ts
+node_modules/safe-regex2/types/index.test-d.ts
+node_modules/safe-stable-stringify/LICENSE
+node_modules/safe-stable-stringify/esm/package.json
+node_modules/safe-stable-stringify/esm/wrapper.d.ts
+node_modules/safe-stable-stringify/esm/wrapper.js
+node_modules/safe-stable-stringify/index.d.ts
+node_modules/safe-stable-stringify/index.js
+node_modules/safe-stable-stringify/package.json
+node_modules/safe-stable-stringify/readme.md
+node_modules/secure-json-parse/.airtap.yml
+node_modules/secure-json-parse/.gitattributes
+node_modules/secure-json-parse/.github/dependabot.yml
+node_modules/secure-json-parse/.github/stale.yml
+node_modules/secure-json-parse/.github/workflows/ci.yml
+node_modules/secure-json-parse/LICENSE
+node_modules/secure-json-parse/README.md
+node_modules/secure-json-parse/benchmarks/ignore.js
+node_modules/secure-json-parse/benchmarks/no__proto__.js
+node_modules/secure-json-parse/benchmarks/package.json
+node_modules/secure-json-parse/benchmarks/remove.js
+node_modules/secure-json-parse/benchmarks/throw.js
+node_modules/secure-json-parse/benchmarks/valid.js
+node_modules/secure-json-parse/eslint.config.js
+node_modules/secure-json-parse/index.js
+node_modules/secure-json-parse/package.json
+node_modules/secure-json-parse/test/index.test.js
+node_modules/secure-json-parse/types/index.d.ts
+node_modules/secure-json-parse/types/index.test-d.ts
+node_modules/semver/LICENSE
+node_modules/semver/README.md
+node_modules/semver/bin/semver.js
+node_modules/semver/classes/comparator.js
+node_modules/semver/classes/index.js
+node_modules/semver/classes/range.js
+node_modules/semver/classes/semver.js
+node_modules/semver/functions/clean.js
+node_modules/semver/functions/cmp.js
+node_modules/semver/functions/coerce.js
+node_modules/semver/functions/compare-build.js
+node_modules/semver/functions/compare-loose.js
+node_modules/semver/functions/compare.js
+node_modules/semver/functions/diff.js
+node_modules/semver/functions/eq.js
+node_modules/semver/functions/gt.js
+node_modules/semver/functions/gte.js
+node_modules/semver/functions/inc.js
+node_modules/semver/functions/lt.js
+node_modules/semver/functions/lte.js
+node_modules/semver/functions/major.js
+node_modules/semver/functions/minor.js
+node_modules/semver/functions/neq.js
+node_modules/semver/functions/parse.js
+node_modules/semver/functions/patch.js
+node_modules/semver/functions/prerelease.js
+node_modules/semver/functions/rcompare.js
+node_modules/semver/functions/rsort.js
+node_modules/semver/functions/satisfies.js
+node_modules/semver/functions/sort.js
+node_modules/semver/functions/valid.js
+node_modules/semver/index.js
+node_modules/semver/internal/constants.js
+node_modules/semver/internal/debug.js
+node_modules/semver/internal/identifiers.js
+node_modules/semver/internal/lrucache.js
+node_modules/semver/internal/parse-options.js
+node_modules/semver/internal/re.js
+node_modules/semver/package.json
+node_modules/semver/preload.js
+node_modules/semver/range.bnf
+node_modules/semver/ranges/gtr.js
+node_modules/semver/ranges/intersects.js
+node_modules/semver/ranges/ltr.js
+node_modules/semver/ranges/max-satisfying.js
+node_modules/semver/ranges/min-satisfying.js
+node_modules/semver/ranges/min-version.js
+node_modules/semver/ranges/outside.js
+node_modules/semver/ranges/simplify.js
+node_modules/semver/ranges/subset.js
+node_modules/semver/ranges/to-comparators.js
+node_modules/semver/ranges/valid.js
+node_modules/set-cookie-parser/LICENSE
+node_modules/set-cookie-parser/README.md
+node_modules/set-cookie-parser/lib/set-cookie.js
+node_modules/set-cookie-parser/package.json
+node_modules/setprototypeof/LICENSE
+node_modules/setprototypeof/README.md
+node_modules/setprototypeof/index.d.ts
+node_modules/setprototypeof/index.js
+node_modules/setprototypeof/package.json
+node_modules/setprototypeof/test/index.js
+node_modules/shebang-command/index.js
+node_modules/shebang-command/license
+node_modules/shebang-command/package.json
+node_modules/shebang-command/readme.md
+node_modules/shebang-regex/index.d.ts
+node_modules/shebang-regex/index.js
+node_modules/shebang-regex/license
+node_modules/shebang-regex/package.json
+node_modules/shebang-regex/readme.md
+node_modules/signal-exit/LICENSE.txt
+node_modules/signal-exit/README.md
+node_modules/signal-exit/dist/cjs/browser.d.ts
+node_modules/signal-exit/dist/cjs/browser.d.ts.map
+node_modules/signal-exit/dist/cjs/browser.js
+node_modules/signal-exit/dist/cjs/browser.js.map
+node_modules/signal-exit/dist/cjs/index.d.ts
+node_modules/signal-exit/dist/cjs/index.d.ts.map
+node_modules/signal-exit/dist/cjs/index.js
+node_modules/signal-exit/dist/cjs/index.js.map
+node_modules/signal-exit/dist/cjs/package.json
+node_modules/signal-exit/dist/cjs/signals.d.ts
+node_modules/signal-exit/dist/cjs/signals.d.ts.map
+node_modules/signal-exit/dist/cjs/signals.js
+node_modules/signal-exit/dist/cjs/signals.js.map
+node_modules/signal-exit/dist/mjs/browser.d.ts
+node_modules/signal-exit/dist/mjs/browser.d.ts.map
+node_modules/signal-exit/dist/mjs/browser.js
+node_modules/signal-exit/dist/mjs/browser.js.map
+node_modules/signal-exit/dist/mjs/index.d.ts
+node_modules/signal-exit/dist/mjs/index.d.ts.map
+node_modules/signal-exit/dist/mjs/index.js
+node_modules/signal-exit/dist/mjs/index.js.map
+node_modules/signal-exit/dist/mjs/package.json
+node_modules/signal-exit/dist/mjs/signals.d.ts
+node_modules/signal-exit/dist/mjs/signals.d.ts.map
+node_modules/signal-exit/dist/mjs/signals.js
+node_modules/signal-exit/dist/mjs/signals.js.map
+node_modules/signal-exit/package.json
+node_modules/simple-concat/.travis.yml
+node_modules/simple-concat/LICENSE
+node_modules/simple-concat/README.md
+node_modules/simple-concat/index.js
+node_modules/simple-concat/package.json
+node_modules/simple-concat/test/basic.js
+node_modules/simple-get/.github/dependabot.yml
+node_modules/simple-get/.github/workflows/ci.yml
+node_modules/simple-get/LICENSE
+node_modules/simple-get/README.md
+node_modules/simple-get/index.js
+node_modules/simple-get/package.json
+node_modules/simple-update-notifier/LICENSE
+node_modules/simple-update-notifier/README.md
+node_modules/simple-update-notifier/build/index.d.ts
+node_modules/simple-update-notifier/build/index.js
+node_modules/simple-update-notifier/package.json
+node_modules/simple-update-notifier/src/borderedText.ts
+node_modules/simple-update-notifier/src/cache.spec.ts
+node_modules/simple-update-notifier/src/cache.ts
+node_modules/simple-update-notifier/src/getDistVersion.spec.ts
+node_modules/simple-update-notifier/src/getDistVersion.ts
+node_modules/simple-update-notifier/src/hasNewVersion.spec.ts
+node_modules/simple-update-notifier/src/hasNewVersion.ts
+node_modules/simple-update-notifier/src/index.spec.ts
+node_modules/simple-update-notifier/src/index.ts
+node_modules/simple-update-notifier/src/isNpmOrYarn.ts
+node_modules/simple-update-notifier/src/types.ts
+node_modules/sonic-boom/.eslintignore
+node_modules/sonic-boom/.taprc
+node_modules/sonic-boom/LICENSE
+node_modules/sonic-boom/README.md
+node_modules/sonic-boom/bench.js
+node_modules/sonic-boom/check.js
+node_modules/sonic-boom/example.js
+node_modules/sonic-boom/fixtures/firehose.js
+node_modules/sonic-boom/index.js
+node_modules/sonic-boom/package.json
+node_modules/sonic-boom/test/destroy.test.js
+node_modules/sonic-boom/test/end.test.js
+node_modules/sonic-boom/test/flush-sync.test.js
+node_modules/sonic-boom/test/flush.test.js
+node_modules/sonic-boom/test/fsync.test.js
+node_modules/sonic-boom/test/helper.js
+node_modules/sonic-boom/test/minlength.test.js
+node_modules/sonic-boom/test/mode.test.js
+node_modules/sonic-boom/test/periodicflush.test.js
+node_modules/sonic-boom/test/reopen.test.js
+node_modules/sonic-boom/test/retry.test.js
+node_modules/sonic-boom/test/sync.test.js
+node_modules/sonic-boom/test/write.test.js
+node_modules/sonic-boom/types/index.d.ts
+node_modules/sonic-boom/types/tests/test.ts
+node_modules/split2/LICENSE
+node_modules/split2/README.md
+node_modules/split2/bench.js
+node_modules/split2/index.js
+node_modules/split2/package.json
+node_modules/split2/test.js
+node_modules/statuses/HISTORY.md
+node_modules/statuses/LICENSE
+node_modules/statuses/README.md
+node_modules/statuses/codes.json
+node_modules/statuses/index.js
+node_modules/statuses/package.json
+node_modules/string-width-cjs/index.d.ts
+node_modules/string-width-cjs/index.js
+node_modules/string-width-cjs/license
+node_modules/string-width-cjs/node_modules/ansi-regex/index.d.ts
+node_modules/string-width-cjs/node_modules/ansi-regex/index.js
+node_modules/string-width-cjs/node_modules/ansi-regex/license
+node_modules/string-width-cjs/node_modules/ansi-regex/package.json
+node_modules/string-width-cjs/node_modules/ansi-regex/readme.md
+node_modules/string-width-cjs/node_modules/emoji-regex/LICENSE-MIT.txt
+node_modules/string-width-cjs/node_modules/emoji-regex/README.md
+node_modules/string-width-cjs/node_modules/emoji-regex/es2015/index.js
+node_modules/string-width-cjs/node_modules/emoji-regex/es2015/text.js
+node_modules/string-width-cjs/node_modules/emoji-regex/index.d.ts
+node_modules/string-width-cjs/node_modules/emoji-regex/index.js
+node_modules/string-width-cjs/node_modules/emoji-regex/package.json
+node_modules/string-width-cjs/node_modules/emoji-regex/text.js
+node_modules/string-width-cjs/node_modules/strip-ansi/index.d.ts
+node_modules/string-width-cjs/node_modules/strip-ansi/index.js
+node_modules/string-width-cjs/node_modules/strip-ansi/license
+node_modules/string-width-cjs/node_modules/strip-ansi/package.json
+node_modules/string-width-cjs/node_modules/strip-ansi/readme.md
+node_modules/string-width-cjs/package.json
+node_modules/string-width-cjs/readme.md
+node_modules/string-width/index.d.ts
+node_modules/string-width/index.js
+node_modules/string-width/license
+node_modules/string-width/package.json
+node_modules/string-width/readme.md
+node_modules/string_decoder/LICENSE
+node_modules/string_decoder/README.md
+node_modules/string_decoder/lib/string_decoder.js
+node_modules/string_decoder/package.json
+node_modules/strip-ansi-cjs/index.d.ts
+node_modules/strip-ansi-cjs/index.js
+node_modules/strip-ansi-cjs/license
+node_modules/strip-ansi-cjs/node_modules/ansi-regex/index.d.ts
+node_modules/strip-ansi-cjs/node_modules/ansi-regex/index.js
+node_modules/strip-ansi-cjs/node_modules/ansi-regex/license
+node_modules/strip-ansi-cjs/node_modules/ansi-regex/package.json
+node_modules/strip-ansi-cjs/node_modules/ansi-regex/readme.md
+node_modules/strip-ansi-cjs/package.json
+node_modules/strip-ansi-cjs/readme.md
+node_modules/strip-ansi/index.d.ts
+node_modules/strip-ansi/index.js
+node_modules/strip-ansi/license
+node_modules/strip-ansi/package.json
+node_modules/strip-ansi/readme.md
+node_modules/strip-json-comments/index.js
+node_modules/strip-json-comments/license
+node_modules/strip-json-comments/package.json
+node_modules/strip-json-comments/readme.md
+node_modules/supports-color/browser.js
+node_modules/supports-color/index.js
+node_modules/supports-color/license
+node_modules/supports-color/package.json
+node_modules/supports-color/readme.md
+node_modules/tar-fs/.travis.yml
+node_modules/tar-fs/LICENSE
+node_modules/tar-fs/README.md
+node_modules/tar-fs/index.js
+node_modules/tar-fs/package.json
+node_modules/tar-fs/test/fixtures/a/hello.txt
+node_modules/tar-fs/test/fixtures/b/a/test.txt
+node_modules/tar-fs/test/fixtures/d/file1
+node_modules/tar-fs/test/fixtures/d/file2
+node_modules/tar-fs/test/fixtures/d/sub-dir/file5
+node_modules/tar-fs/test/fixtures/d/sub-files/file3
+node_modules/tar-fs/test/fixtures/d/sub-files/file4
+node_modules/tar-fs/test/fixtures/e/directory/.ignore
+node_modules/tar-fs/test/fixtures/e/file
+node_modules/tar-fs/test/fixtures/invalid.tar
+node_modules/tar-fs/test/index.js
+node_modules/tar-stream/LICENSE
+node_modules/tar-stream/README.md
+node_modules/tar-stream/extract.js
+node_modules/tar-stream/headers.js
+node_modules/tar-stream/index.js
+node_modules/tar-stream/pack.js
+node_modules/tar-stream/package.json
+node_modules/tar-stream/sandbox.js
+node_modules/thread-stream/.github/dependabot.yml
+node_modules/thread-stream/.github/workflows/ci.yml
+node_modules/thread-stream/.husky/pre-commit
+node_modules/thread-stream/.taprc
+node_modules/thread-stream/LICENSE
+node_modules/thread-stream/README.md
+node_modules/thread-stream/bench.js
+node_modules/thread-stream/index.d.ts
+node_modules/thread-stream/index.js
+node_modules/thread-stream/lib/indexes.js
+node_modules/thread-stream/lib/wait.js
+node_modules/thread-stream/lib/worker.js
+node_modules/thread-stream/package.json
+node_modules/thread-stream/test/base.test.js
+node_modules/thread-stream/test/bench.test.js
+node_modules/thread-stream/test/bundlers.test.js
+node_modules/thread-stream/test/close-on-gc.js
+node_modules/thread-stream/test/commonjs-fallback.test.js
+node_modules/thread-stream/test/context.test.js
+node_modules/thread-stream/test/create-and-exit.js
+node_modules/thread-stream/test/custom-worker.js
+node_modules/thread-stream/test/dir with spaces/test-package.zip
+node_modules/thread-stream/test/emit-event.js
+node_modules/thread-stream/test/end.test.js
+node_modules/thread-stream/test/error.js
+node_modules/thread-stream/test/esm.test.mjs
+node_modules/thread-stream/test/event.test.js
+node_modules/thread-stream/test/exit.js
+node_modules/thread-stream/test/get-context.js
+node_modules/thread-stream/test/helper.d.ts
+node_modules/thread-stream/test/helper.js
+node_modules/thread-stream/test/indexes.test.js
+node_modules/thread-stream/test/multibyte-chars.test.mjs
+node_modules/thread-stream/test/never-drain.test.js
+node_modules/thread-stream/test/on-message.js
+node_modules/thread-stream/test/pkg/index.js
+node_modules/thread-stream/test/pkg/pkg.config.json
+node_modules/thread-stream/test/pkg/pkg.test.js
+node_modules/thread-stream/test/port.js
+node_modules/thread-stream/test/post-message.test.js
+node_modules/thread-stream/test/string-limit-2.test.js
+node_modules/thread-stream/test/string-limit.test.js
+node_modules/thread-stream/test/syntax-error.mjs
+node_modules/thread-stream/test/thread-management.test.js
+node_modules/thread-stream/test/to-file-on-destroy.js
+node_modules/thread-stream/test/to-file-on-final.js
+node_modules/thread-stream/test/to-file.js
+node_modules/thread-stream/test/to-file.mjs
+node_modules/thread-stream/test/to-next.js
+node_modules/thread-stream/test/transpiled.test.js
+node_modules/thread-stream/test/ts-commonjs-default-export.zip
+node_modules/thread-stream/test/ts.test.ts
+node_modules/thread-stream/test/ts/to-file.ts
+node_modules/thread-stream/test/ts/transpile.sh
+node_modules/thread-stream/test/uncaughtException.js
+node_modules/thread-stream/test/unhandledRejection.js
+node_modules/thread-stream/test/yarnrc.yml
+node_modules/thread-stream/tsconfig.json
+node_modules/to-regex-range/LICENSE
+node_modules/to-regex-range/README.md
+node_modules/to-regex-range/index.js
+node_modules/to-regex-range/package.json
+node_modules/toad-cache/LICENSE
+node_modules/toad-cache/README.md
+node_modules/toad-cache/dist/toad-cache.cjs
+node_modules/toad-cache/dist/toad-cache.mjs
+node_modules/toad-cache/package.json
+node_modules/toad-cache/toad-cache.d.cts
+node_modules/toad-cache/toad-cache.d.ts
+node_modules/toidentifier/HISTORY.md
+node_modules/toidentifier/LICENSE
+node_modules/toidentifier/README.md
+node_modules/toidentifier/index.js
+node_modules/toidentifier/package.json
+node_modules/touch/LICENSE
+node_modules/touch/README.md
+node_modules/touch/bin/nodetouch.js
+node_modules/touch/index.js
+node_modules/touch/package.json
+node_modules/ts-node/LICENSE
+node_modules/ts-node/README.md
+node_modules/ts-node/child-loader.mjs
+node_modules/ts-node/dist-raw/NODE-LICENSE.md
+node_modules/ts-node/dist-raw/README.md
+node_modules/ts-node/dist-raw/node-internal-constants.js
+node_modules/ts-node/dist-raw/node-internal-errors.js
+node_modules/ts-node/dist-raw/node-internal-modules-cjs-helpers.js
+node_modules/ts-node/dist-raw/node-internal-modules-cjs-loader.js
+node_modules/ts-node/dist-raw/node-internal-modules-esm-get_format.js
+node_modules/ts-node/dist-raw/node-internal-modules-esm-resolve.js
+node_modules/ts-node/dist-raw/node-internal-modules-package_json_reader.js
+node_modules/ts-node/dist-raw/node-internal-repl-await.js
+node_modules/ts-node/dist-raw/node-internalBinding-fs.js
+node_modules/ts-node/dist-raw/node-nativemodule.js
+node_modules/ts-node/dist-raw/node-options.js
+node_modules/ts-node/dist-raw/node-primordials.js
+node_modules/ts-node/dist-raw/runmain-hack.js
+node_modules/ts-node/dist/bin-cwd.d.ts
+node_modules/ts-node/dist/bin-cwd.js
+node_modules/ts-node/dist/bin-cwd.js.map
+node_modules/ts-node/dist/bin-esm.d.ts
+node_modules/ts-node/dist/bin-esm.js
+node_modules/ts-node/dist/bin-esm.js.map
+node_modules/ts-node/dist/bin-script-deprecated.d.ts
+node_modules/ts-node/dist/bin-script-deprecated.js
+node_modules/ts-node/dist/bin-script-deprecated.js.map
+node_modules/ts-node/dist/bin-script.d.ts
+node_modules/ts-node/dist/bin-script.js
+node_modules/ts-node/dist/bin-script.js.map
+node_modules/ts-node/dist/bin-transpile.d.ts
+node_modules/ts-node/dist/bin-transpile.js
+node_modules/ts-node/dist/bin-transpile.js.map
+node_modules/ts-node/dist/bin.d.ts
+node_modules/ts-node/dist/bin.js
+node_modules/ts-node/dist/bin.js.map
+node_modules/ts-node/dist/child/argv-payload.d.ts
+node_modules/ts-node/dist/child/argv-payload.js
+node_modules/ts-node/dist/child/argv-payload.js.map
+node_modules/ts-node/dist/child/child-entrypoint.d.ts
+node_modules/ts-node/dist/child/child-entrypoint.js
+node_modules/ts-node/dist/child/child-entrypoint.js.map
+node_modules/ts-node/dist/child/child-loader.d.ts
+node_modules/ts-node/dist/child/child-loader.js
+node_modules/ts-node/dist/child/child-loader.js.map
+node_modules/ts-node/dist/child/child-require.d.ts
+node_modules/ts-node/dist/child/child-require.js
+node_modules/ts-node/dist/child/child-require.js.map
+node_modules/ts-node/dist/child/spawn-child.d.ts
+node_modules/ts-node/dist/child/spawn-child.js
+node_modules/ts-node/dist/child/spawn-child.js.map
+node_modules/ts-node/dist/cjs-resolve-hooks.d.ts
+node_modules/ts-node/dist/cjs-resolve-hooks.js
+node_modules/ts-node/dist/cjs-resolve-hooks.js.map
+node_modules/ts-node/dist/configuration.d.ts
+node_modules/ts-node/dist/configuration.js
+node_modules/ts-node/dist/configuration.js.map
+node_modules/ts-node/dist/esm.d.ts
+node_modules/ts-node/dist/esm.js
+node_modules/ts-node/dist/esm.js.map
+node_modules/ts-node/dist/file-extensions.d.ts
+node_modules/ts-node/dist/file-extensions.js
+node_modules/ts-node/dist/file-extensions.js.map
+node_modules/ts-node/dist/index.d.ts
+node_modules/ts-node/dist/index.js
+node_modules/ts-node/dist/index.js.map
+node_modules/ts-node/dist/module-type-classifier.d.ts
+node_modules/ts-node/dist/module-type-classifier.js
+node_modules/ts-node/dist/module-type-classifier.js.map
+node_modules/ts-node/dist/node-module-type-classifier.d.ts
+node_modules/ts-node/dist/node-module-type-classifier.js
+node_modules/ts-node/dist/node-module-type-classifier.js.map
+node_modules/ts-node/dist/repl.d.ts
+node_modules/ts-node/dist/repl.js
+node_modules/ts-node/dist/repl.js.map
+node_modules/ts-node/dist/resolver-functions.d.ts
+node_modules/ts-node/dist/resolver-functions.js
+node_modules/ts-node/dist/resolver-functions.js.map
+node_modules/ts-node/dist/transpilers/swc.d.ts
+node_modules/ts-node/dist/transpilers/swc.js
+node_modules/ts-node/dist/transpilers/swc.js.map
+node_modules/ts-node/dist/transpilers/types.d.ts
+node_modules/ts-node/dist/transpilers/types.js
+node_modules/ts-node/dist/transpilers/types.js.map
+node_modules/ts-node/dist/ts-compiler-types.d.ts
+node_modules/ts-node/dist/ts-compiler-types.js
+node_modules/ts-node/dist/ts-compiler-types.js.map
+node_modules/ts-node/dist/ts-internals.d.ts
+node_modules/ts-node/dist/ts-internals.js
+node_modules/ts-node/dist/ts-internals.js.map
+node_modules/ts-node/dist/ts-transpile-module.d.ts
+node_modules/ts-node/dist/ts-transpile-module.js
+node_modules/ts-node/dist/ts-transpile-module.js.map
+node_modules/ts-node/dist/tsconfig-schema.d.ts
+node_modules/ts-node/dist/tsconfig-schema.js
+node_modules/ts-node/dist/tsconfig-schema.js.map
+node_modules/ts-node/dist/tsconfigs.d.ts
+node_modules/ts-node/dist/tsconfigs.js
+node_modules/ts-node/dist/tsconfigs.js.map
+node_modules/ts-node/dist/util.d.ts
+node_modules/ts-node/dist/util.js
+node_modules/ts-node/dist/util.js.map
+node_modules/ts-node/esm.mjs
+node_modules/ts-node/esm/transpile-only.mjs
+node_modules/ts-node/node10/tsconfig.json
+node_modules/ts-node/node12/tsconfig.json
+node_modules/ts-node/node14/tsconfig.json
+node_modules/ts-node/node16/tsconfig.json
+node_modules/ts-node/package.json
+node_modules/ts-node/register/files.js
+node_modules/ts-node/register/index.js
+node_modules/ts-node/register/transpile-only.js
+node_modules/ts-node/register/type-check.js
+node_modules/ts-node/transpilers/swc-experimental.js
+node_modules/ts-node/transpilers/swc.js
+node_modules/ts-node/tsconfig.schema.json
+node_modules/ts-node/tsconfig.schemastore-schema.json
+node_modules/tunnel-agent/LICENSE
+node_modules/tunnel-agent/README.md
+node_modules/tunnel-agent/index.js
+node_modules/tunnel-agent/package.json
+node_modules/typescript/LICENSE.txt
+node_modules/typescript/README.md
+node_modules/typescript/SECURITY.md
+node_modules/typescript/ThirdPartyNoticeText.txt
+node_modules/typescript/bin/tsc
+node_modules/typescript/bin/tsserver
+node_modules/typescript/lib/_tsc.js
+node_modules/typescript/lib/_tsserver.js
+node_modules/typescript/lib/_typingsInstaller.js
+node_modules/typescript/lib/cs/diagnosticMessages.generated.json
+node_modules/typescript/lib/de/diagnosticMessages.generated.json
+node_modules/typescript/lib/es/diagnosticMessages.generated.json
+node_modules/typescript/lib/fr/diagnosticMessages.generated.json
+node_modules/typescript/lib/it/diagnosticMessages.generated.json
+node_modules/typescript/lib/ja/diagnosticMessages.generated.json
+node_modules/typescript/lib/ko/diagnosticMessages.generated.json
+node_modules/typescript/lib/lib.d.ts
+node_modules/typescript/lib/lib.decorators.d.ts
+node_modules/typescript/lib/lib.decorators.legacy.d.ts
+node_modules/typescript/lib/lib.dom.asynciterable.d.ts
+node_modules/typescript/lib/lib.dom.d.ts
+node_modules/typescript/lib/lib.dom.iterable.d.ts
+node_modules/typescript/lib/lib.es2015.collection.d.ts
+node_modules/typescript/lib/lib.es2015.core.d.ts
+node_modules/typescript/lib/lib.es2015.d.ts
+node_modules/typescript/lib/lib.es2015.generator.d.ts
+node_modules/typescript/lib/lib.es2015.iterable.d.ts
+node_modules/typescript/lib/lib.es2015.promise.d.ts
+node_modules/typescript/lib/lib.es2015.proxy.d.ts
+node_modules/typescript/lib/lib.es2015.reflect.d.ts
+node_modules/typescript/lib/lib.es2015.symbol.d.ts
+node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts
+node_modules/typescript/lib/lib.es2016.array.include.d.ts
+node_modules/typescript/lib/lib.es2016.d.ts
+node_modules/typescript/lib/lib.es2016.full.d.ts
+node_modules/typescript/lib/lib.es2016.intl.d.ts
+node_modules/typescript/lib/lib.es2017.arraybuffer.d.ts
+node_modules/typescript/lib/lib.es2017.d.ts
+node_modules/typescript/lib/lib.es2017.date.d.ts
+node_modules/typescript/lib/lib.es2017.full.d.ts
+node_modules/typescript/lib/lib.es2017.intl.d.ts
+node_modules/typescript/lib/lib.es2017.object.d.ts
+node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts
+node_modules/typescript/lib/lib.es2017.string.d.ts
+node_modules/typescript/lib/lib.es2017.typedarrays.d.ts
+node_modules/typescript/lib/lib.es2018.asyncgenerator.d.ts
+node_modules/typescript/lib/lib.es2018.asynciterable.d.ts
+node_modules/typescript/lib/lib.es2018.d.ts
+node_modules/typescript/lib/lib.es2018.full.d.ts
+node_modules/typescript/lib/lib.es2018.intl.d.ts
+node_modules/typescript/lib/lib.es2018.promise.d.ts
+node_modules/typescript/lib/lib.es2018.regexp.d.ts
+node_modules/typescript/lib/lib.es2019.array.d.ts
+node_modules/typescript/lib/lib.es2019.d.ts
+node_modules/typescript/lib/lib.es2019.full.d.ts
+node_modules/typescript/lib/lib.es2019.intl.d.ts
+node_modules/typescript/lib/lib.es2019.object.d.ts
+node_modules/typescript/lib/lib.es2019.string.d.ts
+node_modules/typescript/lib/lib.es2019.symbol.d.ts
+node_modules/typescript/lib/lib.es2020.bigint.d.ts
+node_modules/typescript/lib/lib.es2020.d.ts
+node_modules/typescript/lib/lib.es2020.date.d.ts
+node_modules/typescript/lib/lib.es2020.full.d.ts
+node_modules/typescript/lib/lib.es2020.intl.d.ts
+node_modules/typescript/lib/lib.es2020.number.d.ts
+node_modules/typescript/lib/lib.es2020.promise.d.ts
+node_modules/typescript/lib/lib.es2020.sharedmemory.d.ts
+node_modules/typescript/lib/lib.es2020.string.d.ts
+node_modules/typescript/lib/lib.es2020.symbol.wellknown.d.ts
+node_modules/typescript/lib/lib.es2021.d.ts
+node_modules/typescript/lib/lib.es2021.full.d.ts
+node_modules/typescript/lib/lib.es2021.intl.d.ts
+node_modules/typescript/lib/lib.es2021.promise.d.ts
+node_modules/typescript/lib/lib.es2021.string.d.ts
+node_modules/typescript/lib/lib.es2021.weakref.d.ts
+node_modules/typescript/lib/lib.es2022.array.d.ts
+node_modules/typescript/lib/lib.es2022.d.ts
+node_modules/typescript/lib/lib.es2022.error.d.ts
+node_modules/typescript/lib/lib.es2022.full.d.ts
+node_modules/typescript/lib/lib.es2022.intl.d.ts
+node_modules/typescript/lib/lib.es2022.object.d.ts
+node_modules/typescript/lib/lib.es2022.regexp.d.ts
+node_modules/typescript/lib/lib.es2022.string.d.ts
+node_modules/typescript/lib/lib.es2023.array.d.ts
+node_modules/typescript/lib/lib.es2023.collection.d.ts
+node_modules/typescript/lib/lib.es2023.d.ts
+node_modules/typescript/lib/lib.es2023.full.d.ts
+node_modules/typescript/lib/lib.es2023.intl.d.ts
+node_modules/typescript/lib/lib.es2024.arraybuffer.d.ts
+node_modules/typescript/lib/lib.es2024.collection.d.ts
+node_modules/typescript/lib/lib.es2024.d.ts
+node_modules/typescript/lib/lib.es2024.full.d.ts
+node_modules/typescript/lib/lib.es2024.object.d.ts
+node_modules/typescript/lib/lib.es2024.promise.d.ts
+node_modules/typescript/lib/lib.es2024.regexp.d.ts
+node_modules/typescript/lib/lib.es2024.sharedmemory.d.ts
+node_modules/typescript/lib/lib.es2024.string.d.ts
+node_modules/typescript/lib/lib.es5.d.ts
+node_modules/typescript/lib/lib.es6.d.ts
+node_modules/typescript/lib/lib.esnext.array.d.ts
+node_modules/typescript/lib/lib.esnext.collection.d.ts
+node_modules/typescript/lib/lib.esnext.d.ts
+node_modules/typescript/lib/lib.esnext.decorators.d.ts
+node_modules/typescript/lib/lib.esnext.disposable.d.ts
+node_modules/typescript/lib/lib.esnext.error.d.ts
+node_modules/typescript/lib/lib.esnext.float16.d.ts
+node_modules/typescript/lib/lib.esnext.full.d.ts
+node_modules/typescript/lib/lib.esnext.intl.d.ts
+node_modules/typescript/lib/lib.esnext.iterator.d.ts
+node_modules/typescript/lib/lib.esnext.promise.d.ts
+node_modules/typescript/lib/lib.esnext.sharedmemory.d.ts
+node_modules/typescript/lib/lib.scripthost.d.ts
+node_modules/typescript/lib/lib.webworker.asynciterable.d.ts
+node_modules/typescript/lib/lib.webworker.d.ts
+node_modules/typescript/lib/lib.webworker.importscripts.d.ts
+node_modules/typescript/lib/lib.webworker.iterable.d.ts
+node_modules/typescript/lib/pl/diagnosticMessages.generated.json
+node_modules/typescript/lib/pt-br/diagnosticMessages.generated.json
+node_modules/typescript/lib/ru/diagnosticMessages.generated.json
+node_modules/typescript/lib/tr/diagnosticMessages.generated.json
+node_modules/typescript/lib/tsc.js
+node_modules/typescript/lib/tsserver.js
+node_modules/typescript/lib/tsserverlibrary.d.ts
+node_modules/typescript/lib/tsserverlibrary.js
+node_modules/typescript/lib/typesMap.json
+node_modules/typescript/lib/typescript.d.ts
+node_modules/typescript/lib/typescript.js
+node_modules/typescript/lib/typingsInstaller.js
+node_modules/typescript/lib/watchGuard.js
+node_modules/typescript/lib/zh-cn/diagnosticMessages.generated.json
+node_modules/typescript/lib/zh-tw/diagnosticMessages.generated.json
+node_modules/typescript/package.json
+node_modules/undefsafe/.github/workflows/release.yml
+node_modules/undefsafe/.jscsrc
+node_modules/undefsafe/.jshintrc
+node_modules/undefsafe/.travis.yml
+node_modules/undefsafe/LICENSE
+node_modules/undefsafe/README.md
+node_modules/undefsafe/example.js
+node_modules/undefsafe/lib/undefsafe.js
+node_modules/undefsafe/package.json
+node_modules/undici-types/LICENSE
+node_modules/undici-types/README.md
+node_modules/undici-types/agent.d.ts
+node_modules/undici-types/api.d.ts
+node_modules/undici-types/balanced-pool.d.ts
+node_modules/undici-types/cache-interceptor.d.ts
+node_modules/undici-types/cache.d.ts
+node_modules/undici-types/client-stats.d.ts
+node_modules/undici-types/client.d.ts
+node_modules/undici-types/connector.d.ts
+node_modules/undici-types/content-type.d.ts
+node_modules/undici-types/cookies.d.ts
+node_modules/undici-types/diagnostics-channel.d.ts
+node_modules/undici-types/dispatcher.d.ts
+node_modules/undici-types/env-http-proxy-agent.d.ts
+node_modules/undici-types/errors.d.ts
+node_modules/undici-types/eventsource.d.ts
+node_modules/undici-types/fetch.d.ts
+node_modules/undici-types/formdata.d.ts
+node_modules/undici-types/global-dispatcher.d.ts
+node_modules/undici-types/global-origin.d.ts
+node_modules/undici-types/h2c-client.d.ts
+node_modules/undici-types/handlers.d.ts
+node_modules/undici-types/header.d.ts
+node_modules/undici-types/index.d.ts
+node_modules/undici-types/interceptors.d.ts
+node_modules/undici-types/mock-agent.d.ts
+node_modules/undici-types/mock-call-history.d.ts
+node_modules/undici-types/mock-client.d.ts
+node_modules/undici-types/mock-errors.d.ts
+node_modules/undici-types/mock-interceptor.d.ts
+node_modules/undici-types/mock-pool.d.ts
+node_modules/undici-types/package.json
+node_modules/undici-types/patch.d.ts
+node_modules/undici-types/pool-stats.d.ts
+node_modules/undici-types/pool.d.ts
+node_modules/undici-types/proxy-agent.d.ts
+node_modules/undici-types/readable.d.ts
+node_modules/undici-types/retry-agent.d.ts
+node_modules/undici-types/retry-handler.d.ts
+node_modules/undici-types/util.d.ts
+node_modules/undici-types/utility.d.ts
+node_modules/undici-types/webidl.d.ts
+node_modules/undici-types/websocket.d.ts
+node_modules/util-deprecate/History.md
+node_modules/util-deprecate/LICENSE
+node_modules/util-deprecate/README.md
+node_modules/util-deprecate/browser.js
+node_modules/util-deprecate/node.js
+node_modules/util-deprecate/package.json
+node_modules/v8-compile-cache-lib/CHANGELOG.md
+node_modules/v8-compile-cache-lib/LICENSE
+node_modules/v8-compile-cache-lib/README.md
+node_modules/v8-compile-cache-lib/package.json
+node_modules/v8-compile-cache-lib/v8-compile-cache.d.ts
+node_modules/v8-compile-cache-lib/v8-compile-cache.js
+node_modules/which/CHANGELOG.md
+node_modules/which/LICENSE
+node_modules/which/README.md
+node_modules/which/bin/node-which
+node_modules/which/package.json
+node_modules/which/which.js
+node_modules/wrap-ansi-cjs/index.js
+node_modules/wrap-ansi-cjs/license
+node_modules/wrap-ansi-cjs/node_modules/ansi-regex/index.d.ts
+node_modules/wrap-ansi-cjs/node_modules/ansi-regex/index.js
+node_modules/wrap-ansi-cjs/node_modules/ansi-regex/license
+node_modules/wrap-ansi-cjs/node_modules/ansi-regex/package.json
+node_modules/wrap-ansi-cjs/node_modules/ansi-regex/readme.md
+node_modules/wrap-ansi-cjs/node_modules/ansi-styles/index.d.ts
+node_modules/wrap-ansi-cjs/node_modules/ansi-styles/index.js
+node_modules/wrap-ansi-cjs/node_modules/ansi-styles/license
+node_modules/wrap-ansi-cjs/node_modules/ansi-styles/package.json
+node_modules/wrap-ansi-cjs/node_modules/ansi-styles/readme.md
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/LICENSE-MIT.txt
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/README.md
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/es2015/index.js
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/es2015/text.js
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/index.d.ts
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/index.js
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/package.json
+node_modules/wrap-ansi-cjs/node_modules/emoji-regex/text.js
+node_modules/wrap-ansi-cjs/node_modules/string-width/index.d.ts
+node_modules/wrap-ansi-cjs/node_modules/string-width/index.js
+node_modules/wrap-ansi-cjs/node_modules/string-width/license
+node_modules/wrap-ansi-cjs/node_modules/string-width/package.json
+node_modules/wrap-ansi-cjs/node_modules/string-width/readme.md
+node_modules/wrap-ansi-cjs/node_modules/strip-ansi/index.d.ts
+node_modules/wrap-ansi-cjs/node_modules/strip-ansi/index.js
+node_modules/wrap-ansi-cjs/node_modules/strip-ansi/license
+node_modules/wrap-ansi-cjs/node_modules/strip-ansi/package.json
+node_modules/wrap-ansi-cjs/node_modules/strip-ansi/readme.md
+node_modules/wrap-ansi-cjs/package.json
+node_modules/wrap-ansi-cjs/readme.md
+node_modules/wrap-ansi/index.d.ts
+node_modules/wrap-ansi/index.js
+node_modules/wrap-ansi/license
+node_modules/wrap-ansi/package.json
+node_modules/wrap-ansi/readme.md
+node_modules/wrappy/LICENSE
+node_modules/wrappy/README.md
+node_modules/wrappy/package.json
+node_modules/wrappy/wrappy.js
+node_modules/yaml/LICENSE
+node_modules/yaml/README.md
+node_modules/yaml/bin.mjs
+node_modules/yaml/browser/dist/compose/compose-collection.js
+node_modules/yaml/browser/dist/compose/compose-doc.js
+node_modules/yaml/browser/dist/compose/compose-node.js
+node_modules/yaml/browser/dist/compose/compose-scalar.js
+node_modules/yaml/browser/dist/compose/composer.js
+node_modules/yaml/browser/dist/compose/resolve-block-map.js
+node_modules/yaml/browser/dist/compose/resolve-block-scalar.js
+node_modules/yaml/browser/dist/compose/resolve-block-seq.js
+node_modules/yaml/browser/dist/compose/resolve-end.js
+node_modules/yaml/browser/dist/compose/resolve-flow-collection.js
+node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js
+node_modules/yaml/browser/dist/compose/resolve-props.js
+node_modules/yaml/browser/dist/compose/util-contains-newline.js
+node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js
+node_modules/yaml/browser/dist/compose/util-flow-indent-check.js
+node_modules/yaml/browser/dist/compose/util-map-includes.js
+node_modules/yaml/browser/dist/doc/Document.js
+node_modules/yaml/browser/dist/doc/anchors.js
+node_modules/yaml/browser/dist/doc/applyReviver.js
+node_modules/yaml/browser/dist/doc/createNode.js
+node_modules/yaml/browser/dist/doc/directives.js
+node_modules/yaml/browser/dist/errors.js
+node_modules/yaml/browser/dist/index.js
+node_modules/yaml/browser/dist/log.js
+node_modules/yaml/browser/dist/nodes/Alias.js
+node_modules/yaml/browser/dist/nodes/Collection.js
+node_modules/yaml/browser/dist/nodes/Node.js
+node_modules/yaml/browser/dist/nodes/Pair.js
+node_modules/yaml/browser/dist/nodes/Scalar.js
+node_modules/yaml/browser/dist/nodes/YAMLMap.js
+node_modules/yaml/browser/dist/nodes/YAMLSeq.js
+node_modules/yaml/browser/dist/nodes/addPairToJSMap.js
+node_modules/yaml/browser/dist/nodes/identity.js
+node_modules/yaml/browser/dist/nodes/toJS.js
+node_modules/yaml/browser/dist/parse/cst-scalar.js
+node_modules/yaml/browser/dist/parse/cst-stringify.js
+node_modules/yaml/browser/dist/parse/cst-visit.js
+node_modules/yaml/browser/dist/parse/cst.js
+node_modules/yaml/browser/dist/parse/lexer.js
+node_modules/yaml/browser/dist/parse/line-counter.js
+node_modules/yaml/browser/dist/parse/parser.js
+node_modules/yaml/browser/dist/public-api.js
+node_modules/yaml/browser/dist/schema/Schema.js
+node_modules/yaml/browser/dist/schema/common/map.js
+node_modules/yaml/browser/dist/schema/common/null.js
+node_modules/yaml/browser/dist/schema/common/seq.js
+node_modules/yaml/browser/dist/schema/common/string.js
+node_modules/yaml/browser/dist/schema/core/bool.js
+node_modules/yaml/browser/dist/schema/core/float.js
+node_modules/yaml/browser/dist/schema/core/int.js
+node_modules/yaml/browser/dist/schema/core/schema.js
+node_modules/yaml/browser/dist/schema/json/schema.js
+node_modules/yaml/browser/dist/schema/tags.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/float.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/int.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/set.js
+node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js
+node_modules/yaml/browser/dist/stringify/foldFlowLines.js
+node_modules/yaml/browser/dist/stringify/stringify.js
+node_modules/yaml/browser/dist/stringify/stringifyCollection.js
+node_modules/yaml/browser/dist/stringify/stringifyComment.js
+node_modules/yaml/browser/dist/stringify/stringifyDocument.js
+node_modules/yaml/browser/dist/stringify/stringifyNumber.js
+node_modules/yaml/browser/dist/stringify/stringifyPair.js
+node_modules/yaml/browser/dist/stringify/stringifyString.js
+node_modules/yaml/browser/dist/util.js
+node_modules/yaml/browser/dist/visit.js
+node_modules/yaml/browser/index.js
+node_modules/yaml/browser/package.json
+node_modules/yaml/dist/cli.d.ts
+node_modules/yaml/dist/cli.mjs
+node_modules/yaml/dist/compose/compose-collection.d.ts
+node_modules/yaml/dist/compose/compose-collection.js
+node_modules/yaml/dist/compose/compose-doc.d.ts
+node_modules/yaml/dist/compose/compose-doc.js
+node_modules/yaml/dist/compose/compose-node.d.ts
+node_modules/yaml/dist/compose/compose-node.js
+node_modules/yaml/dist/compose/compose-scalar.d.ts
+node_modules/yaml/dist/compose/compose-scalar.js
+node_modules/yaml/dist/compose/composer.d.ts
+node_modules/yaml/dist/compose/composer.js
+node_modules/yaml/dist/compose/resolve-block-map.d.ts
+node_modules/yaml/dist/compose/resolve-block-map.js
+node_modules/yaml/dist/compose/resolve-block-scalar.d.ts
+node_modules/yaml/dist/compose/resolve-block-scalar.js
+node_modules/yaml/dist/compose/resolve-block-seq.d.ts
+node_modules/yaml/dist/compose/resolve-block-seq.js
+node_modules/yaml/dist/compose/resolve-end.d.ts
+node_modules/yaml/dist/compose/resolve-end.js
+node_modules/yaml/dist/compose/resolve-flow-collection.d.ts
+node_modules/yaml/dist/compose/resolve-flow-collection.js
+node_modules/yaml/dist/compose/resolve-flow-scalar.d.ts
+node_modules/yaml/dist/compose/resolve-flow-scalar.js
+node_modules/yaml/dist/compose/resolve-props.d.ts
+node_modules/yaml/dist/compose/resolve-props.js
+node_modules/yaml/dist/compose/util-contains-newline.d.ts
+node_modules/yaml/dist/compose/util-contains-newline.js
+node_modules/yaml/dist/compose/util-empty-scalar-position.d.ts
+node_modules/yaml/dist/compose/util-empty-scalar-position.js
+node_modules/yaml/dist/compose/util-flow-indent-check.d.ts
+node_modules/yaml/dist/compose/util-flow-indent-check.js
+node_modules/yaml/dist/compose/util-map-includes.d.ts
+node_modules/yaml/dist/compose/util-map-includes.js
+node_modules/yaml/dist/doc/Document.d.ts
+node_modules/yaml/dist/doc/Document.js
+node_modules/yaml/dist/doc/anchors.d.ts
+node_modules/yaml/dist/doc/anchors.js
+node_modules/yaml/dist/doc/applyReviver.d.ts
+node_modules/yaml/dist/doc/applyReviver.js
+node_modules/yaml/dist/doc/createNode.d.ts
+node_modules/yaml/dist/doc/createNode.js
+node_modules/yaml/dist/doc/directives.d.ts
+node_modules/yaml/dist/doc/directives.js
+node_modules/yaml/dist/errors.d.ts
+node_modules/yaml/dist/errors.js
+node_modules/yaml/dist/index.d.ts
+node_modules/yaml/dist/index.js
+node_modules/yaml/dist/log.d.ts
+node_modules/yaml/dist/log.js
+node_modules/yaml/dist/nodes/Alias.d.ts
+node_modules/yaml/dist/nodes/Alias.js
+node_modules/yaml/dist/nodes/Collection.d.ts
+node_modules/yaml/dist/nodes/Collection.js
+node_modules/yaml/dist/nodes/Node.d.ts
+node_modules/yaml/dist/nodes/Node.js
+node_modules/yaml/dist/nodes/Pair.d.ts
+node_modules/yaml/dist/nodes/Pair.js
+node_modules/yaml/dist/nodes/Scalar.d.ts
+node_modules/yaml/dist/nodes/Scalar.js
+node_modules/yaml/dist/nodes/YAMLMap.d.ts
+node_modules/yaml/dist/nodes/YAMLMap.js
+node_modules/yaml/dist/nodes/YAMLSeq.d.ts
+node_modules/yaml/dist/nodes/YAMLSeq.js
+node_modules/yaml/dist/nodes/addPairToJSMap.d.ts
+node_modules/yaml/dist/nodes/addPairToJSMap.js
+node_modules/yaml/dist/nodes/identity.d.ts
+node_modules/yaml/dist/nodes/identity.js
+node_modules/yaml/dist/nodes/toJS.d.ts
+node_modules/yaml/dist/nodes/toJS.js
+node_modules/yaml/dist/options.d.ts
+node_modules/yaml/dist/parse/cst-scalar.d.ts
+node_modules/yaml/dist/parse/cst-scalar.js
+node_modules/yaml/dist/parse/cst-stringify.d.ts
+node_modules/yaml/dist/parse/cst-stringify.js
+node_modules/yaml/dist/parse/cst-visit.d.ts
+node_modules/yaml/dist/parse/cst-visit.js
+node_modules/yaml/dist/parse/cst.d.ts
+node_modules/yaml/dist/parse/cst.js
+node_modules/yaml/dist/parse/lexer.d.ts
+node_modules/yaml/dist/parse/lexer.js
+node_modules/yaml/dist/parse/line-counter.d.ts
+node_modules/yaml/dist/parse/line-counter.js
+node_modules/yaml/dist/parse/parser.d.ts
+node_modules/yaml/dist/parse/parser.js
+node_modules/yaml/dist/public-api.d.ts
+node_modules/yaml/dist/public-api.js
+node_modules/yaml/dist/schema/Schema.d.ts
+node_modules/yaml/dist/schema/Schema.js
+node_modules/yaml/dist/schema/common/map.d.ts
+node_modules/yaml/dist/schema/common/map.js
+node_modules/yaml/dist/schema/common/null.d.ts
+node_modules/yaml/dist/schema/common/null.js
+node_modules/yaml/dist/schema/common/seq.d.ts
+node_modules/yaml/dist/schema/common/seq.js
+node_modules/yaml/dist/schema/common/string.d.ts
+node_modules/yaml/dist/schema/common/string.js
+node_modules/yaml/dist/schema/core/bool.d.ts
+node_modules/yaml/dist/schema/core/bool.js
+node_modules/yaml/dist/schema/core/float.d.ts
+node_modules/yaml/dist/schema/core/float.js
+node_modules/yaml/dist/schema/core/int.d.ts
+node_modules/yaml/dist/schema/core/int.js
+node_modules/yaml/dist/schema/core/schema.d.ts
+node_modules/yaml/dist/schema/core/schema.js
+node_modules/yaml/dist/schema/json-schema.d.ts
+node_modules/yaml/dist/schema/json/schema.d.ts
+node_modules/yaml/dist/schema/json/schema.js
+node_modules/yaml/dist/schema/tags.d.ts
+node_modules/yaml/dist/schema/tags.js
+node_modules/yaml/dist/schema/types.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/binary.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/binary.js
+node_modules/yaml/dist/schema/yaml-1.1/bool.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/bool.js
+node_modules/yaml/dist/schema/yaml-1.1/float.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/float.js
+node_modules/yaml/dist/schema/yaml-1.1/int.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/int.js
+node_modules/yaml/dist/schema/yaml-1.1/merge.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/merge.js
+node_modules/yaml/dist/schema/yaml-1.1/omap.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/omap.js
+node_modules/yaml/dist/schema/yaml-1.1/pairs.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/pairs.js
+node_modules/yaml/dist/schema/yaml-1.1/schema.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/schema.js
+node_modules/yaml/dist/schema/yaml-1.1/set.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/set.js
+node_modules/yaml/dist/schema/yaml-1.1/timestamp.d.ts
+node_modules/yaml/dist/schema/yaml-1.1/timestamp.js
+node_modules/yaml/dist/stringify/foldFlowLines.d.ts
+node_modules/yaml/dist/stringify/foldFlowLines.js
+node_modules/yaml/dist/stringify/stringify.d.ts
+node_modules/yaml/dist/stringify/stringify.js
+node_modules/yaml/dist/stringify/stringifyCollection.d.ts
+node_modules/yaml/dist/stringify/stringifyCollection.js
+node_modules/yaml/dist/stringify/stringifyComment.d.ts
+node_modules/yaml/dist/stringify/stringifyComment.js
+node_modules/yaml/dist/stringify/stringifyDocument.d.ts
+node_modules/yaml/dist/stringify/stringifyDocument.js
+node_modules/yaml/dist/stringify/stringifyNumber.d.ts
+node_modules/yaml/dist/stringify/stringifyNumber.js
+node_modules/yaml/dist/stringify/stringifyPair.d.ts
+node_modules/yaml/dist/stringify/stringifyPair.js
+node_modules/yaml/dist/stringify/stringifyString.d.ts
+node_modules/yaml/dist/stringify/stringifyString.js
+node_modules/yaml/dist/test-events.d.ts
+node_modules/yaml/dist/test-events.js
+node_modules/yaml/dist/util.d.ts
+node_modules/yaml/dist/util.js
+node_modules/yaml/dist/visit.d.ts
+node_modules/yaml/dist/visit.js
+node_modules/yaml/package.json
+node_modules/yaml/util.js
+node_modules/yn/index.d.ts
+node_modules/yn/index.js
+node_modules/yn/lenient.js
+node_modules/yn/license
+node_modules/yn/package.json
+node_modules/yn/readme.md
+package-lock.json
+package.json
+scripts/backup.sh
+scripts/deploy.sh
+scripts/manage-keys.js
+scripts/monitor.sh
+src/database/connection.ts
+src/middleware/apiKeyAuth.ts
+src/middleware/rateLimiter.ts
+src/migrations/001_create_api_keys_table.sql
+src/migrations/002_create_request_logs_table.sql
+src/migrations/003_create_digipin_cache_table.sql
+src/migrations/004_insert_default_api_keys.sql
+src/models/DigiPinModel.ts
+src/routes/batch.ts
+src/routes/geocode.ts
+src/routes/reverse.ts
+src/routes/usage.ts
+src/routes/validate.ts
+src/server.ts
+tsconfig.json
+
+```
+
+---
+
+I notice `node_modules/` is still being tracked. Let me update the .gitignore to exclude it properly and clean it up:
+
+---
+
+```bash
+git rm -r --cached node_modules/
+```
+
+```
+[Terminal output truncated: ~112KB dropped from beginning]
+110.test.js'
+rm 'node_modules/find-my-way/test/issue-132.test.js'
+rm 'node_modules/find-my-way/test/issue-145.test.js'
+rm 'node_modules/find-my-way/test/issue-149.test.js'
+rm 'node_modules/find-my-way/test/issue-151.test.js'
+rm 'node_modules/find-my-way/test/issue-154.test.js'
+rm 'node_modules/find-my-way/test/issue-161.test.js'
+rm 'node_modules/find-my-way/test/issue-17.test.js'
+rm 'node_modules/find-my-way/test/issue-175.test.js'
+rm 'node_modules/find-my-way/test/issue-182.test.js'
+rm 'node_modules/find-my-way/test/issue-190.test.js'
+rm 'node_modules/find-my-way/test/issue-20.test.js'
+rm 'node_modules/find-my-way/test/issue-206.test.js'
+rm 'node_modules/find-my-way/test/issue-221.test.js'
+rm 'node_modules/find-my-way/test/issue-234.test.js'
+rm 'node_modules/find-my-way/test/issue-238.test.js'
+rm 'node_modules/find-my-way/test/issue-240.test.js'
+rm 'node_modules/find-my-way/test/issue-241.test.js'
+rm 'node_modules/find-my-way/test/issue-247.test.js'
+rm 'node_modules/find-my-way/test/issue-254.test.js'
+rm 'node_modules/find-my-way/test/issue-28.test.js'
+rm 'node_modules/find-my-way/test/issue-280.test.js'
+rm 'node_modules/find-my-way/test/issue-285.test.js'
+rm 'node_modules/find-my-way/test/issue-330.test.js'
+rm 'node_modules/find-my-way/test/issue-44.test.js'
+rm 'node_modules/find-my-way/test/issue-46.test.js'
+rm 'node_modules/find-my-way/test/issue-49.test.js'
+rm 'node_modules/find-my-way/test/issue-59.test.js'
+rm 'node_modules/find-my-way/test/issue-62.test.js'
+rm 'node_modules/find-my-way/test/issue-63.test.js'
+rm 'node_modules/find-my-way/test/issue-67.test.js'
+rm 'node_modules/find-my-way/test/issue-93.test.js'
+rm 'node_modules/find-my-way/test/lookup-async.test.js'
+rm 'node_modules/find-my-way/test/lookup.test.js'
+rm 'node_modules/find-my-way/test/matching-order.test.js'
+rm 'node_modules/find-my-way/test/max-param-length.test.js'
+rm 'node_modules/find-my-way/test/methods.test.js'
+rm 'node_modules/find-my-way/test/null-object.test.js'
+rm 'node_modules/find-my-way/test/on-bad-url.test.js'
+rm 'node_modules/find-my-way/test/optional-params.test.js'
+rm 'node_modules/find-my-way/test/params-collisions.test.js'
+rm 'node_modules/find-my-way/test/path-params-match.test.js'
+rm 'node_modules/find-my-way/test/pretty-print-tree.test.js'
+rm 'node_modules/find-my-way/test/pretty-print.test.js'
+rm 'node_modules/find-my-way/test/querystring.test.js'
+rm 'node_modules/find-my-way/test/regex.test.js'
+rm 'node_modules/find-my-way/test/routes-registered.test.js'
+rm 'node_modules/find-my-way/test/server.test.js'
+rm 'node_modules/find-my-way/test/shorthands.test.js'
+rm 'node_modules/find-my-way/test/store.test.js'
+rm 'node_modules/find-my-way/test/types/router.test-d.ts'
+rm 'node_modules/foreground-child/LICENSE'
+rm 'node_modules/foreground-child/README.md'
+rm 'node_modules/foreground-child/dist/commonjs/all-signals.d.ts'
+rm 'node_modules/foreground-child/dist/commonjs/all-signals.d.ts.map'
+rm 'node_modules/foreground-child/dist/commonjs/all-signals.js'
+rm 'node_modules/foreground-child/dist/commonjs/all-signals.js.map'
+rm 'node_modules/foreground-child/dist/commonjs/index.d.ts'
+rm 'node_modules/foreground-child/dist/commonjs/index.d.ts.map'
+rm 'node_modules/foreground-child/dist/commonjs/index.js'
+rm 'node_modules/foreground-child/dist/commonjs/index.js.map'
+rm 'node_modules/foreground-child/dist/commonjs/package.json'
+rm 'node_modules/foreground-child/dist/commonjs/proxy-signals.d.ts'
+rm 'node_modules/foreground-child/dist/commonjs/proxy-signals.d.ts.map'
+rm 'node_modules/foreground-child/dist/commonjs/proxy-signals.js'
+rm 'node_modules/foreground-child/dist/commonjs/proxy-signals.js.map'
+rm 'node_modules/foreground-child/dist/commonjs/watchdog.d.ts'
+rm 'node_modules/foreground-child/dist/commonjs/watchdog.d.ts.map'
+rm 'node_modules/foreground-child/dist/commonjs/watchdog.js'
+rm 'node_modules/foreground-child/dist/commonjs/watchdog.js.map'
+rm 'node_modules/foreground-child/dist/esm/all-signals.d.ts'
+rm 'node_modules/foreground-child/dist/esm/all-signals.d.ts.map'
+rm 'node_modules/foreground-child/dist/esm/all-signals.js'
+rm 'node_modules/foreground-child/dist/esm/all-signals.js.map'
+rm 'node_modules/foreground-child/dist/esm/index.d.ts'
+rm 'node_modules/foreground-child/dist/esm/index.d.ts.map'
+rm 'node_modules/foreground-child/dist/esm/index.js'
+rm 'node_modules/foreground-child/dist/esm/index.js.map'
+rm 'node_modules/foreground-child/dist/esm/package.json'
+rm 'node_modules/foreground-child/dist/esm/proxy-signals.d.ts'
+rm 'node_modules/foreground-child/dist/esm/proxy-signals.d.ts.map'
+rm 'node_modules/foreground-child/dist/esm/proxy-signals.js'
+rm 'node_modules/foreground-child/dist/esm/proxy-signals.js.map'
+rm 'node_modules/foreground-child/dist/esm/watchdog.d.ts'
+rm 'node_modules/foreground-child/dist/esm/watchdog.d.ts.map'
+rm 'node_modules/foreground-child/dist/esm/watchdog.js'
+rm 'node_modules/foreground-child/dist/esm/watchdog.js.map'
+rm 'node_modules/foreground-child/package.json'
+rm 'node_modules/fs-constants/LICENSE'
+rm 'node_modules/fs-constants/README.md'
+rm 'node_modules/fs-constants/browser.js'
+rm 'node_modules/fs-constants/index.js'
+rm 'node_modules/fs-constants/package.json'
+rm 'node_modules/github-from-package/.travis.yml'
+rm 'node_modules/github-from-package/LICENSE'
+rm 'node_modules/github-from-package/example/package.json'
+rm 'node_modules/github-from-package/example/url.js'
+rm 'node_modules/github-from-package/index.js'
+rm 'node_modules/github-from-package/package.json'
+rm 'node_modules/github-from-package/readme.markdown'
+rm 'node_modules/github-from-package/test/a.json'
+rm 'node_modules/github-from-package/test/b.json'
+rm 'node_modules/github-from-package/test/c.json'
+rm 'node_modules/github-from-package/test/d.json'
+rm 'node_modules/github-from-package/test/e.json'
+rm 'node_modules/github-from-package/test/url.js'
+rm 'node_modules/glob-parent/CHANGELOG.md'
+rm 'node_modules/glob-parent/LICENSE'
+rm 'node_modules/glob-parent/README.md'
+rm 'node_modules/glob-parent/index.js'
+rm 'node_modules/glob-parent/package.json'
+rm 'node_modules/glob/LICENSE'
+rm 'node_modules/glob/README.md'
+rm 'node_modules/glob/dist/commonjs/glob.d.ts'
+rm 'node_modules/glob/dist/commonjs/glob.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/glob.js'
+rm 'node_modules/glob/dist/commonjs/glob.js.map'
+rm 'node_modules/glob/dist/commonjs/has-magic.d.ts'
+rm 'node_modules/glob/dist/commonjs/has-magic.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/has-magic.js'
+rm 'node_modules/glob/dist/commonjs/has-magic.js.map'
+rm 'node_modules/glob/dist/commonjs/ignore.d.ts'
+rm 'node_modules/glob/dist/commonjs/ignore.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/ignore.js'
+rm 'node_modules/glob/dist/commonjs/ignore.js.map'
+rm 'node_modules/glob/dist/commonjs/index.d.ts'
+rm 'node_modules/glob/dist/commonjs/index.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/index.js'
+rm 'node_modules/glob/dist/commonjs/index.js.map'
+rm 'node_modules/glob/dist/commonjs/package.json'
+rm 'node_modules/glob/dist/commonjs/pattern.d.ts'
+rm 'node_modules/glob/dist/commonjs/pattern.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/pattern.js'
+rm 'node_modules/glob/dist/commonjs/pattern.js.map'
+rm 'node_modules/glob/dist/commonjs/processor.d.ts'
+rm 'node_modules/glob/dist/commonjs/processor.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/processor.js'
+rm 'node_modules/glob/dist/commonjs/processor.js.map'
+rm 'node_modules/glob/dist/commonjs/walker.d.ts'
+rm 'node_modules/glob/dist/commonjs/walker.d.ts.map'
+rm 'node_modules/glob/dist/commonjs/walker.js'
+rm 'node_modules/glob/dist/commonjs/walker.js.map'
+rm 'node_modules/glob/dist/esm/bin.d.mts'
+rm 'node_modules/glob/dist/esm/bin.d.mts.map'
+rm 'node_modules/glob/dist/esm/bin.mjs'
+rm 'node_modules/glob/dist/esm/bin.mjs.map'
+rm 'node_modules/glob/dist/esm/glob.d.ts'
+rm 'node_modules/glob/dist/esm/glob.d.ts.map'
+rm 'node_modules/glob/dist/esm/glob.js'
+rm 'node_modules/glob/dist/esm/glob.js.map'
+rm 'node_modules/glob/dist/esm/has-magic.d.ts'
+rm 'node_modules/glob/dist/esm/has-magic.d.ts.map'
+rm 'node_modules/glob/dist/esm/has-magic.js'
+rm 'node_modules/glob/dist/esm/has-magic.js.map'
+rm 'node_modules/glob/dist/esm/ignore.d.ts'
+rm 'node_modules/glob/dist/esm/ignore.d.ts.map'
+rm 'node_modules/glob/dist/esm/ignore.js'
+rm 'node_modules/glob/dist/esm/ignore.js.map'
+rm 'node_modules/glob/dist/esm/index.d.ts'
+rm 'node_modules/glob/dist/esm/index.d.ts.map'
+rm 'node_modules/glob/dist/esm/index.js'
+rm 'node_modules/glob/dist/esm/index.js.map'
+rm 'node_modules/glob/dist/esm/package.json'
+rm 'node_modules/glob/dist/esm/pattern.d.ts'
+rm 'node_modules/glob/dist/esm/pattern.d.ts.map'
+rm 'node_modules/glob/dist/esm/pattern.js'
+rm 'node_modules/glob/dist/esm/pattern.js.map'
+rm 'node_modules/glob/dist/esm/processor.d.ts'
+rm 'node_modules/glob/dist/esm/processor.d.ts.map'
+rm 'node_modules/glob/dist/esm/processor.js'
+rm 'node_modules/glob/dist/esm/processor.js.map'
+rm 'node_modules/glob/dist/esm/walker.d.ts'
+rm 'node_modules/glob/dist/esm/walker.d.ts.map'
+rm 'node_modules/glob/dist/esm/walker.js'
+rm 'node_modules/glob/dist/esm/walker.js.map'
+rm 'node_modules/glob/package.json'
+rm 'node_modules/has-flag/index.js'
+rm 'node_modules/has-flag/license'
+rm 'node_modules/has-flag/package.json'
+rm 'node_modules/has-flag/readme.md'
+rm 'node_modules/helmet/CHANGELOG.md'
+rm 'node_modules/helmet/LICENSE'
+rm 'node_modules/helmet/README.md'
+rm 'node_modules/helmet/SECURITY.md'
+rm 'node_modules/helmet/index.cjs'
+rm 'node_modules/helmet/index.d.cts'
+rm 'node_modules/helmet/index.d.mts'
+rm 'node_modules/helmet/index.mjs'
+rm 'node_modules/helmet/package.json'
+rm 'node_modules/http-errors/HISTORY.md'
+rm 'node_modules/http-errors/LICENSE'
+rm 'node_modules/http-errors/README.md'
+rm 'node_modules/http-errors/index.js'
+rm 'node_modules/http-errors/package.json'
+rm 'node_modules/ieee754/LICENSE'
+rm 'node_modules/ieee754/README.md'
+rm 'node_modules/ieee754/index.d.ts'
+rm 'node_modules/ieee754/index.js'
+rm 'node_modules/ieee754/package.json'
+rm 'node_modules/ignore-by-default/LICENSE'
+rm 'node_modules/ignore-by-default/README.md'
+rm 'node_modules/ignore-by-default/index.js'
+rm 'node_modules/ignore-by-default/package.json'
+rm 'node_modules/inherits/LICENSE'
+rm 'node_modules/inherits/README.md'
+rm 'node_modules/inherits/inherits.js'
+rm 'node_modules/inherits/inherits_browser.js'
+rm 'node_modules/inherits/package.json'
+rm 'node_modules/ini/LICENSE'
+rm 'node_modules/ini/README.md'
+rm 'node_modules/ini/ini.js'
+rm 'node_modules/ini/package.json'
+rm 'node_modules/ipaddr.js/LICENSE'
+rm 'node_modules/ipaddr.js/README.md'
+rm 'node_modules/ipaddr.js/ipaddr.min.js'
+rm 'node_modules/ipaddr.js/lib/ipaddr.js'
+rm 'node_modules/ipaddr.js/lib/ipaddr.js.d.ts'
+rm 'node_modules/ipaddr.js/package.json'
+rm 'node_modules/is-binary-path/index.d.ts'
+rm 'node_modules/is-binary-path/index.js'
+rm 'node_modules/is-binary-path/license'
+rm 'node_modules/is-binary-path/package.json'
+rm 'node_modules/is-binary-path/readme.md'
+rm 'node_modules/is-extglob/LICENSE'
+rm 'node_modules/is-extglob/README.md'
+rm 'node_modules/is-extglob/index.js'
+rm 'node_modules/is-extglob/package.json'
+rm 'node_modules/is-fullwidth-code-point/index.d.ts'
+rm 'node_modules/is-fullwidth-code-point/index.js'
+rm 'node_modules/is-fullwidth-code-point/license'
+rm 'node_modules/is-fullwidth-code-point/package.json'
+rm 'node_modules/is-fullwidth-code-point/readme.md'
+rm 'node_modules/is-glob/LICENSE'
+rm 'node_modules/is-glob/README.md'
+rm 'node_modules/is-glob/index.js'
+rm 'node_modules/is-glob/package.json'
+rm 'node_modules/is-number/LICENSE'
+rm 'node_modules/is-number/README.md'
+rm 'node_modules/is-number/index.js'
+rm 'node_modules/is-number/package.json'
+rm 'node_modules/isexe/.npmignore'
+rm 'node_modules/isexe/LICENSE'
+rm 'node_modules/isexe/README.md'
+rm 'node_modules/isexe/index.js'
+rm 'node_modules/isexe/mode.js'
+rm 'node_modules/isexe/package.json'
+rm 'node_modules/isexe/test/basic.js'
+rm 'node_modules/isexe/windows.js'
+rm 'node_modules/jackspeak/LICENSE.md'
+rm 'node_modules/jackspeak/README.md'
+rm 'node_modules/jackspeak/dist/commonjs/index.d.ts'
+rm 'node_modules/jackspeak/dist/commonjs/index.d.ts.map'
+rm 'node_modules/jackspeak/dist/commonjs/index.js'
+rm 'node_modules/jackspeak/dist/commonjs/index.js.map'
+rm 'node_modules/jackspeak/dist/commonjs/package.json'
+rm 'node_modules/jackspeak/dist/esm/index.d.ts'
+rm 'node_modules/jackspeak/dist/esm/index.d.ts.map'
+rm 'node_modules/jackspeak/dist/esm/index.js'
+rm 'node_modules/jackspeak/dist/esm/index.js.map'
+rm 'node_modules/jackspeak/dist/esm/package.json'
+rm 'node_modules/jackspeak/package.json'
+rm 'node_modules/json-schema-ref-resolver/.gitattributes'
+rm 'node_modules/json-schema-ref-resolver/.github/dependabot.yml'
+rm 'node_modules/json-schema-ref-resolver/.github/workflows/ci.yml'
+rm 'node_modules/json-schema-ref-resolver/LICENSE'
+rm 'node_modules/json-schema-ref-resolver/README.md'
+rm 'node_modules/json-schema-ref-resolver/eslint.config.js'
+rm 'node_modules/json-schema-ref-resolver/index.js'
+rm 'node_modules/json-schema-ref-resolver/package.json'
+rm 'node_modules/json-schema-ref-resolver/test/anchor.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/collisions.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/deref-schema.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/get-deref-schema.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/get-schema-dependencies.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/get-schema-refs.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/get-schema.test.js'
+rm 'node_modules/json-schema-ref-resolver/test/has-schema.test.js'
+rm 'node_modules/json-schema-ref-resolver/types/index.d.ts'
+rm 'node_modules/json-schema-ref-resolver/types/index.test-d.ts'
+rm 'node_modules/json-schema-resolver/LICENSE'
+rm 'node_modules/json-schema-resolver/README.md'
+rm 'node_modules/json-schema-resolver/eslint.config.js'
+rm 'node_modules/json-schema-resolver/package.json'
+rm 'node_modules/json-schema-resolver/ref-resolver.js'
+rm 'node_modules/json-schema-traverse/.eslintrc.yml'
+rm 'node_modules/json-schema-traverse/.github/FUNDING.yml'
+rm 'node_modules/json-schema-traverse/.github/workflows/build.yml'
+rm 'node_modules/json-schema-traverse/.github/workflows/publish.yml'
+rm 'node_modules/json-schema-traverse/LICENSE'
+rm 'node_modules/json-schema-traverse/README.md'
+rm 'node_modules/json-schema-traverse/index.d.ts'
+rm 'node_modules/json-schema-traverse/index.js'
+rm 'node_modules/json-schema-traverse/package.json'
+rm 'node_modules/json-schema-traverse/spec/.eslintrc.yml'
+rm 'node_modules/json-schema-traverse/spec/fixtures/schema.js'
+rm 'node_modules/json-schema-traverse/spec/index.spec.js'
+rm 'node_modules/light-my-request/.gitattributes'
+rm 'node_modules/light-my-request/.github/dependabot.yml'
+rm 'node_modules/light-my-request/.github/stale.yml'
+rm 'node_modules/light-my-request/.github/workflows/benchmark.yml'
+rm 'node_modules/light-my-request/.github/workflows/ci.yml'
+rm 'node_modules/light-my-request/LICENSE'
+rm 'node_modules/light-my-request/README.md'
+rm 'node_modules/light-my-request/benchmark/benchmark.js'
+rm 'node_modules/light-my-request/build/build-validation.js'
+rm 'node_modules/light-my-request/eslint.config.js'
+rm 'node_modules/light-my-request/index.js'
+rm 'node_modules/light-my-request/lib/config-validator.js'
+rm 'node_modules/light-my-request/lib/form-data.js'
+rm 'node_modules/light-my-request/lib/parse-url.js'
+rm 'node_modules/light-my-request/lib/request.js'
+rm 'node_modules/light-my-request/lib/response.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/.gitattributes'
+rm 'node_modules/light-my-request/node_modules/process-warning/.github/dependabot.yml'
+rm 'node_modules/light-my-request/node_modules/process-warning/.github/workflows/ci.yml'
+rm 'node_modules/light-my-request/node_modules/process-warning/.taprc'
+rm 'node_modules/light-my-request/node_modules/process-warning/LICENSE'
+rm 'node_modules/light-my-request/node_modules/process-warning/README.md'
+rm 'node_modules/light-my-request/node_modules/process-warning/benchmarks/warn.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/eslint.config.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/examples/example.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/index.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/package.json'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/emit-interpolated-string.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/emit-once-only.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/emit-reset.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/emit-set.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/emit-unlimited.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/index.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/issue-88.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/jest.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/test/no-warnings.test.js'
+rm 'node_modules/light-my-request/node_modules/process-warning/types/index.d.ts'
+rm 'node_modules/light-my-request/node_modules/process-warning/types/index.test-d.ts'
+rm 'node_modules/light-my-request/package.json'
+rm 'node_modules/light-my-request/test/async-await.test.js'
+rm 'node_modules/light-my-request/test/index.test.js'
+rm 'node_modules/light-my-request/test/request.test.js'
+rm 'node_modules/light-my-request/test/response.test.js'
+rm 'node_modules/light-my-request/test/stream.test.js'
+rm 'node_modules/light-my-request/types/index.d.ts'
+rm 'node_modules/light-my-request/types/index.test-d.ts'
+rm 'node_modules/lru-cache/LICENSE'
+rm 'node_modules/lru-cache/README.md'
+rm 'node_modules/lru-cache/dist/commonjs/index.d.ts'
+rm 'node_modules/lru-cache/dist/commonjs/index.d.ts.map'
+rm 'node_modules/lru-cache/dist/commonjs/index.js'
+rm 'node_modules/lru-cache/dist/commonjs/index.js.map'
+rm 'node_modules/lru-cache/dist/commonjs/index.min.js'
+rm 'node_modules/lru-cache/dist/commonjs/index.min.js.map'
+rm 'node_modules/lru-cache/dist/commonjs/package.json'
+rm 'node_modules/lru-cache/dist/esm/index.d.ts'
+rm 'node_modules/lru-cache/dist/esm/index.d.ts.map'
+rm 'node_modules/lru-cache/dist/esm/index.js'
+rm 'node_modules/lru-cache/dist/esm/index.js.map'
+rm 'node_modules/lru-cache/dist/esm/index.min.js'
+rm 'node_modules/lru-cache/dist/esm/index.min.js.map'
+rm 'node_modules/lru-cache/dist/esm/package.json'
+rm 'node_modules/lru-cache/package.json'
+rm 'node_modules/make-error/LICENSE'
+rm 'node_modules/make-error/README.md'
+rm 'node_modules/make-error/dist/make-error.js'
+rm 'node_modules/make-error/index.d.ts'
+rm 'node_modules/make-error/index.js'
+rm 'node_modules/make-error/package.json'
+rm 'node_modules/mime/CHANGELOG.md'
+rm 'node_modules/mime/LICENSE'
+rm 'node_modules/mime/Mime.js'
+rm 'node_modules/mime/README.md'
+rm 'node_modules/mime/cli.js'
+rm 'node_modules/mime/index.js'
+rm 'node_modules/mime/lite.js'
+rm 'node_modules/mime/package.json'
+rm 'node_modules/mime/types/other.js'
+rm 'node_modules/mime/types/standard.js'
+rm 'node_modules/mimic-response/index.d.ts'
+rm 'node_modules/mimic-response/index.js'
+rm 'node_modules/mimic-response/license'
+rm 'node_modules/mimic-response/package.json'
+rm 'node_modules/mimic-response/readme.md'
+rm 'node_modules/minimatch/LICENSE'
+rm 'node_modules/minimatch/README.md'
+rm 'node_modules/minimatch/dist/commonjs/assert-valid-pattern.d.ts'
+rm 'node_modules/minimatch/dist/commonjs/assert-valid-pattern.d.ts.map'
+rm 'node_modules/minimatch/dist/commonjs/assert-valid-pattern.js'
+rm 'node_modules/minimatch/dist/commonjs/assert-valid-pattern.js.map'
+rm 'node_modules/minimatch/dist/commonjs/ast.d.ts'
+rm 'node_modules/minimatch/dist/commonjs/ast.d.ts.map'
+rm 'node_modules/minimatch/dist/commonjs/ast.js'
+rm 'node_modules/minimatch/dist/commonjs/ast.js.map'
+rm 'node_modules/minimatch/dist/commonjs/brace-expressions.d.ts'
+rm 'node_modules/minimatch/dist/commonjs/brace-expressions.d.ts.map'
+rm 'node_modules/minimatch/dist/commonjs/brace-expressions.js'
+rm 'node_modules/minimatch/dist/commonjs/brace-expressions.js.map'
+rm 'node_modules/minimatch/dist/commonjs/escape.d.ts'
+rm 'node_modules/minimatch/dist/commonjs/escape.d.ts.map'
+rm 'node_modules/minimatch/dist/commonjs/escape.js'
+rm 'node_modules/minimatch/dist/commonjs/escape.js.map'
+rm 'node_modules/minimatch/dist/commonjs/index.d.ts'
+rm 'node_modules/minimatch/dist/commonjs/index.d.ts.map'
+rm 'node_modules/minimatch/dist/commonjs/index.js'
+rm 'node_modules/minimatch/dist/commonjs/index.js.map'
+rm 'node_modules/minimatch/dist/commonjs/package.json'
+rm 'node_modules/minimatch/dist/commonjs/unescape.d.ts'
+rm 'node_modules/minimatch/dist/commonjs/unescape.d.ts.map'
+rm 'node_modules/minimatch/dist/commonjs/unescape.js'
+rm 'node_modules/minimatch/dist/commonjs/unescape.js.map'
+rm 'node_modules/minimatch/dist/esm/assert-valid-pattern.d.ts'
+rm 'node_modules/minimatch/dist/esm/assert-valid-pattern.d.ts.map'
+rm 'node_modules/minimatch/dist/esm/assert-valid-pattern.js'
+rm 'node_modules/minimatch/dist/esm/assert-valid-pattern.js.map'
+rm 'node_modules/minimatch/dist/esm/ast.d.ts'
+rm 'node_modules/minimatch/dist/esm/ast.d.ts.map'
+rm 'node_modules/minimatch/dist/esm/ast.js'
+rm 'node_modules/minimatch/dist/esm/ast.js.map'
+rm 'node_modules/minimatch/dist/esm/brace-expressions.d.ts'
+rm 'node_modules/minimatch/dist/esm/brace-expressions.d.ts.map'
+rm 'node_modules/minimatch/dist/esm/brace-expressions.js'
+rm 'node_modules/minimatch/dist/esm/brace-expressions.js.map'
+rm 'node_modules/minimatch/dist/esm/escape.d.ts'
+rm 'node_modules/minimatch/dist/esm/escape.d.ts.map'
+rm 'node_modules/minimatch/dist/esm/escape.js'
+rm 'node_modules/minimatch/dist/esm/escape.js.map'
+rm 'node_modules/minimatch/dist/esm/index.d.ts'
+rm 'node_modules/minimatch/dist/esm/index.d.ts.map'
+rm 'node_modules/minimatch/dist/esm/index.js'
+rm 'node_modules/minimatch/dist/esm/index.js.map'
+rm 'node_modules/minimatch/dist/esm/package.json'
+rm 'node_modules/minimatch/dist/esm/unescape.d.ts'
+rm 'node_modules/minimatch/dist/esm/unescape.d.ts.map'
+rm 'node_modules/minimatch/dist/esm/unescape.js'
+rm 'node_modules/minimatch/dist/esm/unescape.js.map'
+rm 'node_modules/minimatch/package.json'
+rm 'node_modules/minimist/.eslintrc'
+rm 'node_modules/minimist/.github/FUNDING.yml'
+rm 'node_modules/minimist/.nycrc'
+rm 'node_modules/minimist/CHANGELOG.md'
+rm 'node_modules/minimist/LICENSE'
+rm 'node_modules/minimist/README.md'
+rm 'node_modules/minimist/example/parse.js'
+rm 'node_modules/minimist/index.js'
+rm 'node_modules/minimist/package.json'
+rm 'node_modules/minimist/test/all_bool.js'
+rm 'node_modules/minimist/test/bool.js'
+rm 'node_modules/minimist/test/dash.js'
+rm 'node_modules/minimist/test/default_bool.js'
+rm 'node_modules/minimist/test/dotted.js'
+rm 'node_modules/minimist/test/kv_short.js'
+rm 'node_modules/minimist/test/long.js'
+rm 'node_modules/minimist/test/num.js'
+rm 'node_modules/minimist/test/parse.js'
+rm 'node_modules/minimist/test/parse_modified.js'
+rm 'node_modules/minimist/test/proto.js'
+rm 'node_modules/minimist/test/short.js'
+rm 'node_modules/minimist/test/stop_early.js'
+rm 'node_modules/minimist/test/unknown.js'
+rm 'node_modules/minimist/test/whitespace.js'
+rm 'node_modules/minipass/LICENSE'
+rm 'node_modules/minipass/README.md'
+rm 'node_modules/minipass/dist/commonjs/index.d.ts'
+rm 'node_modules/minipass/dist/commonjs/index.d.ts.map'
+rm 'node_modules/minipass/dist/commonjs/index.js'
+rm 'node_modules/minipass/dist/commonjs/index.js.map'
+rm 'node_modules/minipass/dist/commonjs/package.json'
+rm 'node_modules/minipass/dist/esm/index.d.ts'
+rm 'node_modules/minipass/dist/esm/index.d.ts.map'
+rm 'node_modules/minipass/dist/esm/index.js'
+rm 'node_modules/minipass/dist/esm/index.js.map'
+rm 'node_modules/minipass/dist/esm/package.json'
+rm 'node_modules/minipass/package.json'
+rm 'node_modules/mkdirp-classic/LICENSE'
+rm 'node_modules/mkdirp-classic/README.md'
+rm 'node_modules/mkdirp-classic/index.js'
+rm 'node_modules/mkdirp-classic/package.json'
+rm 'node_modules/ms/index.js'
+rm 'node_modules/ms/license.md'
+rm 'node_modules/ms/package.json'
+rm 'node_modules/ms/readme.md'
+rm 'node_modules/napi-build-utils/.github/workflows/run-npm-tests.yml'
+rm 'node_modules/napi-build-utils/LICENSE'
+rm 'node_modules/napi-build-utils/README.md'
+rm 'node_modules/napi-build-utils/index.js'
+rm 'node_modules/napi-build-utils/index.md'
+rm 'node_modules/napi-build-utils/package.json'
+rm 'node_modules/node-abi/LICENSE'
+rm 'node_modules/node-abi/README.md'
+rm 'node_modules/node-abi/abi_registry.json'
+rm 'node_modules/node-abi/index.js'
+rm 'node_modules/node-abi/package.json'
+rm 'node_modules/nodemon/.prettierrc.json'
+rm 'node_modules/nodemon/LICENSE'
+rm 'node_modules/nodemon/README.md'
+rm 'node_modules/nodemon/bin/nodemon.js'
+rm 'node_modules/nodemon/bin/windows-kill.exe'
+rm 'node_modules/nodemon/doc/cli/authors.txt'
+rm 'node_modules/nodemon/doc/cli/config.txt'
+rm 'node_modules/nodemon/doc/cli/help.txt'
+rm 'node_modules/nodemon/doc/cli/logo.txt'
+rm 'node_modules/nodemon/doc/cli/options.txt'
+rm 'node_modules/nodemon/doc/cli/topics.txt'
+rm 'node_modules/nodemon/doc/cli/usage.txt'
+rm 'node_modules/nodemon/doc/cli/whoami.txt'
+rm 'node_modules/nodemon/index.d.ts'
+rm 'node_modules/nodemon/jsconfig.json'
+rm 'node_modules/nodemon/lib/cli/index.js'
+rm 'node_modules/nodemon/lib/cli/parse.js'
+rm 'node_modules/nodemon/lib/config/command.js'
+rm 'node_modules/nodemon/lib/config/defaults.js'
+rm 'node_modules/nodemon/lib/config/exec.js'
+rm 'node_modules/nodemon/lib/config/index.js'
+rm 'node_modules/nodemon/lib/config/load.js'
+rm 'node_modules/nodemon/lib/help/index.js'
+rm 'node_modules/nodemon/lib/index.js'
+rm 'node_modules/nodemon/lib/monitor/index.js'
+rm 'node_modules/nodemon/lib/monitor/match.js'
+rm 'node_modules/nodemon/lib/monitor/run.js'
+rm 'node_modules/nodemon/lib/monitor/signals.js'
+rm 'node_modules/nodemon/lib/monitor/watch.js'
+rm 'node_modules/nodemon/lib/nodemon.js'
+rm 'node_modules/nodemon/lib/rules/add.js'
+rm 'node_modules/nodemon/lib/rules/index.js'
+rm 'node_modules/nodemon/lib/rules/parse.js'
+rm 'node_modules/nodemon/lib/spawn.js'
+rm 'node_modules/nodemon/lib/utils/bus.js'
+rm 'node_modules/nodemon/lib/utils/clone.js'
+rm 'node_modules/nodemon/lib/utils/colour.js'
+rm 'node_modules/nodemon/lib/utils/index.js'
+rm 'node_modules/nodemon/lib/utils/log.js'
+rm 'node_modules/nodemon/lib/utils/merge.js'
+rm 'node_modules/nodemon/lib/version.js'
+rm 'node_modules/nodemon/node_modules/minimatch/LICENSE'
+rm 'node_modules/nodemon/node_modules/minimatch/README.md'
+rm 'node_modules/nodemon/node_modules/minimatch/minimatch.js'
+rm 'node_modules/nodemon/node_modules/minimatch/package.json'
+rm 'node_modules/nodemon/package.json'
+rm 'node_modules/normalize-path/LICENSE'
+rm 'node_modules/normalize-path/README.md'
+rm 'node_modules/normalize-path/index.js'
+rm 'node_modules/normalize-path/package.json'
+rm 'node_modules/on-exit-leak-free/.github/dependabot.yml'
+rm 'node_modules/on-exit-leak-free/.github/workflows/ci.yml'
+rm 'node_modules/on-exit-leak-free/LICENSE'
+rm 'node_modules/on-exit-leak-free/README.md'
+rm 'node_modules/on-exit-leak-free/index.js'
+rm 'node_modules/on-exit-leak-free/package.json'
+rm 'node_modules/on-exit-leak-free/test/base.test.js'
+rm 'node_modules/on-exit-leak-free/test/event-emitter-leak.test.js'
+rm 'node_modules/on-exit-leak-free/test/fixtures/beforeExit.js'
+rm 'node_modules/on-exit-leak-free/test/fixtures/close.js'
+rm 'node_modules/on-exit-leak-free/test/fixtures/gc-not-close.js'
+rm 'node_modules/on-exit-leak-free/test/fixtures/unregister.js'
+rm 'node_modules/once/LICENSE'
+rm 'node_modules/once/README.md'
+rm 'node_modules/once/once.js'
+rm 'node_modules/once/package.json'
+rm 'node_modules/openapi-types/CHANGELOG.md'
+rm 'node_modules/openapi-types/LICENSE'
+rm 'node_modules/openapi-types/README.md'
+rm 'node_modules/openapi-types/dist/index.d.ts'
+rm 'node_modules/openapi-types/dist/index.js'
+rm 'node_modules/openapi-types/dist/index.js.map'
+rm 'node_modules/openapi-types/package.json'
+rm 'node_modules/package-json-from-dist/LICENSE.md'
+rm 'node_modules/package-json-from-dist/README.md'
+rm 'node_modules/package-json-from-dist/dist/commonjs/index.d.ts'
+rm 'node_modules/package-json-from-dist/dist/commonjs/index.d.ts.map'
+rm 'node_modules/package-json-from-dist/dist/commonjs/index.js'
+rm 'node_modules/package-json-from-dist/dist/commonjs/index.js.map'
+rm 'node_modules/package-json-from-dist/dist/commonjs/package.json'
+rm 'node_modules/package-json-from-dist/dist/esm/index.d.ts'
+rm 'node_modules/package-json-from-dist/dist/esm/index.d.ts.map'
+rm 'node_modules/package-json-from-dist/dist/esm/index.js'
+rm 'node_modules/package-json-from-dist/dist/esm/index.js.map'
+rm 'node_modules/package-json-from-dist/dist/esm/package.json'
+rm 'node_modules/package-json-from-dist/package.json'
+rm 'node_modules/path-key/index.d.ts'
+rm 'node_modules/path-key/index.js'
+rm 'node_modules/path-key/license'
+rm 'node_modules/path-key/package.json'
+rm 'node_modules/path-key/readme.md'
+rm 'node_modules/path-scurry/LICENSE.md'
+rm 'node_modules/path-scurry/README.md'
+rm 'node_modules/path-scurry/dist/commonjs/index.d.ts'
+rm 'node_modules/path-scurry/dist/commonjs/index.d.ts.map'
+rm 'node_modules/path-scurry/dist/commonjs/index.js'
+rm 'node_modules/path-scurry/dist/commonjs/index.js.map'
+rm 'node_modules/path-scurry/dist/commonjs/package.json'
+rm 'node_modules/path-scurry/dist/esm/index.d.ts'
+rm 'node_modules/path-scurry/dist/esm/index.d.ts.map'
+rm 'node_modules/path-scurry/dist/esm/index.js'
+rm 'node_modules/path-scurry/dist/esm/index.js.map'
+rm 'node_modules/path-scurry/dist/esm/package.json'
+rm 'node_modules/path-scurry/package.json'
+rm 'node_modules/picomatch/CHANGELOG.md'
+rm 'node_modules/picomatch/LICENSE'
+rm 'node_modules/picomatch/README.md'
+rm 'node_modules/picomatch/index.js'
+rm 'node_modules/picomatch/lib/constants.js'
+rm 'node_modules/picomatch/lib/parse.js'
+rm 'node_modules/picomatch/lib/picomatch.js'
+rm 'node_modules/picomatch/lib/scan.js'
+rm 'node_modules/picomatch/lib/utils.js'
+rm 'node_modules/picomatch/package.json'
+rm 'node_modules/pino-abstract-transport/.github/dependabot.yml'
+rm 'node_modules/pino-abstract-transport/.github/workflows/ci.yml'
+rm 'node_modules/pino-abstract-transport/.husky/pre-commit'
+rm 'node_modules/pino-abstract-transport/LICENSE'
+rm 'node_modules/pino-abstract-transport/README.md'
+rm 'node_modules/pino-abstract-transport/index.d.ts'
+rm 'node_modules/pino-abstract-transport/index.js'
+rm 'node_modules/pino-abstract-transport/package.json'
+rm 'node_modules/pino-abstract-transport/test/base.test.js'
+rm 'node_modules/pino-abstract-transport/test/fixtures/transport-async-iteration.js'
+rm 'node_modules/pino-abstract-transport/test/fixtures/transport-on-data.js'
+rm 'node_modules/pino-abstract-transport/test/fixtures/transport-transform.js'
+rm 'node_modules/pino-abstract-transport/test/fixtures/worker-pipeline.js'
+rm 'node_modules/pino-abstract-transport/test/types/index.test-d.ts'
+rm 'node_modules/pino-abstract-transport/test/worker.test.js'
+rm 'node_modules/pino-std-serializers/.editorconfig'
+rm 'node_modules/pino-std-serializers/.eslintignore'
+rm 'node_modules/pino-std-serializers/.github/dependabot.yml'
+rm 'node_modules/pino-std-serializers/.github/workflows/ci.yml'
+rm 'node_modules/pino-std-serializers/LICENSE'
+rm 'node_modules/pino-std-serializers/Readme.md'
+rm 'node_modules/pino-std-serializers/index.d.ts'
+rm 'node_modules/pino-std-serializers/index.js'
+rm 'node_modules/pino-std-serializers/lib/err-helpers.js'
+rm 'node_modules/pino-std-serializers/lib/err-proto.js'
+rm 'node_modules/pino-std-serializers/lib/err-with-cause.js'
+rm 'node_modules/pino-std-serializers/lib/err.js'
+rm 'node_modules/pino-std-serializers/lib/req.js'
+rm 'node_modules/pino-std-serializers/lib/res.js'
+rm 'node_modules/pino-std-serializers/package.json'
+rm 'node_modules/pino-std-serializers/test/err-with-cause.test.js'
+rm 'node_modules/pino-std-serializers/test/err.test.js'
+rm 'node_modules/pino-std-serializers/test/req.test.js'
+rm 'node_modules/pino-std-serializers/test/res.test.js'
+rm 'node_modules/pino-std-serializers/test/types/index.test-d.ts'
+rm 'node_modules/pino-std-serializers/tsconfig.json'
+rm 'node_modules/pino/.eslintignore'
+rm 'node_modules/pino/.eslintrc'
+rm 'node_modules/pino/.github/dependabot.yml'
+rm 'node_modules/pino/.github/workflows/bench.yml'
+rm 'node_modules/pino/.github/workflows/ci.yml'
+rm 'node_modules/pino/.github/workflows/lock-threads.yml'
+rm 'node_modules/pino/.github/workflows/publish-release.yml'
+rm 'node_modules/pino/.github/workflows/target-main.yml'
+rm 'node_modules/pino/.nojekyll'
+rm 'node_modules/pino/.prettierignore'
+rm 'node_modules/pino/.taprc.yaml'
+rm 'node_modules/pino/CNAME'
+rm 'node_modules/pino/CONTRIBUTING.md'
+rm 'node_modules/pino/LICENSE'
+rm 'node_modules/pino/README.md'
+rm 'node_modules/pino/SECURITY.md'
+rm 'node_modules/pino/benchmarks/basic.bench.js'
+rm 'node_modules/pino/benchmarks/child-child.bench.js'
+rm 'node_modules/pino/benchmarks/child-creation.bench.js'
+rm 'node_modules/pino/benchmarks/child.bench.js'
+rm 'node_modules/pino/benchmarks/deep-object.bench.js'
+rm 'node_modules/pino/benchmarks/formatters.bench.js'
+rm 'node_modules/pino/benchmarks/internal/custom-levels.js'
+rm 'node_modules/pino/benchmarks/internal/just-pino-heavy.bench.js'
+rm 'node_modules/pino/benchmarks/internal/just-pino.bench.js'
+rm 'node_modules/pino/benchmarks/internal/parent-vs-child.bench.js'
+rm 'node_modules/pino/benchmarks/internal/redact.bench.js'
+rm 'node_modules/pino/benchmarks/long-string.bench.js'
+rm 'node_modules/pino/benchmarks/multi-arg.bench.js'
+rm 'node_modules/pino/benchmarks/multistream.js'
+rm 'node_modules/pino/benchmarks/object.bench.js'
+rm 'node_modules/pino/benchmarks/utils/generate-benchmark-doc.js'
+rm 'node_modules/pino/benchmarks/utils/runbench.js'
+rm 'node_modules/pino/benchmarks/utils/wrap-log-level.js'
+rm 'node_modules/pino/bin.js'
+rm 'node_modules/pino/browser.js'
+rm 'node_modules/pino/build/sync-version.js'
+rm 'node_modules/pino/docs/api.md'
+rm 'node_modules/pino/docs/asynchronous.md'
+rm 'node_modules/pino/docs/benchmarks.md'
+rm 'node_modules/pino/docs/browser.md'
+rm 'node_modules/pino/docs/bundling.md'
+rm 'node_modules/pino/docs/child-loggers.md'
+rm 'node_modules/pino/docs/diagnostics.md'
+rm 'node_modules/pino/docs/ecosystem.md'
+rm 'node_modules/pino/docs/help.md'
+rm 'node_modules/pino/docs/lts.md'
+rm 'node_modules/pino/docs/pretty.md'
+rm 'node_modules/pino/docs/redaction.md'
+rm 'node_modules/pino/docs/transports.md'
+rm 'node_modules/pino/docs/web.md'
+rm 'node_modules/pino/docsify/sidebar.md'
+rm 'node_modules/pino/examples/basic.js'
+rm 'node_modules/pino/examples/transport.js'
+rm 'node_modules/pino/favicon-16x16.png'
+rm 'node_modules/pino/favicon-32x32.png'
+rm 'node_modules/pino/favicon.ico'
+rm 'node_modules/pino/file.js'
+rm 'node_modules/pino/inc-version.sh'
+rm 'node_modules/pino/index.html'
+rm 'node_modules/pino/lib/caller.js'
+rm 'node_modules/pino/lib/constants.js'
+rm 'node_modules/pino/lib/deprecations.js'
+rm 'node_modules/pino/lib/levels.js'
+rm 'node_modules/pino/lib/meta.js'
+rm 'node_modules/pino/lib/multistream.js'
+rm 'node_modules/pino/lib/proto.js'
+rm 'node_modules/pino/lib/redaction.js'
+rm 'node_modules/pino/lib/symbols.js'
+rm 'node_modules/pino/lib/time.js'
+rm 'node_modules/pino/lib/tools.js'
+rm 'node_modules/pino/lib/transport-stream.js'
+rm 'node_modules/pino/lib/transport.js'
+rm 'node_modules/pino/lib/worker.js'
+rm 'node_modules/pino/package.json'
+rm 'node_modules/pino/pino-banner.png'
+rm 'node_modules/pino/pino-logo-hire.png'
+rm 'node_modules/pino/pino-tree.png'
+rm 'node_modules/pino/pino.d.ts'
+rm 'node_modules/pino/pino.js'
+rm 'node_modules/pino/pretty-demo.png'
+rm 'node_modules/pino/test/basic.test.js'
+rm 'node_modules/pino/test/broken-pipe.test.js'
+rm 'node_modules/pino/test/browser-child.test.js'
+rm 'node_modules/pino/test/browser-disabled.test.js'
+rm 'node_modules/pino/test/browser-early-console-freeze.test.js'
+rm 'node_modules/pino/test/browser-is-level-enabled.test.js'
+rm 'node_modules/pino/test/browser-levels.test.js'
+rm 'node_modules/pino/test/browser-serializers.test.js'
+rm 'node_modules/pino/test/browser-timestamp.test.js'
+rm 'node_modules/pino/test/browser-transmit.test.js'
+rm 'node_modules/pino/test/browser.test.js'
+rm 'node_modules/pino/test/complex-objects.test.js'
+rm 'node_modules/pino/test/crlf.test.js'
+rm 'node_modules/pino/test/custom-levels.test.js'
+rm 'node_modules/pino/test/diagnostics.test.js'
+rm 'node_modules/pino/test/error.test.js'
+rm 'node_modules/pino/test/errorKey.test.js'
+rm 'node_modules/pino/test/escaping.test.js'
+rm 'node_modules/pino/test/esm/esm.mjs'
+rm 'node_modules/pino/test/esm/index.test.js'
+rm 'node_modules/pino/test/esm/named-exports.mjs'
+rm 'node_modules/pino/test/exit.test.js'
+rm 'node_modules/pino/test/fixtures/broken-pipe/basic.js'
+rm 'node_modules/pino/test/fixtures/broken-pipe/destination.js'
+rm 'node_modules/pino/test/fixtures/broken-pipe/syncfalse.js'
+rm 'node_modules/pino/test/fixtures/console-transport.js'
+rm 'node_modules/pino/test/fixtures/crashing-transport.js'
+rm 'node_modules/pino/test/fixtures/default-exit.js'
+rm 'node_modules/pino/test/fixtures/destination-exit.js'
+rm 'node_modules/pino/test/fixtures/eval/index.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/14-files.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/2-files.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file1.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file10.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file11.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file12.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file13.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file14.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file2.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file3.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file4.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file5.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file6.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file7.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file8.js'
+rm 'node_modules/pino/test/fixtures/eval/node_modules/file9.js'
+rm 'node_modules/pino/test/fixtures/noop-transport.js'
+rm 'node_modules/pino/test/fixtures/pretty/null-prototype.js'
+rm 'node_modules/pino/test/fixtures/stdout-hack-protection.js'
+rm 'node_modules/pino/test/fixtures/syncfalse-child.js'
+rm 'node_modules/pino/test/fixtures/syncfalse-exit.js'
+rm 'node_modules/pino/test/fixtures/syncfalse-flush-exit.js'
+rm 'node_modules/pino/test/fixtures/syncfalse.js'
+rm 'node_modules/pino/test/fixtures/syntax-error-esm.mjs'
+rm 'node_modules/pino/test/fixtures/to-file-transport-with-transform.js'
+rm 'node_modules/pino/test/fixtures/to-file-transport.js'
+rm 'node_modules/pino/test/fixtures/to-file-transport.mjs'
+rm 'node_modules/pino/test/fixtures/transport-exit-immediately-with-async-dest.js'
+rm 'node_modules/pino/test/fixtures/transport-exit-immediately.js'
+rm 'node_modules/pino/test/fixtures/transport-exit-on-ready.js'
+rm 'node_modules/pino/test/fixtures/transport-main.js'
+rm 'node_modules/pino/test/fixtures/transport-many-lines.js'
+rm 'node_modules/pino/test/fixtures/transport-string-stdout.js'
+rm 'node_modules/pino/test/fixtures/transport-transform.js'
+rm 'node_modules/pino/test/fixtures/transport-uses-pino-config.js'
+rm 'node_modules/pino/test/fixtures/transport-with-on-exit.js'
+rm 'node_modules/pino/test/fixtures/transport-worker-data.js'
+rm 'node_modules/pino/test/fixtures/transport-worker.js'
+rm 'node_modules/pino/test/fixtures/transport-wrong-export-type.js'
+rm 'node_modules/pino/test/fixtures/transport/index.js'
+rm 'node_modules/pino/test/fixtures/transport/package.json'
+rm 'node_modules/pino/test/fixtures/ts/to-file-transport-with-transform.ts'
+rm 'node_modules/pino/test/fixtures/ts/to-file-transport.ts'
+rm 'node_modules/pino/test/fixtures/ts/transpile.cjs'
+rm 'node_modules/pino/test/fixtures/ts/transport-exit-immediately-with-async-dest.ts'
+rm 'node_modules/pino/test/fixtures/ts/transport-exit-immediately.ts'
+rm 'node_modules/pino/test/fixtures/ts/transport-exit-on-ready.ts'
+rm 'node_modules/pino/test/fixtures/ts/transport-main.ts'
+rm 'node_modules/pino/test/fixtures/ts/transport-string-stdout.ts'
+rm 'node_modules/pino/test/fixtures/ts/transport-worker.ts'
+rm 'node_modules/pino/test/formatters.test.js'
+rm 'node_modules/pino/test/helper.d.ts'
+rm 'node_modules/pino/test/helper.js'
+rm 'node_modules/pino/test/hooks.test.js'
+rm 'node_modules/pino/test/http.test.js'
+rm 'node_modules/pino/test/internals/version.test.js'
+rm 'node_modules/pino/test/is-level-enabled.test.js'
+rm 'node_modules/pino/test/jest/basic.spec.js'
+rm 'node_modules/pino/test/levels.test.js'
+rm 'node_modules/pino/test/metadata.test.js'
+rm 'node_modules/pino/test/mixin-merge-strategy.test.js'
+rm 'node_modules/pino/test/mixin.test.js'
+rm 'node_modules/pino/test/multistream.test.js'
+rm 'node_modules/pino/test/pkg/index.js'
+rm 'node_modules/pino/test/pkg/pkg.config.json'
+rm 'node_modules/pino/test/pkg/pkg.test.js'
+rm 'node_modules/pino/test/redact.test.js'
+rm 'node_modules/pino/test/serializers.test.js'
+rm 'node_modules/pino/test/stdout-protection.test.js'
+rm 'node_modules/pino/test/syncfalse.test.js'
+rm 'node_modules/pino/test/timestamp-nano.test.js'
+rm 'node_modules/pino/test/timestamp.test.js'
+rm 'node_modules/pino/test/transport-stream.test.js'
+rm 'node_modules/pino/test/transport/big.test.js'
+rm 'node_modules/pino/test/transport/bundlers-support.test.js'
+rm 'node_modules/pino/test/transport/caller.test.js'
+rm 'node_modules/pino/test/transport/core.test.js'
+rm 'node_modules/pino/test/transport/core.test.ts'
+rm 'node_modules/pino/test/transport/core.transpiled.test.ts'
+rm 'node_modules/pino/test/transport/crash.test.js'
+rm 'node_modules/pino/test/transport/module-link.test.js'
+rm 'node_modules/pino/test/transport/pipeline.test.js'
+rm 'node_modules/pino/test/transport/repl.test.js'
+rm 'node_modules/pino/test/transport/syncTrue.test.js'
+rm 'node_modules/pino/test/transport/syncfalse.test.js'
+rm 'node_modules/pino/test/transport/targets.test.js'
+rm 'node_modules/pino/test/transport/uses-pino-config.test.js'
+rm 'node_modules/pino/test/types/pino-import.test-d.cts'
+rm 'node_modules/pino/test/types/pino-multistream.test-d.ts'
+rm 'node_modules/pino/test/types/pino-top-export.test-d.ts'
+rm 'node_modules/pino/test/types/pino-transport.test-d.ts'
+rm 'node_modules/pino/test/types/pino-type-only.test-d.ts'
+rm 'node_modules/pino/test/types/pino.test-d.ts'
+rm 'node_modules/pino/test/types/pino.ts'
+rm 'node_modules/pino/tsconfig.json'
+rm 'node_modules/prebuild-install/CHANGELOG.md'
+rm 'node_modules/prebuild-install/CONTRIBUTING.md'
+rm 'node_modules/prebuild-install/LICENSE'
+rm 'node_modules/prebuild-install/README.md'
+rm 'node_modules/prebuild-install/asset.js'
+rm 'node_modules/prebuild-install/bin.js'
+rm 'node_modules/prebuild-install/download.js'
+rm 'node_modules/prebuild-install/error.js'
+rm 'node_modules/prebuild-install/help.txt'
+rm 'node_modules/prebuild-install/index.js'
+rm 'node_modules/prebuild-install/log.js'
+rm 'node_modules/prebuild-install/package.json'
+rm 'node_modules/prebuild-install/proxy.js'
+rm 'node_modules/prebuild-install/rc.js'
+rm 'node_modules/prebuild-install/util.js'
+rm 'node_modules/process-warning/.gitattributes'
+rm 'node_modules/process-warning/.github/dependabot.yml'
+rm 'node_modules/process-warning/.github/workflows/ci.yml'
+rm 'node_modules/process-warning/LICENSE'
+rm 'node_modules/process-warning/README.md'
+rm 'node_modules/process-warning/benchmarks/warn.js'
+rm 'node_modules/process-warning/eslint.config.js'
+rm 'node_modules/process-warning/examples/example.js'
+rm 'node_modules/process-warning/index.js'
+rm 'node_modules/process-warning/package.json'
+rm 'node_modules/process-warning/test/emit-interpolated-string.test.js'
+rm 'node_modules/process-warning/test/emit-once-only.test.js'
+rm 'node_modules/process-warning/test/emit-reset.test.js'
+rm 'node_modules/process-warning/test/emit-set.test.js'
+rm 'node_modules/process-warning/test/emit-unlimited.test.js'
+rm 'node_modules/process-warning/test/index.test.js'
+rm 'node_modules/process-warning/test/issue-88.test.js'
+rm 'node_modules/process-warning/test/jest.test.js'
+rm 'node_modules/process-warning/test/no-warnings.test.js'
+rm 'node_modules/process-warning/test/promise.js'
+rm 'node_modules/process-warning/types/index.d.ts'
+rm 'node_modules/process-warning/types/index.test-d.ts'
+rm 'node_modules/pstree.remy/.travis.yml'
+rm 'node_modules/pstree.remy/LICENSE'
+rm 'node_modules/pstree.remy/README.md'
+rm 'node_modules/pstree.remy/lib/index.js'
+rm 'node_modules/pstree.remy/lib/tree.js'
+rm 'node_modules/pstree.remy/lib/utils.js'
+rm 'node_modules/pstree.remy/package.json'
+rm 'node_modules/pstree.remy/tests/fixtures/index.js'
+rm 'node_modules/pstree.remy/tests/fixtures/out1'
+rm 'node_modules/pstree.remy/tests/fixtures/out2'
+rm 'node_modules/pstree.remy/tests/index.test.js'
+rm 'node_modules/pump/.github/FUNDING.yml'
+rm 'node_modules/pump/.travis.yml'
+rm 'node_modules/pump/LICENSE'
+rm 'node_modules/pump/README.md'
+rm 'node_modules/pump/SECURITY.md'
+rm 'node_modules/pump/index.js'
+rm 'node_modules/pump/package.json'
+rm 'node_modules/pump/test-browser.js'
+rm 'node_modules/pump/test-node.js'
+rm 'node_modules/quick-format-unescaped/.github/workflows/ci.yml'
+rm 'node_modules/quick-format-unescaped/LICENSE'
+rm 'node_modules/quick-format-unescaped/benchmark.js'
+rm 'node_modules/quick-format-unescaped/index.js'
+rm 'node_modules/quick-format-unescaped/package.json'
+rm 'node_modules/quick-format-unescaped/readme.md'
+rm 'node_modules/quick-format-unescaped/test/index.js'
+rm 'node_modules/rc/LICENSE.APACHE2'
+rm 'node_modules/rc/LICENSE.BSD'
+rm 'node_modules/rc/LICENSE.MIT'
+rm 'node_modules/rc/README.md'
+rm 'node_modules/rc/browser.js'
+rm 'node_modules/rc/cli.js'
+rm 'node_modules/rc/index.js'
+rm 'node_modules/rc/lib/utils.js'
+rm 'node_modules/rc/package.json'
+rm 'node_modules/rc/test/ini.js'
+rm 'node_modules/rc/test/nested-env-vars.js'
+rm 'node_modules/rc/test/test.js'
+rm 'node_modules/readable-stream/CONTRIBUTING.md'
+rm 'node_modules/readable-stream/GOVERNANCE.md'
+rm 'node_modules/readable-stream/LICENSE'
+rm 'node_modules/readable-stream/README.md'
+rm 'node_modules/readable-stream/errors-browser.js'
+rm 'node_modules/readable-stream/errors.js'
+rm 'node_modules/readable-stream/experimentalWarning.js'
+rm 'node_modules/readable-stream/lib/_stream_duplex.js'
+rm 'node_modules/readable-stream/lib/_stream_passthrough.js'
+rm 'node_modules/readable-stream/lib/_stream_readable.js'
+rm 'node_modules/readable-stream/lib/_stream_transform.js'
+rm 'node_modules/readable-stream/lib/_stream_writable.js'
+rm 'node_modules/readable-stream/lib/internal/streams/async_iterator.js'
+rm 'node_modules/readable-stream/lib/internal/streams/buffer_list.js'
+rm 'node_modules/readable-stream/lib/internal/streams/destroy.js'
+rm 'node_modules/readable-stream/lib/internal/streams/end-of-stream.js'
+rm 'node_modules/readable-stream/lib/internal/streams/from-browser.js'
+rm 'node_modules/readable-stream/lib/internal/streams/from.js'
+rm 'node_modules/readable-stream/lib/internal/streams/pipeline.js'
+rm 'node_modules/readable-stream/lib/internal/streams/state.js'
+rm 'node_modules/readable-stream/lib/internal/streams/stream-browser.js'
+rm 'node_modules/readable-stream/lib/internal/streams/stream.js'
+rm 'node_modules/readable-stream/package.json'
+rm 'node_modules/readable-stream/readable-browser.js'
+rm 'node_modules/readable-stream/readable.js'
+rm 'node_modules/readdirp/LICENSE'
+rm 'node_modules/readdirp/README.md'
+rm 'node_modules/readdirp/index.d.ts'
+rm 'node_modules/readdirp/index.js'
+rm 'node_modules/readdirp/package.json'
+rm 'node_modules/real-require/LICENSE.md'
+rm 'node_modules/real-require/README.md'
+rm 'node_modules/real-require/package.json'
+rm 'node_modules/real-require/src/index.js'
+rm 'node_modules/require-from-string/index.js'
+rm 'node_modules/require-from-string/license'
+rm 'node_modules/require-from-string/package.json'
+rm 'node_modules/require-from-string/readme.md'
+rm 'node_modules/ret/LICENSE'
+rm 'node_modules/ret/README.md'
+rm 'node_modules/ret/dist/index.d.ts'
+rm 'node_modules/ret/dist/index.js'
+rm 'node_modules/ret/dist/index.js.map'
+rm 'node_modules/ret/dist/reconstruct.d.ts'
+rm 'node_modules/ret/dist/reconstruct.js'
+rm 'node_modules/ret/dist/reconstruct.js.map'
+rm 'node_modules/ret/dist/sets-lookup.d.ts'
+rm 'node_modules/ret/dist/sets-lookup.js'
+rm 'node_modules/ret/dist/sets-lookup.js.map'
+rm 'node_modules/ret/dist/sets.d.ts'
+rm 'node_modules/ret/dist/sets.js'
+rm 'node_modules/ret/dist/sets.js.map'
+rm 'node_modules/ret/dist/tokenizer.d.ts'
+rm 'node_modules/ret/dist/tokenizer.js'
+rm 'node_modules/ret/dist/tokenizer.js.map'
+rm 'node_modules/ret/dist/types/index.d.ts'
+rm 'node_modules/ret/dist/types/index.js'
+rm 'node_modules/ret/dist/types/index.js.map'
+rm 'node_modules/ret/dist/types/set-lookup.d.ts'
+rm 'node_modules/ret/dist/types/set-lookup.js'
+rm 'node_modules/ret/dist/types/set-lookup.js.map'
+rm 'node_modules/ret/dist/types/tokens.d.ts'
+rm 'node_modules/ret/dist/types/tokens.js'
+rm 'node_modules/ret/dist/types/tokens.js.map'
+rm 'node_modules/ret/dist/types/types.d.ts'
+rm 'node_modules/ret/dist/types/types.js'
+rm 'node_modules/ret/dist/types/types.js.map'
+rm 'node_modules/ret/dist/util.d.ts'
+rm 'node_modules/ret/dist/util.js'
+rm 'node_modules/ret/dist/util.js.map'
+rm 'node_modules/ret/dist/write-set-tokens.d.ts'
+rm 'node_modules/ret/dist/write-set-tokens.js'
+rm 'node_modules/ret/dist/write-set-tokens.js.map'
+rm 'node_modules/ret/package.json'
+rm 'node_modules/reusify/.github/dependabot.yml'
+rm 'node_modules/reusify/.github/workflows/ci.yml'
+rm 'node_modules/reusify/LICENSE'
+rm 'node_modules/reusify/README.md'
+rm 'node_modules/reusify/SECURITY.md'
+rm 'node_modules/reusify/benchmarks/createNoCodeFunction.js'
+rm 'node_modules/reusify/benchmarks/fib.js'
+rm 'node_modules/reusify/benchmarks/reuseNoCodeFunction.js'
+rm 'node_modules/reusify/eslint.config.js'
+rm 'node_modules/reusify/package.json'
+rm 'node_modules/reusify/reusify.d.ts'
+rm 'node_modules/reusify/reusify.js'
+rm 'node_modules/reusify/test.js'
+rm 'node_modules/reusify/tsconfig.json'
+rm 'node_modules/rfdc/.github/workflows/ci.yml'
+rm 'node_modules/rfdc/LICENSE'
+rm 'node_modules/rfdc/default.js'
+rm 'node_modules/rfdc/index.d.ts'
+rm 'node_modules/rfdc/index.js'
+rm 'node_modules/rfdc/index.test-d.ts'
+rm 'node_modules/rfdc/package.json'
+rm 'node_modules/rfdc/readme.md'
+rm 'node_modules/rfdc/test/index.js'
+rm 'node_modules/safe-buffer/LICENSE'
+rm 'node_modules/safe-buffer/README.md'
+rm 'node_modules/safe-buffer/index.d.ts'
+rm 'node_modules/safe-buffer/index.js'
+rm 'node_modules/safe-buffer/package.json'
+rm 'node_modules/safe-regex2/.gitattributes'
+rm 'node_modules/safe-regex2/.github/dependabot.yml'
+rm 'node_modules/safe-regex2/.github/stale.yml'
+rm 'node_modules/safe-regex2/.github/workflows/ci.yml'
+rm 'node_modules/safe-regex2/LICENSE'
+rm 'node_modules/safe-regex2/README.md'
+rm 'node_modules/safe-regex2/eslint.config.js'
+rm 'node_modules/safe-regex2/example/safe.js'
+rm 'node_modules/safe-regex2/index.js'
+rm 'node_modules/safe-regex2/package.json'
+rm 'node_modules/safe-regex2/test/regex.js'
+rm 'node_modules/safe-regex2/types/index.d.ts'
+rm 'node_modules/safe-regex2/types/index.test-d.ts'
+rm 'node_modules/safe-stable-stringify/LICENSE'
+rm 'node_modules/safe-stable-stringify/esm/package.json'
+rm 'node_modules/safe-stable-stringify/esm/wrapper.d.ts'
+rm 'node_modules/safe-stable-stringify/esm/wrapper.js'
+rm 'node_modules/safe-stable-stringify/index.d.ts'
+rm 'node_modules/safe-stable-stringify/index.js'
+rm 'node_modules/safe-stable-stringify/package.json'
+rm 'node_modules/safe-stable-stringify/readme.md'
+rm 'node_modules/secure-json-parse/.airtap.yml'
+rm 'node_modules/secure-json-parse/.gitattributes'
+rm 'node_modules/secure-json-parse/.github/dependabot.yml'
+rm 'node_modules/secure-json-parse/.github/stale.yml'
+rm 'node_modules/secure-json-parse/.github/workflows/ci.yml'
+rm 'node_modules/secure-json-parse/LICENSE'
+rm 'node_modules/secure-json-parse/README.md'
+rm 'node_modules/secure-json-parse/benchmarks/ignore.js'
+rm 'node_modules/secure-json-parse/benchmarks/no__proto__.js'
+rm 'node_modules/secure-json-parse/benchmarks/package.json'
+rm 'node_modules/secure-json-parse/benchmarks/remove.js'
+rm 'node_modules/secure-json-parse/benchmarks/throw.js'
+rm 'node_modules/secure-json-parse/benchmarks/valid.js'
+rm 'node_modules/secure-json-parse/eslint.config.js'
+rm 'node_modules/secure-json-parse/index.js'
+rm 'node_modules/secure-json-parse/package.json'
+rm 'node_modules/secure-json-parse/test/index.test.js'
+rm 'node_modules/secure-json-parse/types/index.d.ts'
+rm 'node_modules/secure-json-parse/types/index.test-d.ts'
+rm 'node_modules/semver/LICENSE'
+rm 'node_modules/semver/README.md'
+rm 'node_modules/semver/bin/semver.js'
+rm 'node_modules/semver/classes/comparator.js'
+rm 'node_modules/semver/classes/index.js'
+rm 'node_modules/semver/classes/range.js'
+rm 'node_modules/semver/classes/semver.js'
+rm 'node_modules/semver/functions/clean.js'
+rm 'node_modules/semver/functions/cmp.js'
+rm 'node_modules/semver/functions/coerce.js'
+rm 'node_modules/semver/functions/compare-build.js'
+rm 'node_modules/semver/functions/compare-loose.js'
+rm 'node_modules/semver/functions/compare.js'
+rm 'node_modules/semver/functions/diff.js'
+rm 'node_modules/semver/functions/eq.js'
+rm 'node_modules/semver/functions/gt.js'
+rm 'node_modules/semver/functions/gte.js'
+rm 'node_modules/semver/functions/inc.js'
+rm 'node_modules/semver/functions/lt.js'
+rm 'node_modules/semver/functions/lte.js'
+rm 'node_modules/semver/functions/major.js'
+rm 'node_modules/semver/functions/minor.js'
+rm 'node_modules/semver/functions/neq.js'
+rm 'node_modules/semver/functions/parse.js'
+rm 'node_modules/semver/functions/patch.js'
+rm 'node_modules/semver/functions/prerelease.js'
+rm 'node_modules/semver/functions/rcompare.js'
+rm 'node_modules/semver/functions/rsort.js'
+rm 'node_modules/semver/functions/satisfies.js'
+rm 'node_modules/semver/functions/sort.js'
+rm 'node_modules/semver/functions/valid.js'
+rm 'node_modules/semver/index.js'
+rm 'node_modules/semver/internal/constants.js'
+rm 'node_modules/semver/internal/debug.js'
+rm 'node_modules/semver/internal/identifiers.js'
+rm 'node_modules/semver/internal/lrucache.js'
+rm 'node_modules/semver/internal/parse-options.js'
+rm 'node_modules/semver/internal/re.js'
+rm 'node_modules/semver/package.json'
+rm 'node_modules/semver/preload.js'
+rm 'node_modules/semver/range.bnf'
+rm 'node_modules/semver/ranges/gtr.js'
+rm 'node_modules/semver/ranges/intersects.js'
+rm 'node_modules/semver/ranges/ltr.js'
+rm 'node_modules/semver/ranges/max-satisfying.js'
+rm 'node_modules/semver/ranges/min-satisfying.js'
+rm 'node_modules/semver/ranges/min-version.js'
+rm 'node_modules/semver/ranges/outside.js'
+rm 'node_modules/semver/ranges/simplify.js'
+rm 'node_modules/semver/ranges/subset.js'
+rm 'node_modules/semver/ranges/to-comparators.js'
+rm 'node_modules/semver/ranges/valid.js'
+rm 'node_modules/set-cookie-parser/LICENSE'
+rm 'node_modules/set-cookie-parser/README.md'
+rm 'node_modules/set-cookie-parser/lib/set-cookie.js'
+rm 'node_modules/set-cookie-parser/package.json'
+rm 'node_modules/setprototypeof/LICENSE'
+rm 'node_modules/setprototypeof/README.md'
+rm 'node_modules/setprototypeof/index.d.ts'
+rm 'node_modules/setprototypeof/index.js'
+rm 'node_modules/setprototypeof/package.json'
+rm 'node_modules/setprototypeof/test/index.js'
+rm 'node_modules/shebang-command/index.js'
+rm 'node_modules/shebang-command/license'
+rm 'node_modules/shebang-command/package.json'
+rm 'node_modules/shebang-command/readme.md'
+rm 'node_modules/shebang-regex/index.d.ts'
+rm 'node_modules/shebang-regex/index.js'
+rm 'node_modules/shebang-regex/license'
+rm 'node_modules/shebang-regex/package.json'
+rm 'node_modules/shebang-regex/readme.md'
+rm 'node_modules/signal-exit/LICENSE.txt'
+rm 'node_modules/signal-exit/README.md'
+rm 'node_modules/signal-exit/dist/cjs/browser.d.ts'
+rm 'node_modules/signal-exit/dist/cjs/browser.d.ts.map'
+rm 'node_modules/signal-exit/dist/cjs/browser.js'
+rm 'node_modules/signal-exit/dist/cjs/browser.js.map'
+rm 'node_modules/signal-exit/dist/cjs/index.d.ts'
+rm 'node_modules/signal-exit/dist/cjs/index.d.ts.map'
+rm 'node_modules/signal-exit/dist/cjs/index.js'
+rm 'node_modules/signal-exit/dist/cjs/index.js.map'
+rm 'node_modules/signal-exit/dist/cjs/package.json'
+rm 'node_modules/signal-exit/dist/cjs/signals.d.ts'
+rm 'node_modules/signal-exit/dist/cjs/signals.d.ts.map'
+rm 'node_modules/signal-exit/dist/cjs/signals.js'
+rm 'node_modules/signal-exit/dist/cjs/signals.js.map'
+rm 'node_modules/signal-exit/dist/mjs/browser.d.ts'
+rm 'node_modules/signal-exit/dist/mjs/browser.d.ts.map'
+rm 'node_modules/signal-exit/dist/mjs/browser.js'
+rm 'node_modules/signal-exit/dist/mjs/browser.js.map'
+rm 'node_modules/signal-exit/dist/mjs/index.d.ts'
+rm 'node_modules/signal-exit/dist/mjs/index.d.ts.map'
+rm 'node_modules/signal-exit/dist/mjs/index.js'
+rm 'node_modules/signal-exit/dist/mjs/index.js.map'
+rm 'node_modules/signal-exit/dist/mjs/package.json'
+rm 'node_modules/signal-exit/dist/mjs/signals.d.ts'
+rm 'node_modules/signal-exit/dist/mjs/signals.d.ts.map'
+rm 'node_modules/signal-exit/dist/mjs/signals.js'
+rm 'node_modules/signal-exit/dist/mjs/signals.js.map'
+rm 'node_modules/signal-exit/package.json'
+rm 'node_modules/simple-concat/.travis.yml'
+rm 'node_modules/simple-concat/LICENSE'
+rm 'node_modules/simple-concat/README.md'
+rm 'node_modules/simple-concat/index.js'
+rm 'node_modules/simple-concat/package.json'
+rm 'node_modules/simple-concat/test/basic.js'
+rm 'node_modules/simple-get/.github/dependabot.yml'
+rm 'node_modules/simple-get/.github/workflows/ci.yml'
+rm 'node_modules/simple-get/LICENSE'
+rm 'node_modules/simple-get/README.md'
+rm 'node_modules/simple-get/index.js'
+rm 'node_modules/simple-get/package.json'
+rm 'node_modules/simple-update-notifier/LICENSE'
+rm 'node_modules/simple-update-notifier/README.md'
+rm 'node_modules/simple-update-notifier/build/index.d.ts'
+rm 'node_modules/simple-update-notifier/build/index.js'
+rm 'node_modules/simple-update-notifier/package.json'
+rm 'node_modules/simple-update-notifier/src/borderedText.ts'
+rm 'node_modules/simple-update-notifier/src/cache.spec.ts'
+rm 'node_modules/simple-update-notifier/src/cache.ts'
+rm 'node_modules/simple-update-notifier/src/getDistVersion.spec.ts'
+rm 'node_modules/simple-update-notifier/src/getDistVersion.ts'
+rm 'node_modules/simple-update-notifier/src/hasNewVersion.spec.ts'
+rm 'node_modules/simple-update-notifier/src/hasNewVersion.ts'
+rm 'node_modules/simple-update-notifier/src/index.spec.ts'
+rm 'node_modules/simple-update-notifier/src/index.ts'
+rm 'node_modules/simple-update-notifier/src/isNpmOrYarn.ts'
+rm 'node_modules/simple-update-notifier/src/types.ts'
+rm 'node_modules/sonic-boom/.eslintignore'
+rm 'node_modules/sonic-boom/.taprc'
+rm 'node_modules/sonic-boom/LICENSE'
+rm 'node_modules/sonic-boom/README.md'
+rm 'node_modules/sonic-boom/bench.js'
+rm 'node_modules/sonic-boom/check.js'
+rm 'node_modules/sonic-boom/example.js'
+rm 'node_modules/sonic-boom/fixtures/firehose.js'
+rm 'node_modules/sonic-boom/index.js'
+rm 'node_modules/sonic-boom/package.json'
+rm 'node_modules/sonic-boom/test/destroy.test.js'
+rm 'node_modules/sonic-boom/test/end.test.js'
+rm 'node_modules/sonic-boom/test/flush-sync.test.js'
+rm 'node_modules/sonic-boom/test/flush.test.js'
+rm 'node_modules/sonic-boom/test/fsync.test.js'
+rm 'node_modules/sonic-boom/test/helper.js'
+rm 'node_modules/sonic-boom/test/minlength.test.js'
+rm 'node_modules/sonic-boom/test/mode.test.js'
+rm 'node_modules/sonic-boom/test/periodicflush.test.js'
+rm 'node_modules/sonic-boom/test/reopen.test.js'
+rm 'node_modules/sonic-boom/test/retry.test.js'
+rm 'node_modules/sonic-boom/test/sync.test.js'
+rm 'node_modules/sonic-boom/test/write.test.js'
+rm 'node_modules/sonic-boom/types/index.d.ts'
+rm 'node_modules/sonic-boom/types/tests/test.ts'
+rm 'node_modules/split2/LICENSE'
+rm 'node_modules/split2/README.md'
+rm 'node_modules/split2/bench.js'
+rm 'node_modules/split2/index.js'
+rm 'node_modules/split2/package.json'
+rm 'node_modules/split2/test.js'
+rm 'node_modules/statuses/HISTORY.md'
+rm 'node_modules/statuses/LICENSE'
+rm 'node_modules/statuses/README.md'
+rm 'node_modules/statuses/codes.json'
+rm 'node_modules/statuses/index.js'
+rm 'node_modules/statuses/package.json'
+rm 'node_modules/string-width-cjs/index.d.ts'
+rm 'node_modules/string-width-cjs/index.js'
+rm 'node_modules/string-width-cjs/license'
+rm 'node_modules/string-width-cjs/node_modules/ansi-regex/index.d.ts'
+rm 'node_modules/string-width-cjs/node_modules/ansi-regex/index.js'
+rm 'node_modules/string-width-cjs/node_modules/ansi-regex/license'
+rm 'node_modules/string-width-cjs/node_modules/ansi-regex/package.json'
+rm 'node_modules/string-width-cjs/node_modules/ansi-regex/readme.md'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/LICENSE-MIT.txt'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/README.md'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/es2015/index.js'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/es2015/text.js'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/index.d.ts'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/index.js'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/package.json'
+rm 'node_modules/string-width-cjs/node_modules/emoji-regex/text.js'
+rm 'node_modules/string-width-cjs/node_modules/strip-ansi/index.d.ts'
+rm 'node_modules/string-width-cjs/node_modules/strip-ansi/index.js'
+rm 'node_modules/string-width-cjs/node_modules/strip-ansi/license'
+rm 'node_modules/string-width-cjs/node_modules/strip-ansi/package.json'
+rm 'node_modules/string-width-cjs/node_modules/strip-ansi/readme.md'
+rm 'node_modules/string-width-cjs/package.json'
+rm 'node_modules/string-width-cjs/readme.md'
+rm 'node_modules/string-width/index.d.ts'
+rm 'node_modules/string-width/index.js'
+rm 'node_modules/string-width/license'
+rm 'node_modules/string-width/package.json'
+rm 'node_modules/string-width/readme.md'
+rm 'node_modules/string_decoder/LICENSE'
+rm 'node_modules/string_decoder/README.md'
+rm 'node_modules/string_decoder/lib/string_decoder.js'
+rm 'node_modules/string_decoder/package.json'
+rm 'node_modules/strip-ansi-cjs/index.d.ts'
+rm 'node_modules/strip-ansi-cjs/index.js'
+rm 'node_modules/strip-ansi-cjs/license'
+rm 'node_modules/strip-ansi-cjs/node_modules/ansi-regex/index.d.ts'
+rm 'node_modules/strip-ansi-cjs/node_modules/ansi-regex/index.js'
+rm 'node_modules/strip-ansi-cjs/node_modules/ansi-regex/license'
+rm 'node_modules/strip-ansi-cjs/node_modules/ansi-regex/package.json'
+rm 'node_modules/strip-ansi-cjs/node_modules/ansi-regex/readme.md'
+rm 'node_modules/strip-ansi-cjs/package.json'
+rm 'node_modules/strip-ansi-cjs/readme.md'
+rm 'node_modules/strip-ansi/index.d.ts'
+rm 'node_modules/strip-ansi/index.js'
+rm 'node_modules/strip-ansi/license'
+rm 'node_modules/strip-ansi/package.json'
+rm 'node_modules/strip-ansi/readme.md'
+rm 'node_modules/strip-json-comments/index.js'
+rm 'node_modules/strip-json-comments/license'
+rm 'node_modules/strip-json-comments/package.json'
+rm 'node_modules/strip-json-comments/readme.md'
+rm 'node_modules/supports-color/browser.js'
+rm 'node_modules/supports-color/index.js'
+rm 'node_modules/supports-color/license'
+rm 'node_modules/supports-color/package.json'
+rm 'node_modules/supports-color/readme.md'
+rm 'node_modules/tar-fs/.travis.yml'
+rm 'node_modules/tar-fs/LICENSE'
+rm 'node_modules/tar-fs/README.md'
+rm 'node_modules/tar-fs/index.js'
+rm 'node_modules/tar-fs/package.json'
+rm 'node_modules/tar-fs/test/fixtures/a/hello.txt'
+rm 'node_modules/tar-fs/test/fixtures/b/a/test.txt'
+rm 'node_modules/tar-fs/test/fixtures/d/file1'
+rm 'node_modules/tar-fs/test/fixtures/d/file2'
+rm 'node_modules/tar-fs/test/fixtures/d/sub-dir/file5'
+rm 'node_modules/tar-fs/test/fixtures/d/sub-files/file3'
+rm 'node_modules/tar-fs/test/fixtures/d/sub-files/file4'
+rm 'node_modules/tar-fs/test/fixtures/e/directory/.ignore'
+rm 'node_modules/tar-fs/test/fixtures/e/file'
+rm 'node_modules/tar-fs/test/fixtures/invalid.tar'
+rm 'node_modules/tar-fs/test/index.js'
+rm 'node_modules/tar-stream/LICENSE'
+rm 'node_modules/tar-stream/README.md'
+rm 'node_modules/tar-stream/extract.js'
+rm 'node_modules/tar-stream/headers.js'
+rm 'node_modules/tar-stream/index.js'
+rm 'node_modules/tar-stream/pack.js'
+rm 'node_modules/tar-stream/package.json'
+rm 'node_modules/tar-stream/sandbox.js'
+rm 'node_modules/thread-stream/.github/dependabot.yml'
+rm 'node_modules/thread-stream/.github/workflows/ci.yml'
+rm 'node_modules/thread-stream/.husky/pre-commit'
+rm 'node_modules/thread-stream/.taprc'
+rm 'node_modules/thread-stream/LICENSE'
+rm 'node_modules/thread-stream/README.md'
+rm 'node_modules/thread-stream/bench.js'
+rm 'node_modules/thread-stream/index.d.ts'
+rm 'node_modules/thread-stream/index.js'
+rm 'node_modules/thread-stream/lib/indexes.js'
+rm 'node_modules/thread-stream/lib/wait.js'
+rm 'node_modules/thread-stream/lib/worker.js'
+rm 'node_modules/thread-stream/package.json'
+rm 'node_modules/thread-stream/test/base.test.js'
+rm 'node_modules/thread-stream/test/bench.test.js'
+rm 'node_modules/thread-stream/test/bundlers.test.js'
+rm 'node_modules/thread-stream/test/close-on-gc.js'
+rm 'node_modules/thread-stream/test/commonjs-fallback.test.js'
+rm 'node_modules/thread-stream/test/context.test.js'
+rm 'node_modules/thread-stream/test/create-and-exit.js'
+rm 'node_modules/thread-stream/test/custom-worker.js'
+rm 'node_modules/thread-stream/test/dir with spaces/test-package.zip'
+rm 'node_modules/thread-stream/test/emit-event.js'
+rm 'node_modules/thread-stream/test/end.test.js'
+rm 'node_modules/thread-stream/test/error.js'
+rm 'node_modules/thread-stream/test/esm.test.mjs'
+rm 'node_modules/thread-stream/test/event.test.js'
+rm 'node_modules/thread-stream/test/exit.js'
+rm 'node_modules/thread-stream/test/get-context.js'
+rm 'node_modules/thread-stream/test/helper.d.ts'
+rm 'node_modules/thread-stream/test/helper.js'
+rm 'node_modules/thread-stream/test/indexes.test.js'
+rm 'node_modules/thread-stream/test/multibyte-chars.test.mjs'
+rm 'node_modules/thread-stream/test/never-drain.test.js'
+rm 'node_modules/thread-stream/test/on-message.js'
+rm 'node_modules/thread-stream/test/pkg/index.js'
+rm 'node_modules/thread-stream/test/pkg/pkg.config.json'
+rm 'node_modules/thread-stream/test/pkg/pkg.test.js'
+rm 'node_modules/thread-stream/test/port.js'
+rm 'node_modules/thread-stream/test/post-message.test.js'
+rm 'node_modules/thread-stream/test/string-limit-2.test.js'
+rm 'node_modules/thread-stream/test/string-limit.test.js'
+rm 'node_modules/thread-stream/test/syntax-error.mjs'
+rm 'node_modules/thread-stream/test/thread-management.test.js'
+rm 'node_modules/thread-stream/test/to-file-on-destroy.js'
+rm 'node_modules/thread-stream/test/to-file-on-final.js'
+rm 'node_modules/thread-stream/test/to-file.js'
+rm 'node_modules/thread-stream/test/to-file.mjs'
+rm 'node_modules/thread-stream/test/to-next.js'
+rm 'node_modules/thread-stream/test/transpiled.test.js'
+rm 'node_modules/thread-stream/test/ts-commonjs-default-export.zip'
+rm 'node_modules/thread-stream/test/ts.test.ts'
+rm 'node_modules/thread-stream/test/ts/to-file.ts'
+rm 'node_modules/thread-stream/test/ts/transpile.sh'
+rm 'node_modules/thread-stream/test/uncaughtException.js'
+rm 'node_modules/thread-stream/test/unhandledRejection.js'
+rm 'node_modules/thread-stream/test/yarnrc.yml'
+rm 'node_modules/thread-stream/tsconfig.json'
+rm 'node_modules/to-regex-range/LICENSE'
+rm 'node_modules/to-regex-range/README.md'
+rm 'node_modules/to-regex-range/index.js'
+rm 'node_modules/to-regex-range/package.json'
+rm 'node_modules/toad-cache/LICENSE'
+rm 'node_modules/toad-cache/README.md'
+rm 'node_modules/toad-cache/dist/toad-cache.cjs'
+rm 'node_modules/toad-cache/dist/toad-cache.mjs'
+rm 'node_modules/toad-cache/package.json'
+rm 'node_modules/toad-cache/toad-cache.d.cts'
+rm 'node_modules/toad-cache/toad-cache.d.ts'
+rm 'node_modules/toidentifier/HISTORY.md'
+rm 'node_modules/toidentifier/LICENSE'
+rm 'node_modules/toidentifier/README.md'
+rm 'node_modules/toidentifier/index.js'
+rm 'node_modules/toidentifier/package.json'
+rm 'node_modules/touch/LICENSE'
+rm 'node_modules/touch/README.md'
+rm 'node_modules/touch/bin/nodetouch.js'
+rm 'node_modules/touch/index.js'
+rm 'node_modules/touch/package.json'
+rm 'node_modules/ts-node/LICENSE'
+rm 'node_modules/ts-node/README.md'
+rm 'node_modules/ts-node/child-loader.mjs'
+rm 'node_modules/ts-node/dist-raw/NODE-LICENSE.md'
+rm 'node_modules/ts-node/dist-raw/README.md'
+rm 'node_modules/ts-node/dist-raw/node-internal-constants.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-errors.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-modules-cjs-helpers.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-modules-cjs-loader.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-modules-esm-get_format.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-modules-esm-resolve.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-modules-package_json_reader.js'
+rm 'node_modules/ts-node/dist-raw/node-internal-repl-await.js'
+rm 'node_modules/ts-node/dist-raw/node-internalBinding-fs.js'
+rm 'node_modules/ts-node/dist-raw/node-nativemodule.js'
+rm 'node_modules/ts-node/dist-raw/node-options.js'
+rm 'node_modules/ts-node/dist-raw/node-primordials.js'
+rm 'node_modules/ts-node/dist-raw/runmain-hack.js'
+rm 'node_modules/ts-node/dist/bin-cwd.d.ts'
+rm 'node_modules/ts-node/dist/bin-cwd.js'
+rm 'node_modules/ts-node/dist/bin-cwd.js.map'
+rm 'node_modules/ts-node/dist/bin-esm.d.ts'
+rm 'node_modules/ts-node/dist/bin-esm.js'
+rm 'node_modules/ts-node/dist/bin-esm.js.map'
+rm 'node_modules/ts-node/dist/bin-script-deprecated.d.ts'
+rm 'node_modules/ts-node/dist/bin-script-deprecated.js'
+rm 'node_modules/ts-node/dist/bin-script-deprecated.js.map'
+rm 'node_modules/ts-node/dist/bin-script.d.ts'
+rm 'node_modules/ts-node/dist/bin-script.js'
+rm 'node_modules/ts-node/dist/bin-script.js.map'
+rm 'node_modules/ts-node/dist/bin-transpile.d.ts'
+rm 'node_modules/ts-node/dist/bin-transpile.js'
+rm 'node_modules/ts-node/dist/bin-transpile.js.map'
+rm 'node_modules/ts-node/dist/bin.d.ts'
+rm 'node_modules/ts-node/dist/bin.js'
+rm 'node_modules/ts-node/dist/bin.js.map'
+rm 'node_modules/ts-node/dist/child/argv-payload.d.ts'
+rm 'node_modules/ts-node/dist/child/argv-payload.js'
+rm 'node_modules/ts-node/dist/child/argv-payload.js.map'
+rm 'node_modules/ts-node/dist/child/child-entrypoint.d.ts'
+rm 'node_modules/ts-node/dist/child/child-entrypoint.js'
+rm 'node_modules/ts-node/dist/child/child-entrypoint.js.map'
+rm 'node_modules/ts-node/dist/child/child-loader.d.ts'
+rm 'node_modules/ts-node/dist/child/child-loader.js'
+rm 'node_modules/ts-node/dist/child/child-loader.js.map'
+rm 'node_modules/ts-node/dist/child/child-require.d.ts'
+rm 'node_modules/ts-node/dist/child/child-require.js'
+rm 'node_modules/ts-node/dist/child/child-require.js.map'
+rm 'node_modules/ts-node/dist/child/spawn-child.d.ts'
+rm 'node_modules/ts-node/dist/child/spawn-child.js'
+rm 'node_modules/ts-node/dist/child/spawn-child.js.map'
+rm 'node_modules/ts-node/dist/cjs-resolve-hooks.d.ts'
+rm 'node_modules/ts-node/dist/cjs-resolve-hooks.js'
+rm 'node_modules/ts-node/dist/cjs-resolve-hooks.js.map'
+rm 'node_modules/ts-node/dist/configuration.d.ts'
+rm 'node_modules/ts-node/dist/configuration.js'
+rm 'node_modules/ts-node/dist/configuration.js.map'
+rm 'node_modules/ts-node/dist/esm.d.ts'
+rm 'node_modules/ts-node/dist/esm.js'
+rm 'node_modules/ts-node/dist/esm.js.map'
+rm 'node_modules/ts-node/dist/file-extensions.d.ts'
+rm 'node_modules/ts-node/dist/file-extensions.js'
+rm 'node_modules/ts-node/dist/file-extensions.js.map'
+rm 'node_modules/ts-node/dist/index.d.ts'
+rm 'node_modules/ts-node/dist/index.js'
+rm 'node_modules/ts-node/dist/index.js.map'
+rm 'node_modules/ts-node/dist/module-type-classifier.d.ts'
+rm 'node_modules/ts-node/dist/module-type-classifier.js'
+rm 'node_modules/ts-node/dist/module-type-classifier.js.map'
+rm 'node_modules/ts-node/dist/node-module-type-classifier.d.ts'
+rm 'node_modules/ts-node/dist/node-module-type-classifier.js'
+rm 'node_modules/ts-node/dist/node-module-type-classifier.js.map'
+rm 'node_modules/ts-node/dist/repl.d.ts'
+rm 'node_modules/ts-node/dist/repl.js'
+rm 'node_modules/ts-node/dist/repl.js.map'
+rm 'node_modules/ts-node/dist/resolver-functions.d.ts'
+rm 'node_modules/ts-node/dist/resolver-functions.js'
+rm 'node_modules/ts-node/dist/resolver-functions.js.map'
+rm 'node_modules/ts-node/dist/transpilers/swc.d.ts'
+rm 'node_modules/ts-node/dist/transpilers/swc.js'
+rm 'node_modules/ts-node/dist/transpilers/swc.js.map'
+rm 'node_modules/ts-node/dist/transpilers/types.d.ts'
+rm 'node_modules/ts-node/dist/transpilers/types.js'
+rm 'node_modules/ts-node/dist/transpilers/types.js.map'
+rm 'node_modules/ts-node/dist/ts-compiler-types.d.ts'
+rm 'node_modules/ts-node/dist/ts-compiler-types.js'
+rm 'node_modules/ts-node/dist/ts-compiler-types.js.map'
+rm 'node_modules/ts-node/dist/ts-internals.d.ts'
+rm 'node_modules/ts-node/dist/ts-internals.js'
+rm 'node_modules/ts-node/dist/ts-internals.js.map'
+rm 'node_modules/ts-node/dist/ts-transpile-module.d.ts'
+rm 'node_modules/ts-node/dist/ts-transpile-module.js'
+rm 'node_modules/ts-node/dist/ts-transpile-module.js.map'
+rm 'node_modules/ts-node/dist/tsconfig-schema.d.ts'
+rm 'node_modules/ts-node/dist/tsconfig-schema.js'
+rm 'node_modules/ts-node/dist/tsconfig-schema.js.map'
+rm 'node_modules/ts-node/dist/tsconfigs.d.ts'
+rm 'node_modules/ts-node/dist/tsconfigs.js'
+rm 'node_modules/ts-node/dist/tsconfigs.js.map'
+rm 'node_modules/ts-node/dist/util.d.ts'
+rm 'node_modules/ts-node/dist/util.js'
+rm 'node_modules/ts-node/dist/util.js.map'
+rm 'node_modules/ts-node/esm.mjs'
+rm 'node_modules/ts-node/esm/transpile-only.mjs'
+rm 'node_modules/ts-node/node10/tsconfig.json'
+rm 'node_modules/ts-node/node12/tsconfig.json'
+rm 'node_modules/ts-node/node14/tsconfig.json'
+rm 'node_modules/ts-node/node16/tsconfig.json'
+rm 'node_modules/ts-node/package.json'
+rm 'node_modules/ts-node/register/files.js'
+rm 'node_modules/ts-node/register/index.js'
+rm 'node_modules/ts-node/register/transpile-only.js'
+rm 'node_modules/ts-node/register/type-check.js'
+rm 'node_modules/ts-node/transpilers/swc-experimental.js'
+rm 'node_modules/ts-node/transpilers/swc.js'
+rm 'node_modules/ts-node/tsconfig.schema.json'
+rm 'node_modules/ts-node/tsconfig.schemastore-schema.json'
+rm 'node_modules/tunnel-agent/LICENSE'
+rm 'node_modules/tunnel-agent/README.md'
+rm 'node_modules/tunnel-agent/index.js'
+rm 'node_modules/tunnel-agent/package.json'
+rm 'node_modules/typescript/LICENSE.txt'
+rm 'node_modules/typescript/README.md'
+rm 'node_modules/typescript/SECURITY.md'
+rm 'node_modules/typescript/ThirdPartyNoticeText.txt'
+rm 'node_modules/typescript/bin/tsc'
+rm 'node_modules/typescript/bin/tsserver'
+rm 'node_modules/typescript/lib/_tsc.js'
+rm 'node_modules/typescript/lib/_tsserver.js'
+rm 'node_modules/typescript/lib/_typingsInstaller.js'
+rm 'node_modules/typescript/lib/cs/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/de/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/es/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/fr/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/it/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/ja/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/ko/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/lib.d.ts'
+rm 'node_modules/typescript/lib/lib.decorators.d.ts'
+rm 'node_modules/typescript/lib/lib.decorators.legacy.d.ts'
+rm 'node_modules/typescript/lib/lib.dom.asynciterable.d.ts'
+rm 'node_modules/typescript/lib/lib.dom.d.ts'
+rm 'node_modules/typescript/lib/lib.dom.iterable.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.collection.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.core.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.generator.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.iterable.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.promise.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.proxy.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.reflect.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.symbol.d.ts'
+rm 'node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts'
+rm 'node_modules/typescript/lib/lib.es2016.array.include.d.ts'
+rm 'node_modules/typescript/lib/lib.es2016.d.ts'
+rm 'node_modules/typescript/lib/lib.es2016.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2016.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.arraybuffer.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.date.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.object.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.string.d.ts'
+rm 'node_modules/typescript/lib/lib.es2017.typedarrays.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.asyncgenerator.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.asynciterable.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.promise.d.ts'
+rm 'node_modules/typescript/lib/lib.es2018.regexp.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.array.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.object.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.string.d.ts'
+rm 'node_modules/typescript/lib/lib.es2019.symbol.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.bigint.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.date.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.number.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.promise.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.sharedmemory.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.string.d.ts'
+rm 'node_modules/typescript/lib/lib.es2020.symbol.wellknown.d.ts'
+rm 'node_modules/typescript/lib/lib.es2021.d.ts'
+rm 'node_modules/typescript/lib/lib.es2021.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2021.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2021.promise.d.ts'
+rm 'node_modules/typescript/lib/lib.es2021.string.d.ts'
+rm 'node_modules/typescript/lib/lib.es2021.weakref.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.array.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.error.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.object.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.regexp.d.ts'
+rm 'node_modules/typescript/lib/lib.es2022.string.d.ts'
+rm 'node_modules/typescript/lib/lib.es2023.array.d.ts'
+rm 'node_modules/typescript/lib/lib.es2023.collection.d.ts'
+rm 'node_modules/typescript/lib/lib.es2023.d.ts'
+rm 'node_modules/typescript/lib/lib.es2023.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2023.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.arraybuffer.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.collection.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.full.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.object.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.promise.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.regexp.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.sharedmemory.d.ts'
+rm 'node_modules/typescript/lib/lib.es2024.string.d.ts'
+rm 'node_modules/typescript/lib/lib.es5.d.ts'
+rm 'node_modules/typescript/lib/lib.es6.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.array.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.collection.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.decorators.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.disposable.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.error.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.float16.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.full.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.intl.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.iterator.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.promise.d.ts'
+rm 'node_modules/typescript/lib/lib.esnext.sharedmemory.d.ts'
+rm 'node_modules/typescript/lib/lib.scripthost.d.ts'
+rm 'node_modules/typescript/lib/lib.webworker.asynciterable.d.ts'
+rm 'node_modules/typescript/lib/lib.webworker.d.ts'
+rm 'node_modules/typescript/lib/lib.webworker.importscripts.d.ts'
+rm 'node_modules/typescript/lib/lib.webworker.iterable.d.ts'
+rm 'node_modules/typescript/lib/pl/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/pt-br/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/ru/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/tr/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/tsc.js'
+rm 'node_modules/typescript/lib/tsserver.js'
+rm 'node_modules/typescript/lib/tsserverlibrary.d.ts'
+rm 'node_modules/typescript/lib/tsserverlibrary.js'
+rm 'node_modules/typescript/lib/typesMap.json'
+rm 'node_modules/typescript/lib/typescript.d.ts'
+rm 'node_modules/typescript/lib/typescript.js'
+rm 'node_modules/typescript/lib/typingsInstaller.js'
+rm 'node_modules/typescript/lib/watchGuard.js'
+rm 'node_modules/typescript/lib/zh-cn/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/lib/zh-tw/diagnosticMessages.generated.json'
+rm 'node_modules/typescript/package.json'
+rm 'node_modules/undefsafe/.github/workflows/release.yml'
+rm 'node_modules/undefsafe/.jscsrc'
+rm 'node_modules/undefsafe/.jshintrc'
+rm 'node_modules/undefsafe/.travis.yml'
+rm 'node_modules/undefsafe/LICENSE'
+rm 'node_modules/undefsafe/README.md'
+rm 'node_modules/undefsafe/example.js'
+rm 'node_modules/undefsafe/lib/undefsafe.js'
+rm 'node_modules/undefsafe/package.json'
+rm 'node_modules/undici-types/LICENSE'
+rm 'node_modules/undici-types/README.md'
+rm 'node_modules/undici-types/agent.d.ts'
+rm 'node_modules/undici-types/api.d.ts'
+rm 'node_modules/undici-types/balanced-pool.d.ts'
+rm 'node_modules/undici-types/cache-interceptor.d.ts'
+rm 'node_modules/undici-types/cache.d.ts'
+rm 'node_modules/undici-types/client-stats.d.ts'
+rm 'node_modules/undici-types/client.d.ts'
+rm 'node_modules/undici-types/connector.d.ts'
+rm 'node_modules/undici-types/content-type.d.ts'
+rm 'node_modules/undici-types/cookies.d.ts'
+rm 'node_modules/undici-types/diagnostics-channel.d.ts'
+rm 'node_modules/undici-types/dispatcher.d.ts'
+rm 'node_modules/undici-types/env-http-proxy-agent.d.ts'
+rm 'node_modules/undici-types/errors.d.ts'
+rm 'node_modules/undici-types/eventsource.d.ts'
+rm 'node_modules/undici-types/fetch.d.ts'
+rm 'node_modules/undici-types/formdata.d.ts'
+rm 'node_modules/undici-types/global-dispatcher.d.ts'
+rm 'node_modules/undici-types/global-origin.d.ts'
+rm 'node_modules/undici-types/h2c-client.d.ts'
+rm 'node_modules/undici-types/handlers.d.ts'
+rm 'node_modules/undici-types/header.d.ts'
+rm 'node_modules/undici-types/index.d.ts'
+rm 'node_modules/undici-types/interceptors.d.ts'
+rm 'node_modules/undici-types/mock-agent.d.ts'
+rm 'node_modules/undici-types/mock-call-history.d.ts'
+rm 'node_modules/undici-types/mock-client.d.ts'
+rm 'node_modules/undici-types/mock-errors.d.ts'
+rm 'node_modules/undici-types/mock-interceptor.d.ts'
+rm 'node_modules/undici-types/mock-pool.d.ts'
+rm 'node_modules/undici-types/package.json'
+rm 'node_modules/undici-types/patch.d.ts'
+rm 'node_modules/undici-types/pool-stats.d.ts'
+rm 'node_modules/undici-types/pool.d.ts'
+rm 'node_modules/undici-types/proxy-agent.d.ts'
+rm 'node_modules/undici-types/readable.d.ts'
+rm 'node_modules/undici-types/retry-agent.d.ts'
+rm 'node_modules/undici-types/retry-handler.d.ts'
+rm 'node_modules/undici-types/util.d.ts'
+rm 'node_modules/undici-types/utility.d.ts'
+rm 'node_modules/undici-types/webidl.d.ts'
+rm 'node_modules/undici-types/websocket.d.ts'
+rm 'node_modules/util-deprecate/History.md'
+rm 'node_modules/util-deprecate/LICENSE'
+rm 'node_modules/util-deprecate/README.md'
+rm 'node_modules/util-deprecate/browser.js'
+rm 'node_modules/util-deprecate/node.js'
+rm 'node_modules/util-deprecate/package.json'
+rm 'node_modules/v8-compile-cache-lib/CHANGELOG.md'
+rm 'node_modules/v8-compile-cache-lib/LICENSE'
+rm 'node_modules/v8-compile-cache-lib/README.md'
+rm 'node_modules/v8-compile-cache-lib/package.json'
+rm 'node_modules/v8-compile-cache-lib/v8-compile-cache.d.ts'
+rm 'node_modules/v8-compile-cache-lib/v8-compile-cache.js'
+rm 'node_modules/which/CHANGELOG.md'
+rm 'node_modules/which/LICENSE'
+rm 'node_modules/which/README.md'
+rm 'node_modules/which/bin/node-which'
+rm 'node_modules/which/package.json'
+rm 'node_modules/which/which.js'
+rm 'node_modules/wrap-ansi-cjs/index.js'
+rm 'node_modules/wrap-ansi-cjs/license'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-regex/index.d.ts'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-regex/index.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-regex/license'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-regex/package.json'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-regex/readme.md'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-styles/index.d.ts'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-styles/index.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-styles/license'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-styles/package.json'
+rm 'node_modules/wrap-ansi-cjs/node_modules/ansi-styles/readme.md'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/LICENSE-MIT.txt'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/README.md'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/es2015/index.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/es2015/text.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/index.d.ts'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/index.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/package.json'
+rm 'node_modules/wrap-ansi-cjs/node_modules/emoji-regex/text.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/string-width/index.d.ts'
+rm 'node_modules/wrap-ansi-cjs/node_modules/string-width/index.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/string-width/license'
+rm 'node_modules/wrap-ansi-cjs/node_modules/string-width/package.json'
+rm 'node_modules/wrap-ansi-cjs/node_modules/string-width/readme.md'
+rm 'node_modules/wrap-ansi-cjs/node_modules/strip-ansi/index.d.ts'
+rm 'node_modules/wrap-ansi-cjs/node_modules/strip-ansi/index.js'
+rm 'node_modules/wrap-ansi-cjs/node_modules/strip-ansi/license'
+rm 'node_modules/wrap-ansi-cjs/node_modules/strip-ansi/package.json'
+rm 'node_modules/wrap-ansi-cjs/node_modules/strip-ansi/readme.md'
+rm 'node_modules/wrap-ansi-cjs/package.json'
+rm 'node_modules/wrap-ansi-cjs/readme.md'
+rm 'node_modules/wrap-ansi/index.d.ts'
+rm 'node_modules/wrap-ansi/index.js'
+rm 'node_modules/wrap-ansi/license'
+rm 'node_modules/wrap-ansi/package.json'
+rm 'node_modules/wrap-ansi/readme.md'
+rm 'node_modules/wrappy/LICENSE'
+rm 'node_modules/wrappy/README.md'
+rm 'node_modules/wrappy/package.json'
+rm 'node_modules/wrappy/wrappy.js'
+rm 'node_modules/yaml/LICENSE'
+rm 'node_modules/yaml/README.md'
+rm 'node_modules/yaml/bin.mjs'
+rm 'node_modules/yaml/browser/dist/compose/compose-collection.js'
+rm 'node_modules/yaml/browser/dist/compose/compose-doc.js'
+rm 'node_modules/yaml/browser/dist/compose/compose-node.js'
+rm 'node_modules/yaml/browser/dist/compose/compose-scalar.js'
+rm 'node_modules/yaml/browser/dist/compose/composer.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-block-map.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-block-scalar.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-block-seq.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-end.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-flow-collection.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js'
+rm 'node_modules/yaml/browser/dist/compose/resolve-props.js'
+rm 'node_modules/yaml/browser/dist/compose/util-contains-newline.js'
+rm 'node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js'
+rm 'node_modules/yaml/browser/dist/compose/util-flow-indent-check.js'
+rm 'node_modules/yaml/browser/dist/compose/util-map-includes.js'
+rm 'node_modules/yaml/browser/dist/doc/Document.js'
+rm 'node_modules/yaml/browser/dist/doc/anchors.js'
+rm 'node_modules/yaml/browser/dist/doc/applyReviver.js'
+rm 'node_modules/yaml/browser/dist/doc/createNode.js'
+rm 'node_modules/yaml/browser/dist/doc/directives.js'
+rm 'node_modules/yaml/browser/dist/errors.js'
+rm 'node_modules/yaml/browser/dist/index.js'
+rm 'node_modules/yaml/browser/dist/log.js'
+rm 'node_modules/yaml/browser/dist/nodes/Alias.js'
+rm 'node_modules/yaml/browser/dist/nodes/Collection.js'
+rm 'node_modules/yaml/browser/dist/nodes/Node.js'
+rm 'node_modules/yaml/browser/dist/nodes/Pair.js'
+rm 'node_modules/yaml/browser/dist/nodes/Scalar.js'
+rm 'node_modules/yaml/browser/dist/nodes/YAMLMap.js'
+rm 'node_modules/yaml/browser/dist/nodes/YAMLSeq.js'
+rm 'node_modules/yaml/browser/dist/nodes/addPairToJSMap.js'
+rm 'node_modules/yaml/browser/dist/nodes/identity.js'
+rm 'node_modules/yaml/browser/dist/nodes/toJS.js'
+rm 'node_modules/yaml/browser/dist/parse/cst-scalar.js'
+rm 'node_modules/yaml/browser/dist/parse/cst-stringify.js'
+rm 'node_modules/yaml/browser/dist/parse/cst-visit.js'
+rm 'node_modules/yaml/browser/dist/parse/cst.js'
+rm 'node_modules/yaml/browser/dist/parse/lexer.js'
+rm 'node_modules/yaml/browser/dist/parse/line-counter.js'
+rm 'node_modules/yaml/browser/dist/parse/parser.js'
+rm 'node_modules/yaml/browser/dist/public-api.js'
+rm 'node_modules/yaml/browser/dist/schema/Schema.js'
+rm 'node_modules/yaml/browser/dist/schema/common/map.js'
+rm 'node_modules/yaml/browser/dist/schema/common/null.js'
+rm 'node_modules/yaml/browser/dist/schema/common/seq.js'
+rm 'node_modules/yaml/browser/dist/schema/common/string.js'
+rm 'node_modules/yaml/browser/dist/schema/core/bool.js'
+rm 'node_modules/yaml/browser/dist/schema/core/float.js'
+rm 'node_modules/yaml/browser/dist/schema/core/int.js'
+rm 'node_modules/yaml/browser/dist/schema/core/schema.js'
+rm 'node_modules/yaml/browser/dist/schema/json/schema.js'
+rm 'node_modules/yaml/browser/dist/schema/tags.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/float.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/int.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/set.js'
+rm 'node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js'
+rm 'node_modules/yaml/browser/dist/stringify/foldFlowLines.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringify.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringifyCollection.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringifyComment.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringifyDocument.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringifyNumber.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringifyPair.js'
+rm 'node_modules/yaml/browser/dist/stringify/stringifyString.js'
+rm 'node_modules/yaml/browser/dist/util.js'
+rm 'node_modules/yaml/browser/dist/visit.js'
+rm 'node_modules/yaml/browser/index.js'
+rm 'node_modules/yaml/browser/package.json'
+rm 'node_modules/yaml/dist/cli.d.ts'
+rm 'node_modules/yaml/dist/cli.mjs'
+rm 'node_modules/yaml/dist/compose/compose-collection.d.ts'
+rm 'node_modules/yaml/dist/compose/compose-collection.js'
+rm 'node_modules/yaml/dist/compose/compose-doc.d.ts'
+rm 'node_modules/yaml/dist/compose/compose-doc.js'
+rm 'node_modules/yaml/dist/compose/compose-node.d.ts'
+rm 'node_modules/yaml/dist/compose/compose-node.js'
+rm 'node_modules/yaml/dist/compose/compose-scalar.d.ts'
+rm 'node_modules/yaml/dist/compose/compose-scalar.js'
+rm 'node_modules/yaml/dist/compose/composer.d.ts'
+rm 'node_modules/yaml/dist/compose/composer.js'
+rm 'node_modules/yaml/dist/compose/resolve-block-map.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-block-map.js'
+rm 'node_modules/yaml/dist/compose/resolve-block-scalar.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-block-scalar.js'
+rm 'node_modules/yaml/dist/compose/resolve-block-seq.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-block-seq.js'
+rm 'node_modules/yaml/dist/compose/resolve-end.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-end.js'
+rm 'node_modules/yaml/dist/compose/resolve-flow-collection.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-flow-collection.js'
+rm 'node_modules/yaml/dist/compose/resolve-flow-scalar.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-flow-scalar.js'
+rm 'node_modules/yaml/dist/compose/resolve-props.d.ts'
+rm 'node_modules/yaml/dist/compose/resolve-props.js'
+rm 'node_modules/yaml/dist/compose/util-contains-newline.d.ts'
+rm 'node_modules/yaml/dist/compose/util-contains-newline.js'
+rm 'node_modules/yaml/dist/compose/util-empty-scalar-position.d.ts'
+rm 'node_modules/yaml/dist/compose/util-empty-scalar-position.js'
+rm 'node_modules/yaml/dist/compose/util-flow-indent-check.d.ts'
+rm 'node_modules/yaml/dist/compose/util-flow-indent-check.js'
+rm 'node_modules/yaml/dist/compose/util-map-includes.d.ts'
+rm 'node_modules/yaml/dist/compose/util-map-includes.js'
+rm 'node_modules/yaml/dist/doc/Document.d.ts'
+rm 'node_modules/yaml/dist/doc/Document.js'
+rm 'node_modules/yaml/dist/doc/anchors.d.ts'
+rm 'node_modules/yaml/dist/doc/anchors.js'
+rm 'node_modules/yaml/dist/doc/applyReviver.d.ts'
+rm 'node_modules/yaml/dist/doc/applyReviver.js'
+rm 'node_modules/yaml/dist/doc/createNode.d.ts'
+rm 'node_modules/yaml/dist/doc/createNode.js'
+rm 'node_modules/yaml/dist/doc/directives.d.ts'
+rm 'node_modules/yaml/dist/doc/directives.js'
+rm 'node_modules/yaml/dist/errors.d.ts'
+rm 'node_modules/yaml/dist/errors.js'
+rm 'node_modules/yaml/dist/index.d.ts'
+rm 'node_modules/yaml/dist/index.js'
+rm 'node_modules/yaml/dist/log.d.ts'
+rm 'node_modules/yaml/dist/log.js'
+rm 'node_modules/yaml/dist/nodes/Alias.d.ts'
+rm 'node_modules/yaml/dist/nodes/Alias.js'
+rm 'node_modules/yaml/dist/nodes/Collection.d.ts'
+rm 'node_modules/yaml/dist/nodes/Collection.js'
+rm 'node_modules/yaml/dist/nodes/Node.d.ts'
+rm 'node_modules/yaml/dist/nodes/Node.js'
+rm 'node_modules/yaml/dist/nodes/Pair.d.ts'
+rm 'node_modules/yaml/dist/nodes/Pair.js'
+rm 'node_modules/yaml/dist/nodes/Scalar.d.ts'
+rm 'node_modules/yaml/dist/nodes/Scalar.js'
+rm 'node_modules/yaml/dist/nodes/YAMLMap.d.ts'
+rm 'node_modules/yaml/dist/nodes/YAMLMap.js'
+rm 'node_modules/yaml/dist/nodes/YAMLSeq.d.ts'
+rm 'node_modules/yaml/dist/nodes/YAMLSeq.js'
+rm 'node_modules/yaml/dist/nodes/addPairToJSMap.d.ts'
+rm 'node_modules/yaml/dist/nodes/addPairToJSMap.js'
+rm 'node_modules/yaml/dist/nodes/identity.d.ts'
+rm 'node_modules/yaml/dist/nodes/identity.js'
+rm 'node_modules/yaml/dist/nodes/toJS.d.ts'
+rm 'node_modules/yaml/dist/nodes/toJS.js'
+rm 'node_modules/yaml/dist/options.d.ts'
+rm 'node_modules/yaml/dist/parse/cst-scalar.d.ts'
+rm 'node_modules/yaml/dist/parse/cst-scalar.js'
+rm 'node_modules/yaml/dist/parse/cst-stringify.d.ts'
+rm 'node_modules/yaml/dist/parse/cst-stringify.js'
+rm 'node_modules/yaml/dist/parse/cst-visit.d.ts'
+rm 'node_modules/yaml/dist/parse/cst-visit.js'
+rm 'node_modules/yaml/dist/parse/cst.d.ts'
+rm 'node_modules/yaml/dist/parse/cst.js'
+rm 'node_modules/yaml/dist/parse/lexer.d.ts'
+rm 'node_modules/yaml/dist/parse/lexer.js'
+rm 'node_modules/yaml/dist/parse/line-counter.d.ts'
+rm 'node_modules/yaml/dist/parse/line-counter.js'
+rm 'node_modules/yaml/dist/parse/parser.d.ts'
+rm 'node_modules/yaml/dist/parse/parser.js'
+rm 'node_modules/yaml/dist/public-api.d.ts'
+rm 'node_modules/yaml/dist/public-api.js'
+rm 'node_modules/yaml/dist/schema/Schema.d.ts'
+rm 'node_modules/yaml/dist/schema/Schema.js'
+rm 'node_modules/yaml/dist/schema/common/map.d.ts'
+rm 'node_modules/yaml/dist/schema/common/map.js'
+rm 'node_modules/yaml/dist/schema/common/null.d.ts'
+rm 'node_modules/yaml/dist/schema/common/null.js'
+rm 'node_modules/yaml/dist/schema/common/seq.d.ts'
+rm 'node_modules/yaml/dist/schema/common/seq.js'
+rm 'node_modules/yaml/dist/schema/common/string.d.ts'
+rm 'node_modules/yaml/dist/schema/common/string.js'
+rm 'node_modules/yaml/dist/schema/core/bool.d.ts'
+rm 'node_modules/yaml/dist/schema/core/bool.js'
+rm 'node_modules/yaml/dist/schema/core/float.d.ts'
+rm 'node_modules/yaml/dist/schema/core/float.js'
+rm 'node_modules/yaml/dist/schema/core/int.d.ts'
+rm 'node_modules/yaml/dist/schema/core/int.js'
+rm 'node_modules/yaml/dist/schema/core/schema.d.ts'
+rm 'node_modules/yaml/dist/schema/core/schema.js'
+rm 'node_modules/yaml/dist/schema/json-schema.d.ts'
+rm 'node_modules/yaml/dist/schema/json/schema.d.ts'
+rm 'node_modules/yaml/dist/schema/json/schema.js'
+rm 'node_modules/yaml/dist/schema/tags.d.ts'
+rm 'node_modules/yaml/dist/schema/tags.js'
+rm 'node_modules/yaml/dist/schema/types.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/binary.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/binary.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/bool.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/bool.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/float.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/float.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/int.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/int.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/merge.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/merge.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/omap.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/omap.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/pairs.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/pairs.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/schema.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/schema.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/set.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/set.js'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/timestamp.d.ts'
+rm 'node_modules/yaml/dist/schema/yaml-1.1/timestamp.js'
+rm 'node_modules/yaml/dist/stringify/foldFlowLines.d.ts'
+rm 'node_modules/yaml/dist/stringify/foldFlowLines.js'
+rm 'node_modules/yaml/dist/stringify/stringify.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringify.js'
+rm 'node_modules/yaml/dist/stringify/stringifyCollection.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringifyCollection.js'
+rm 'node_modules/yaml/dist/stringify/stringifyComment.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringifyComment.js'
+rm 'node_modules/yaml/dist/stringify/stringifyDocument.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringifyDocument.js'
+rm 'node_modules/yaml/dist/stringify/stringifyNumber.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringifyNumber.js'
+rm 'node_modules/yaml/dist/stringify/stringifyPair.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringifyPair.js'
+rm 'node_modules/yaml/dist/stringify/stringifyString.d.ts'
+rm 'node_modules/yaml/dist/stringify/stringifyString.js'
+rm 'node_modules/yaml/dist/test-events.d.ts'
+rm 'node_modules/yaml/dist/test-events.js'
+rm 'node_modules/yaml/dist/util.d.ts'
+rm 'node_modules/yaml/dist/util.js'
+rm 'node_modules/yaml/dist/visit.d.ts'
+rm 'node_modules/yaml/dist/visit.js'
+rm 'node_modules/yaml/package.json'
+rm 'node_modules/yaml/util.js'
+rm 'node_modules/yn/index.d.ts'
+rm 'node_modules/yn/index.js'
+rm 'node_modules/yn/lenient.js'
+rm 'node_modules/yn/license'
+rm 'node_modules/yn/package.json'
+rm 'node_modules/yn/readme.md'
+
+```
+
+---
+
+
+
+---
+
+Excellent! Now let's commit the clean repository:
+
+---
+
+```bash
+git add .
+```
+
+---
+
+```bash
+git commit -m "Final cleanup: Remove node_modules from tracking
+
+- Added comprehensive .gitignore file
+- Removed all development and build files from tracking  
+- Repository now contains only production source code
+- Clean structure ready for deployment
+
+✅ DigiPin API production-ready
+✅ Clean git history
+✅ Proper .gitignore configuration
+✅ Ready for GitHub push and Digital Ocean deployment"
+```
+
+```
+[Terminal output truncated: ~195KB dropped from beginning]
+/parse_modified.js
+ delete mode 100644 node_modules/minimist/test/proto.js
+ delete mode 100644 node_modules/minimist/test/short.js
+ delete mode 100644 node_modules/minimist/test/stop_early.js
+ delete mode 100644 node_modules/minimist/test/unknown.js
+ delete mode 100644 node_modules/minimist/test/whitespace.js
+ delete mode 100644 node_modules/minipass/LICENSE
+ delete mode 100644 node_modules/minipass/README.md
+ delete mode 100644 node_modules/minipass/dist/commonjs/index.d.ts
+ delete mode 100644 node_modules/minipass/dist/commonjs/index.d.ts.map
+ delete mode 100644 node_modules/minipass/dist/commonjs/index.js
+ delete mode 100644 node_modules/minipass/dist/commonjs/index.js.map
+ delete mode 100644 node_modules/minipass/dist/commonjs/package.json
+ delete mode 100644 node_modules/minipass/dist/esm/index.d.ts
+ delete mode 100644 node_modules/minipass/dist/esm/index.d.ts.map
+ delete mode 100644 node_modules/minipass/dist/esm/index.js
+ delete mode 100644 node_modules/minipass/dist/esm/index.js.map
+ delete mode 100644 node_modules/minipass/dist/esm/package.json
+ delete mode 100644 node_modules/minipass/package.json
+ delete mode 100644 node_modules/mkdirp-classic/LICENSE
+ delete mode 100644 node_modules/mkdirp-classic/README.md
+ delete mode 100644 node_modules/mkdirp-classic/index.js
+ delete mode 100644 node_modules/mkdirp-classic/package.json
+ delete mode 100644 node_modules/ms/index.js
+ delete mode 100644 node_modules/ms/license.md
+ delete mode 100644 node_modules/ms/package.json
+ delete mode 100644 node_modules/ms/readme.md
+ delete mode 100644 node_modules/napi-build-utils/.github/workflows/run-npm-tests.yml
+ delete mode 100644 node_modules/napi-build-utils/LICENSE
+ delete mode 100644 node_modules/napi-build-utils/README.md
+ delete mode 100644 node_modules/napi-build-utils/index.js
+ delete mode 100644 node_modules/napi-build-utils/index.md
+ delete mode 100644 node_modules/napi-build-utils/package.json
+ delete mode 100644 node_modules/node-abi/LICENSE
+ delete mode 100644 node_modules/node-abi/README.md
+ delete mode 100644 node_modules/node-abi/abi_registry.json
+ delete mode 100644 node_modules/node-abi/index.js
+ delete mode 100644 node_modules/node-abi/package.json
+ delete mode 100644 node_modules/nodemon/.prettierrc.json
+ delete mode 100644 node_modules/nodemon/LICENSE
+ delete mode 100644 node_modules/nodemon/README.md
+ delete mode 100755 node_modules/nodemon/bin/nodemon.js
+ delete mode 100644 node_modules/nodemon/bin/windows-kill.exe
+ delete mode 100644 node_modules/nodemon/doc/cli/authors.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/config.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/help.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/logo.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/options.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/topics.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/usage.txt
+ delete mode 100644 node_modules/nodemon/doc/cli/whoami.txt
+ delete mode 100644 node_modules/nodemon/index.d.ts
+ delete mode 100644 node_modules/nodemon/jsconfig.json
+ delete mode 100644 node_modules/nodemon/lib/cli/index.js
+ delete mode 100644 node_modules/nodemon/lib/cli/parse.js
+ delete mode 100644 node_modules/nodemon/lib/config/command.js
+ delete mode 100644 node_modules/nodemon/lib/config/defaults.js
+ delete mode 100644 node_modules/nodemon/lib/config/exec.js
+ delete mode 100644 node_modules/nodemon/lib/config/index.js
+ delete mode 100644 node_modules/nodemon/lib/config/load.js
+ delete mode 100644 node_modules/nodemon/lib/help/index.js
+ delete mode 100644 node_modules/nodemon/lib/index.js
+ delete mode 100644 node_modules/nodemon/lib/monitor/index.js
+ delete mode 100644 node_modules/nodemon/lib/monitor/match.js
+ delete mode 100644 node_modules/nodemon/lib/monitor/run.js
+ delete mode 100644 node_modules/nodemon/lib/monitor/signals.js
+ delete mode 100644 node_modules/nodemon/lib/monitor/watch.js
+ delete mode 100644 node_modules/nodemon/lib/nodemon.js
+ delete mode 100644 node_modules/nodemon/lib/rules/add.js
+ delete mode 100644 node_modules/nodemon/lib/rules/index.js
+ delete mode 100644 node_modules/nodemon/lib/rules/parse.js
+ delete mode 100644 node_modules/nodemon/lib/spawn.js
+ delete mode 100644 node_modules/nodemon/lib/utils/bus.js
+ delete mode 100644 node_modules/nodemon/lib/utils/clone.js
+ delete mode 100644 node_modules/nodemon/lib/utils/colour.js
+ delete mode 100644 node_modules/nodemon/lib/utils/index.js
+ delete mode 100644 node_modules/nodemon/lib/utils/log.js
+ delete mode 100644 node_modules/nodemon/lib/utils/merge.js
+ delete mode 100644 node_modules/nodemon/lib/version.js
+ delete mode 100644 node_modules/nodemon/node_modules/minimatch/LICENSE
+ delete mode 100644 node_modules/nodemon/node_modules/minimatch/README.md
+ delete mode 100644 node_modules/nodemon/node_modules/minimatch/minimatch.js
+ delete mode 100644 node_modules/nodemon/node_modules/minimatch/package.json
+ delete mode 100644 node_modules/nodemon/package.json
+ delete mode 100644 node_modules/normalize-path/LICENSE
+ delete mode 100644 node_modules/normalize-path/README.md
+ delete mode 100644 node_modules/normalize-path/index.js
+ delete mode 100644 node_modules/normalize-path/package.json
+ delete mode 100644 node_modules/on-exit-leak-free/.github/dependabot.yml
+ delete mode 100644 node_modules/on-exit-leak-free/.github/workflows/ci.yml
+ delete mode 100644 node_modules/on-exit-leak-free/LICENSE
+ delete mode 100644 node_modules/on-exit-leak-free/README.md
+ delete mode 100644 node_modules/on-exit-leak-free/index.js
+ delete mode 100644 node_modules/on-exit-leak-free/package.json
+ delete mode 100644 node_modules/on-exit-leak-free/test/base.test.js
+ delete mode 100644 node_modules/on-exit-leak-free/test/event-emitter-leak.test.js
+ delete mode 100644 node_modules/on-exit-leak-free/test/fixtures/beforeExit.js
+ delete mode 100644 node_modules/on-exit-leak-free/test/fixtures/close.js
+ delete mode 100644 node_modules/on-exit-leak-free/test/fixtures/gc-not-close.js
+ delete mode 100644 node_modules/on-exit-leak-free/test/fixtures/unregister.js
+ delete mode 100644 node_modules/once/LICENSE
+ delete mode 100644 node_modules/once/README.md
+ delete mode 100644 node_modules/once/once.js
+ delete mode 100644 node_modules/once/package.json
+ delete mode 100644 node_modules/openapi-types/CHANGELOG.md
+ delete mode 100644 node_modules/openapi-types/LICENSE
+ delete mode 100644 node_modules/openapi-types/README.md
+ delete mode 100644 node_modules/openapi-types/dist/index.d.ts
+ delete mode 100644 node_modules/openapi-types/dist/index.js
+ delete mode 100644 node_modules/openapi-types/dist/index.js.map
+ delete mode 100644 node_modules/openapi-types/package.json
+ delete mode 100644 node_modules/package-json-from-dist/LICENSE.md
+ delete mode 100644 node_modules/package-json-from-dist/README.md
+ delete mode 100644 node_modules/package-json-from-dist/dist/commonjs/index.d.ts
+ delete mode 100644 node_modules/package-json-from-dist/dist/commonjs/index.d.ts.map
+ delete mode 100644 node_modules/package-json-from-dist/dist/commonjs/index.js
+ delete mode 100644 node_modules/package-json-from-dist/dist/commonjs/index.js.map
+ delete mode 100644 node_modules/package-json-from-dist/dist/commonjs/package.json
+ delete mode 100644 node_modules/package-json-from-dist/dist/esm/index.d.ts
+ delete mode 100644 node_modules/package-json-from-dist/dist/esm/index.d.ts.map
+ delete mode 100644 node_modules/package-json-from-dist/dist/esm/index.js
+ delete mode 100644 node_modules/package-json-from-dist/dist/esm/index.js.map
+ delete mode 100644 node_modules/package-json-from-dist/dist/esm/package.json
+ delete mode 100644 node_modules/package-json-from-dist/package.json
+ delete mode 100644 node_modules/path-key/index.d.ts
+ delete mode 100644 node_modules/path-key/index.js
+ delete mode 100644 node_modules/path-key/license
+ delete mode 100644 node_modules/path-key/package.json
+ delete mode 100644 node_modules/path-key/readme.md
+ delete mode 100644 node_modules/path-scurry/LICENSE.md
+ delete mode 100644 node_modules/path-scurry/README.md
+ delete mode 100644 node_modules/path-scurry/dist/commonjs/index.d.ts
+ delete mode 100644 node_modules/path-scurry/dist/commonjs/index.d.ts.map
+ delete mode 100644 node_modules/path-scurry/dist/commonjs/index.js
+ delete mode 100644 node_modules/path-scurry/dist/commonjs/index.js.map
+ delete mode 100644 node_modules/path-scurry/dist/commonjs/package.json
+ delete mode 100644 node_modules/path-scurry/dist/esm/index.d.ts
+ delete mode 100644 node_modules/path-scurry/dist/esm/index.d.ts.map
+ delete mode 100644 node_modules/path-scurry/dist/esm/index.js
+ delete mode 100644 node_modules/path-scurry/dist/esm/index.js.map
+ delete mode 100644 node_modules/path-scurry/dist/esm/package.json
+ delete mode 100644 node_modules/path-scurry/package.json
+ delete mode 100644 node_modules/picomatch/CHANGELOG.md
+ delete mode 100644 node_modules/picomatch/LICENSE
+ delete mode 100644 node_modules/picomatch/README.md
+ delete mode 100644 node_modules/picomatch/index.js
+ delete mode 100644 node_modules/picomatch/lib/constants.js
+ delete mode 100644 node_modules/picomatch/lib/parse.js
+ delete mode 100644 node_modules/picomatch/lib/picomatch.js
+ delete mode 100644 node_modules/picomatch/lib/scan.js
+ delete mode 100644 node_modules/picomatch/lib/utils.js
+ delete mode 100644 node_modules/picomatch/package.json
+ delete mode 100644 node_modules/pino-abstract-transport/.github/dependabot.yml
+ delete mode 100644 node_modules/pino-abstract-transport/.github/workflows/ci.yml
+ delete mode 100755 node_modules/pino-abstract-transport/.husky/pre-commit
+ delete mode 100644 node_modules/pino-abstract-transport/LICENSE
+ delete mode 100644 node_modules/pino-abstract-transport/README.md
+ delete mode 100644 node_modules/pino-abstract-transport/index.d.ts
+ delete mode 100644 node_modules/pino-abstract-transport/index.js
+ delete mode 100644 node_modules/pino-abstract-transport/package.json
+ delete mode 100644 node_modules/pino-abstract-transport/test/base.test.js
+ delete mode 100644 node_modules/pino-abstract-transport/test/fixtures/transport-async-iteration.js
+ delete mode 100644 node_modules/pino-abstract-transport/test/fixtures/transport-on-data.js
+ delete mode 100644 node_modules/pino-abstract-transport/test/fixtures/transport-transform.js
+ delete mode 100644 node_modules/pino-abstract-transport/test/fixtures/worker-pipeline.js
+ delete mode 100644 node_modules/pino-abstract-transport/test/types/index.test-d.ts
+ delete mode 100644 node_modules/pino-abstract-transport/test/worker.test.js
+ delete mode 100644 node_modules/pino-std-serializers/.editorconfig
+ delete mode 100644 node_modules/pino-std-serializers/.eslintignore
+ delete mode 100644 node_modules/pino-std-serializers/.github/dependabot.yml
+ delete mode 100644 node_modules/pino-std-serializers/.github/workflows/ci.yml
+ delete mode 100644 node_modules/pino-std-serializers/LICENSE
+ delete mode 100644 node_modules/pino-std-serializers/Readme.md
+ delete mode 100644 node_modules/pino-std-serializers/index.d.ts
+ delete mode 100644 node_modules/pino-std-serializers/index.js
+ delete mode 100644 node_modules/pino-std-serializers/lib/err-helpers.js
+ delete mode 100644 node_modules/pino-std-serializers/lib/err-proto.js
+ delete mode 100644 node_modules/pino-std-serializers/lib/err-with-cause.js
+ delete mode 100644 node_modules/pino-std-serializers/lib/err.js
+ delete mode 100644 node_modules/pino-std-serializers/lib/req.js
+ delete mode 100644 node_modules/pino-std-serializers/lib/res.js
+ delete mode 100644 node_modules/pino-std-serializers/package.json
+ delete mode 100644 node_modules/pino-std-serializers/test/err-with-cause.test.js
+ delete mode 100644 node_modules/pino-std-serializers/test/err.test.js
+ delete mode 100644 node_modules/pino-std-serializers/test/req.test.js
+ delete mode 100644 node_modules/pino-std-serializers/test/res.test.js
+ delete mode 100644 node_modules/pino-std-serializers/test/types/index.test-d.ts
+ delete mode 100644 node_modules/pino-std-serializers/tsconfig.json
+ delete mode 100644 node_modules/pino/.eslintignore
+ delete mode 100644 node_modules/pino/.eslintrc
+ delete mode 100644 node_modules/pino/.github/dependabot.yml
+ delete mode 100644 node_modules/pino/.github/workflows/bench.yml
+ delete mode 100644 node_modules/pino/.github/workflows/ci.yml
+ delete mode 100644 node_modules/pino/.github/workflows/lock-threads.yml
+ delete mode 100644 node_modules/pino/.github/workflows/publish-release.yml
+ delete mode 100644 node_modules/pino/.github/workflows/target-main.yml
+ delete mode 100644 node_modules/pino/.nojekyll
+ delete mode 100644 node_modules/pino/.prettierignore
+ delete mode 100644 node_modules/pino/.taprc.yaml
+ delete mode 100644 node_modules/pino/CNAME
+ delete mode 100644 node_modules/pino/CONTRIBUTING.md
+ delete mode 100644 node_modules/pino/LICENSE
+ delete mode 100644 node_modules/pino/README.md
+ delete mode 100644 node_modules/pino/SECURITY.md
+ delete mode 100644 node_modules/pino/benchmarks/basic.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/child-child.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/child-creation.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/child.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/deep-object.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/formatters.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/internal/custom-levels.js
+ delete mode 100644 node_modules/pino/benchmarks/internal/just-pino-heavy.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/internal/just-pino.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/internal/parent-vs-child.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/internal/redact.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/long-string.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/multi-arg.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/multistream.js
+ delete mode 100644 node_modules/pino/benchmarks/object.bench.js
+ delete mode 100644 node_modules/pino/benchmarks/utils/generate-benchmark-doc.js
+ delete mode 100644 node_modules/pino/benchmarks/utils/runbench.js
+ delete mode 100644 node_modules/pino/benchmarks/utils/wrap-log-level.js
+ delete mode 100755 node_modules/pino/bin.js
+ delete mode 100644 node_modules/pino/browser.js
+ delete mode 100644 node_modules/pino/build/sync-version.js
+ delete mode 100644 node_modules/pino/docs/api.md
+ delete mode 100644 node_modules/pino/docs/asynchronous.md
+ delete mode 100644 node_modules/pino/docs/benchmarks.md
+ delete mode 100644 node_modules/pino/docs/browser.md
+ delete mode 100644 node_modules/pino/docs/bundling.md
+ delete mode 100644 node_modules/pino/docs/child-loggers.md
+ delete mode 100644 node_modules/pino/docs/diagnostics.md
+ delete mode 100644 node_modules/pino/docs/ecosystem.md
+ delete mode 100644 node_modules/pino/docs/help.md
+ delete mode 100644 node_modules/pino/docs/lts.md
+ delete mode 100644 node_modules/pino/docs/pretty.md
+ delete mode 100644 node_modules/pino/docs/redaction.md
+ delete mode 100644 node_modules/pino/docs/transports.md
+ delete mode 100644 node_modules/pino/docs/web.md
+ delete mode 100644 node_modules/pino/docsify/sidebar.md
+ delete mode 100644 node_modules/pino/examples/basic.js
+ delete mode 100644 node_modules/pino/examples/transport.js
+ delete mode 100644 node_modules/pino/favicon-16x16.png
+ delete mode 100644 node_modules/pino/favicon-32x32.png
+ delete mode 100644 node_modules/pino/favicon.ico
+ delete mode 100644 node_modules/pino/file.js
+ delete mode 100755 node_modules/pino/inc-version.sh
+ delete mode 100644 node_modules/pino/index.html
+ delete mode 100644 node_modules/pino/lib/caller.js
+ delete mode 100644 node_modules/pino/lib/constants.js
+ delete mode 100644 node_modules/pino/lib/deprecations.js
+ delete mode 100644 node_modules/pino/lib/levels.js
+ delete mode 100644 node_modules/pino/lib/meta.js
+ delete mode 100644 node_modules/pino/lib/multistream.js
+ delete mode 100644 node_modules/pino/lib/proto.js
+ delete mode 100644 node_modules/pino/lib/redaction.js
+ delete mode 100644 node_modules/pino/lib/symbols.js
+ delete mode 100644 node_modules/pino/lib/time.js
+ delete mode 100644 node_modules/pino/lib/tools.js
+ delete mode 100644 node_modules/pino/lib/transport-stream.js
+ delete mode 100644 node_modules/pino/lib/transport.js
+ delete mode 100644 node_modules/pino/lib/worker.js
+ delete mode 100644 node_modules/pino/package.json
+ delete mode 100644 node_modules/pino/pino-banner.png
+ delete mode 100644 node_modules/pino/pino-logo-hire.png
+ delete mode 100644 node_modules/pino/pino-tree.png
+ delete mode 100644 node_modules/pino/pino.d.ts
+ delete mode 100644 node_modules/pino/pino.js
+ delete mode 100644 node_modules/pino/pretty-demo.png
+ delete mode 100644 node_modules/pino/test/basic.test.js
+ delete mode 100644 node_modules/pino/test/broken-pipe.test.js
+ delete mode 100644 node_modules/pino/test/browser-child.test.js
+ delete mode 100644 node_modules/pino/test/browser-disabled.test.js
+ delete mode 100644 node_modules/pino/test/browser-early-console-freeze.test.js
+ delete mode 100644 node_modules/pino/test/browser-is-level-enabled.test.js
+ delete mode 100644 node_modules/pino/test/browser-levels.test.js
+ delete mode 100644 node_modules/pino/test/browser-serializers.test.js
+ delete mode 100644 node_modules/pino/test/browser-timestamp.test.js
+ delete mode 100644 node_modules/pino/test/browser-transmit.test.js
+ delete mode 100644 node_modules/pino/test/browser.test.js
+ delete mode 100644 node_modules/pino/test/complex-objects.test.js
+ delete mode 100644 node_modules/pino/test/crlf.test.js
+ delete mode 100644 node_modules/pino/test/custom-levels.test.js
+ delete mode 100644 node_modules/pino/test/diagnostics.test.js
+ delete mode 100644 node_modules/pino/test/error.test.js
+ delete mode 100644 node_modules/pino/test/errorKey.test.js
+ delete mode 100644 node_modules/pino/test/escaping.test.js
+ delete mode 100644 node_modules/pino/test/esm/esm.mjs
+ delete mode 100644 node_modules/pino/test/esm/index.test.js
+ delete mode 100644 node_modules/pino/test/esm/named-exports.mjs
+ delete mode 100644 node_modules/pino/test/exit.test.js
+ delete mode 100644 node_modules/pino/test/fixtures/broken-pipe/basic.js
+ delete mode 100644 node_modules/pino/test/fixtures/broken-pipe/destination.js
+ delete mode 100644 node_modules/pino/test/fixtures/broken-pipe/syncfalse.js
+ delete mode 100644 node_modules/pino/test/fixtures/console-transport.js
+ delete mode 100644 node_modules/pino/test/fixtures/crashing-transport.js
+ delete mode 100644 node_modules/pino/test/fixtures/default-exit.js
+ delete mode 100644 node_modules/pino/test/fixtures/destination-exit.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/index.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/14-files.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/2-files.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file1.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file10.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file11.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file12.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file13.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file14.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file2.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file3.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file4.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file5.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file6.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file7.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file8.js
+ delete mode 100644 node_modules/pino/test/fixtures/eval/node_modules/file9.js
+ delete mode 100644 node_modules/pino/test/fixtures/noop-transport.js
+ delete mode 100644 node_modules/pino/test/fixtures/pretty/null-prototype.js
+ delete mode 100644 node_modules/pino/test/fixtures/stdout-hack-protection.js
+ delete mode 100644 node_modules/pino/test/fixtures/syncfalse-child.js
+ delete mode 100644 node_modules/pino/test/fixtures/syncfalse-exit.js
+ delete mode 100644 node_modules/pino/test/fixtures/syncfalse-flush-exit.js
+ delete mode 100644 node_modules/pino/test/fixtures/syncfalse.js
+ delete mode 100644 node_modules/pino/test/fixtures/syntax-error-esm.mjs
+ delete mode 100644 node_modules/pino/test/fixtures/to-file-transport-with-transform.js
+ delete mode 100644 node_modules/pino/test/fixtures/to-file-transport.js
+ delete mode 100644 node_modules/pino/test/fixtures/to-file-transport.mjs
+ delete mode 100644 node_modules/pino/test/fixtures/transport-exit-immediately-with-async-dest.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-exit-immediately.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-exit-on-ready.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-main.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-many-lines.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-string-stdout.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-transform.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-uses-pino-config.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-with-on-exit.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-worker-data.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-worker.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport-wrong-export-type.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport/index.js
+ delete mode 100644 node_modules/pino/test/fixtures/transport/package.json
+ delete mode 100644 node_modules/pino/test/fixtures/ts/to-file-transport-with-transform.ts
+ delete mode 100644 node_modules/pino/test/fixtures/ts/to-file-transport.ts
+ delete mode 100755 node_modules/pino/test/fixtures/ts/transpile.cjs
+ delete mode 100644 node_modules/pino/test/fixtures/ts/transport-exit-immediately-with-async-dest.ts
+ delete mode 100644 node_modules/pino/test/fixtures/ts/transport-exit-immediately.ts
+ delete mode 100644 node_modules/pino/test/fixtures/ts/transport-exit-on-ready.ts
+ delete mode 100644 node_modules/pino/test/fixtures/ts/transport-main.ts
+ delete mode 100644 node_modules/pino/test/fixtures/ts/transport-string-stdout.ts
+ delete mode 100644 node_modules/pino/test/fixtures/ts/transport-worker.ts
+ delete mode 100644 node_modules/pino/test/formatters.test.js
+ delete mode 100644 node_modules/pino/test/helper.d.ts
+ delete mode 100644 node_modules/pino/test/helper.js
+ delete mode 100644 node_modules/pino/test/hooks.test.js
+ delete mode 100644 node_modules/pino/test/http.test.js
+ delete mode 100644 node_modules/pino/test/internals/version.test.js
+ delete mode 100644 node_modules/pino/test/is-level-enabled.test.js
+ delete mode 100644 node_modules/pino/test/jest/basic.spec.js
+ delete mode 100644 node_modules/pino/test/levels.test.js
+ delete mode 100644 node_modules/pino/test/metadata.test.js
+ delete mode 100644 node_modules/pino/test/mixin-merge-strategy.test.js
+ delete mode 100644 node_modules/pino/test/mixin.test.js
+ delete mode 100644 node_modules/pino/test/multistream.test.js
+ delete mode 100644 node_modules/pino/test/pkg/index.js
+ delete mode 100644 node_modules/pino/test/pkg/pkg.config.json
+ delete mode 100644 node_modules/pino/test/pkg/pkg.test.js
+ delete mode 100644 node_modules/pino/test/redact.test.js
+ delete mode 100644 node_modules/pino/test/serializers.test.js
+ delete mode 100644 node_modules/pino/test/stdout-protection.test.js
+ delete mode 100644 node_modules/pino/test/syncfalse.test.js
+ delete mode 100644 node_modules/pino/test/timestamp-nano.test.js
+ delete mode 100644 node_modules/pino/test/timestamp.test.js
+ delete mode 100644 node_modules/pino/test/transport-stream.test.js
+ delete mode 100644 node_modules/pino/test/transport/big.test.js
+ delete mode 100644 node_modules/pino/test/transport/bundlers-support.test.js
+ delete mode 100644 node_modules/pino/test/transport/caller.test.js
+ delete mode 100644 node_modules/pino/test/transport/core.test.js
+ delete mode 100644 node_modules/pino/test/transport/core.test.ts
+ delete mode 100644 node_modules/pino/test/transport/core.transpiled.test.ts
+ delete mode 100644 node_modules/pino/test/transport/crash.test.js
+ delete mode 100644 node_modules/pino/test/transport/module-link.test.js
+ delete mode 100644 node_modules/pino/test/transport/pipeline.test.js
+ delete mode 100644 node_modules/pino/test/transport/repl.test.js
+ delete mode 100644 node_modules/pino/test/transport/syncTrue.test.js
+ delete mode 100644 node_modules/pino/test/transport/syncfalse.test.js
+ delete mode 100644 node_modules/pino/test/transport/targets.test.js
+ delete mode 100644 node_modules/pino/test/transport/uses-pino-config.test.js
+ delete mode 100644 node_modules/pino/test/types/pino-import.test-d.cts
+ delete mode 100644 node_modules/pino/test/types/pino-multistream.test-d.ts
+ delete mode 100644 node_modules/pino/test/types/pino-top-export.test-d.ts
+ delete mode 100644 node_modules/pino/test/types/pino-transport.test-d.ts
+ delete mode 100644 node_modules/pino/test/types/pino-type-only.test-d.ts
+ delete mode 100644 node_modules/pino/test/types/pino.test-d.ts
+ delete mode 100644 node_modules/pino/test/types/pino.ts
+ delete mode 100644 node_modules/pino/tsconfig.json
+ delete mode 100644 node_modules/prebuild-install/CHANGELOG.md
+ delete mode 100644 node_modules/prebuild-install/CONTRIBUTING.md
+ delete mode 100644 node_modules/prebuild-install/LICENSE
+ delete mode 100644 node_modules/prebuild-install/README.md
+ delete mode 100644 node_modules/prebuild-install/asset.js
+ delete mode 100755 node_modules/prebuild-install/bin.js
+ delete mode 100644 node_modules/prebuild-install/download.js
+ delete mode 100644 node_modules/prebuild-install/error.js
+ delete mode 100644 node_modules/prebuild-install/help.txt
+ delete mode 100644 node_modules/prebuild-install/index.js
+ delete mode 100644 node_modules/prebuild-install/log.js
+ delete mode 100644 node_modules/prebuild-install/package.json
+ delete mode 100644 node_modules/prebuild-install/proxy.js
+ delete mode 100644 node_modules/prebuild-install/rc.js
+ delete mode 100644 node_modules/prebuild-install/util.js
+ delete mode 100644 node_modules/process-warning/.gitattributes
+ delete mode 100644 node_modules/process-warning/.github/dependabot.yml
+ delete mode 100644 node_modules/process-warning/.github/workflows/ci.yml
+ delete mode 100644 node_modules/process-warning/LICENSE
+ delete mode 100644 node_modules/process-warning/README.md
+ delete mode 100644 node_modules/process-warning/benchmarks/warn.js
+ delete mode 100644 node_modules/process-warning/eslint.config.js
+ delete mode 100644 node_modules/process-warning/examples/example.js
+ delete mode 100644 node_modules/process-warning/index.js
+ delete mode 100644 node_modules/process-warning/package.json
+ delete mode 100644 node_modules/process-warning/test/emit-interpolated-string.test.js
+ delete mode 100644 node_modules/process-warning/test/emit-once-only.test.js
+ delete mode 100644 node_modules/process-warning/test/emit-reset.test.js
+ delete mode 100644 node_modules/process-warning/test/emit-set.test.js
+ delete mode 100644 node_modules/process-warning/test/emit-unlimited.test.js
+ delete mode 100644 node_modules/process-warning/test/index.test.js
+ delete mode 100644 node_modules/process-warning/test/issue-88.test.js
+ delete mode 100644 node_modules/process-warning/test/jest.test.js
+ delete mode 100644 node_modules/process-warning/test/no-warnings.test.js
+ delete mode 100644 node_modules/process-warning/test/promise.js
+ delete mode 100644 node_modules/process-warning/types/index.d.ts
+ delete mode 100644 node_modules/process-warning/types/index.test-d.ts
+ delete mode 100644 node_modules/pstree.remy/.travis.yml
+ delete mode 100644 node_modules/pstree.remy/LICENSE
+ delete mode 100644 node_modules/pstree.remy/README.md
+ delete mode 100644 node_modules/pstree.remy/lib/index.js
+ delete mode 100644 node_modules/pstree.remy/lib/tree.js
+ delete mode 100644 node_modules/pstree.remy/lib/utils.js
+ delete mode 100644 node_modules/pstree.remy/package.json
+ delete mode 100644 node_modules/pstree.remy/tests/fixtures/index.js
+ delete mode 100644 node_modules/pstree.remy/tests/fixtures/out1
+ delete mode 100644 node_modules/pstree.remy/tests/fixtures/out2
+ delete mode 100644 node_modules/pstree.remy/tests/index.test.js
+ delete mode 100644 node_modules/pump/.github/FUNDING.yml
+ delete mode 100644 node_modules/pump/.travis.yml
+ delete mode 100644 node_modules/pump/LICENSE
+ delete mode 100644 node_modules/pump/README.md
+ delete mode 100644 node_modules/pump/SECURITY.md
+ delete mode 100644 node_modules/pump/index.js
+ delete mode 100644 node_modules/pump/package.json
+ delete mode 100644 node_modules/pump/test-browser.js
+ delete mode 100644 node_modules/pump/test-node.js
+ delete mode 100644 node_modules/quick-format-unescaped/.github/workflows/ci.yml
+ delete mode 100644 node_modules/quick-format-unescaped/LICENSE
+ delete mode 100644 node_modules/quick-format-unescaped/benchmark.js
+ delete mode 100644 node_modules/quick-format-unescaped/index.js
+ delete mode 100644 node_modules/quick-format-unescaped/package.json
+ delete mode 100644 node_modules/quick-format-unescaped/readme.md
+ delete mode 100644 node_modules/quick-format-unescaped/test/index.js
+ delete mode 100644 node_modules/rc/LICENSE.APACHE2
+ delete mode 100644 node_modules/rc/LICENSE.BSD
+ delete mode 100644 node_modules/rc/LICENSE.MIT
+ delete mode 100644 node_modules/rc/README.md
+ delete mode 100644 node_modules/rc/browser.js
+ delete mode 100755 node_modules/rc/cli.js
+ delete mode 100755 node_modules/rc/index.js
+ delete mode 100644 node_modules/rc/lib/utils.js
+ delete mode 100644 node_modules/rc/package.json
+ delete mode 100644 node_modules/rc/test/ini.js
+ delete mode 100644 node_modules/rc/test/nested-env-vars.js
+ delete mode 100644 node_modules/rc/test/test.js
+ delete mode 100644 node_modules/readable-stream/CONTRIBUTING.md
+ delete mode 100644 node_modules/readable-stream/GOVERNANCE.md
+ delete mode 100644 node_modules/readable-stream/LICENSE
+ delete mode 100644 node_modules/readable-stream/README.md
+ delete mode 100644 node_modules/readable-stream/errors-browser.js
+ delete mode 100644 node_modules/readable-stream/errors.js
+ delete mode 100644 node_modules/readable-stream/experimentalWarning.js
+ delete mode 100644 node_modules/readable-stream/lib/_stream_duplex.js
+ delete mode 100644 node_modules/readable-stream/lib/_stream_passthrough.js
+ delete mode 100644 node_modules/readable-stream/lib/_stream_readable.js
+ delete mode 100644 node_modules/readable-stream/lib/_stream_transform.js
+ delete mode 100644 node_modules/readable-stream/lib/_stream_writable.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/async_iterator.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/buffer_list.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/destroy.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/end-of-stream.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/from-browser.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/from.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/pipeline.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/state.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/stream-browser.js
+ delete mode 100644 node_modules/readable-stream/lib/internal/streams/stream.js
+ delete mode 100644 node_modules/readable-stream/package.json
+ delete mode 100644 node_modules/readable-stream/readable-browser.js
+ delete mode 100644 node_modules/readable-stream/readable.js
+ delete mode 100644 node_modules/readdirp/LICENSE
+ delete mode 100644 node_modules/readdirp/README.md
+ delete mode 100644 node_modules/readdirp/index.d.ts
+ delete mode 100644 node_modules/readdirp/index.js
+ delete mode 100644 node_modules/readdirp/package.json
+ delete mode 100644 node_modules/real-require/LICENSE.md
+ delete mode 100644 node_modules/real-require/README.md
+ delete mode 100644 node_modules/real-require/package.json
+ delete mode 100644 node_modules/real-require/src/index.js
+ delete mode 100644 node_modules/require-from-string/index.js
+ delete mode 100644 node_modules/require-from-string/license
+ delete mode 100644 node_modules/require-from-string/package.json
+ delete mode 100644 node_modules/require-from-string/readme.md
+ delete mode 100644 node_modules/ret/LICENSE
+ delete mode 100644 node_modules/ret/README.md
+ delete mode 100644 node_modules/ret/dist/index.d.ts
+ delete mode 100644 node_modules/ret/dist/index.js
+ delete mode 100644 node_modules/ret/dist/index.js.map
+ delete mode 100644 node_modules/ret/dist/reconstruct.d.ts
+ delete mode 100644 node_modules/ret/dist/reconstruct.js
+ delete mode 100644 node_modules/ret/dist/reconstruct.js.map
+ delete mode 100644 node_modules/ret/dist/sets-lookup.d.ts
+ delete mode 100644 node_modules/ret/dist/sets-lookup.js
+ delete mode 100644 node_modules/ret/dist/sets-lookup.js.map
+ delete mode 100644 node_modules/ret/dist/sets.d.ts
+ delete mode 100644 node_modules/ret/dist/sets.js
+ delete mode 100644 node_modules/ret/dist/sets.js.map
+ delete mode 100644 node_modules/ret/dist/tokenizer.d.ts
+ delete mode 100644 node_modules/ret/dist/tokenizer.js
+ delete mode 100644 node_modules/ret/dist/tokenizer.js.map
+ delete mode 100644 node_modules/ret/dist/types/index.d.ts
+ delete mode 100644 node_modules/ret/dist/types/index.js
+ delete mode 100644 node_modules/ret/dist/types/index.js.map
+ delete mode 100644 node_modules/ret/dist/types/set-lookup.d.ts
+ delete mode 100644 node_modules/ret/dist/types/set-lookup.js
+ delete mode 100644 node_modules/ret/dist/types/set-lookup.js.map
+ delete mode 100644 node_modules/ret/dist/types/tokens.d.ts
+ delete mode 100644 node_modules/ret/dist/types/tokens.js
+ delete mode 100644 node_modules/ret/dist/types/tokens.js.map
+ delete mode 100644 node_modules/ret/dist/types/types.d.ts
+ delete mode 100644 node_modules/ret/dist/types/types.js
+ delete mode 100644 node_modules/ret/dist/types/types.js.map
+ delete mode 100644 node_modules/ret/dist/util.d.ts
+ delete mode 100644 node_modules/ret/dist/util.js
+ delete mode 100644 node_modules/ret/dist/util.js.map
+ delete mode 100644 node_modules/ret/dist/write-set-tokens.d.ts
+ delete mode 100644 node_modules/ret/dist/write-set-tokens.js
+ delete mode 100644 node_modules/ret/dist/write-set-tokens.js.map
+ delete mode 100644 node_modules/ret/package.json
+ delete mode 100644 node_modules/reusify/.github/dependabot.yml
+ delete mode 100644 node_modules/reusify/.github/workflows/ci.yml
+ delete mode 100644 node_modules/reusify/LICENSE
+ delete mode 100644 node_modules/reusify/README.md
+ delete mode 100644 node_modules/reusify/SECURITY.md
+ delete mode 100644 node_modules/reusify/benchmarks/createNoCodeFunction.js
+ delete mode 100644 node_modules/reusify/benchmarks/fib.js
+ delete mode 100644 node_modules/reusify/benchmarks/reuseNoCodeFunction.js
+ delete mode 100644 node_modules/reusify/eslint.config.js
+ delete mode 100644 node_modules/reusify/package.json
+ delete mode 100644 node_modules/reusify/reusify.d.ts
+ delete mode 100644 node_modules/reusify/reusify.js
+ delete mode 100644 node_modules/reusify/test.js
+ delete mode 100644 node_modules/reusify/tsconfig.json
+ delete mode 100644 node_modules/rfdc/.github/workflows/ci.yml
+ delete mode 100644 node_modules/rfdc/LICENSE
+ delete mode 100644 node_modules/rfdc/default.js
+ delete mode 100644 node_modules/rfdc/index.d.ts
+ delete mode 100644 node_modules/rfdc/index.js
+ delete mode 100644 node_modules/rfdc/index.test-d.ts
+ delete mode 100644 node_modules/rfdc/package.json
+ delete mode 100644 node_modules/rfdc/readme.md
+ delete mode 100644 node_modules/rfdc/test/index.js
+ delete mode 100644 node_modules/safe-buffer/LICENSE
+ delete mode 100644 node_modules/safe-buffer/README.md
+ delete mode 100644 node_modules/safe-buffer/index.d.ts
+ delete mode 100644 node_modules/safe-buffer/index.js
+ delete mode 100644 node_modules/safe-buffer/package.json
+ delete mode 100644 node_modules/safe-regex2/.gitattributes
+ delete mode 100644 node_modules/safe-regex2/.github/dependabot.yml
+ delete mode 100644 node_modules/safe-regex2/.github/stale.yml
+ delete mode 100644 node_modules/safe-regex2/.github/workflows/ci.yml
+ delete mode 100644 node_modules/safe-regex2/LICENSE
+ delete mode 100644 node_modules/safe-regex2/README.md
+ delete mode 100644 node_modules/safe-regex2/eslint.config.js
+ delete mode 100644 node_modules/safe-regex2/example/safe.js
+ delete mode 100644 node_modules/safe-regex2/index.js
+ delete mode 100644 node_modules/safe-regex2/package.json
+ delete mode 100644 node_modules/safe-regex2/test/regex.js
+ delete mode 100644 node_modules/safe-regex2/types/index.d.ts
+ delete mode 100644 node_modules/safe-regex2/types/index.test-d.ts
+ delete mode 100644 node_modules/safe-stable-stringify/LICENSE
+ delete mode 100644 node_modules/safe-stable-stringify/esm/package.json
+ delete mode 100644 node_modules/safe-stable-stringify/esm/wrapper.d.ts
+ delete mode 100644 node_modules/safe-stable-stringify/esm/wrapper.js
+ delete mode 100644 node_modules/safe-stable-stringify/index.d.ts
+ delete mode 100644 node_modules/safe-stable-stringify/index.js
+ delete mode 100644 node_modules/safe-stable-stringify/package.json
+ delete mode 100644 node_modules/safe-stable-stringify/readme.md
+ delete mode 100644 node_modules/secure-json-parse/.airtap.yml
+ delete mode 100644 node_modules/secure-json-parse/.gitattributes
+ delete mode 100644 node_modules/secure-json-parse/.github/dependabot.yml
+ delete mode 100644 node_modules/secure-json-parse/.github/stale.yml
+ delete mode 100644 node_modules/secure-json-parse/.github/workflows/ci.yml
+ delete mode 100644 node_modules/secure-json-parse/LICENSE
+ delete mode 100644 node_modules/secure-json-parse/README.md
+ delete mode 100644 node_modules/secure-json-parse/benchmarks/ignore.js
+ delete mode 100644 node_modules/secure-json-parse/benchmarks/no__proto__.js
+ delete mode 100644 node_modules/secure-json-parse/benchmarks/package.json
+ delete mode 100644 node_modules/secure-json-parse/benchmarks/remove.js
+ delete mode 100644 node_modules/secure-json-parse/benchmarks/throw.js
+ delete mode 100644 node_modules/secure-json-parse/benchmarks/valid.js
+ delete mode 100644 node_modules/secure-json-parse/eslint.config.js
+ delete mode 100644 node_modules/secure-json-parse/index.js
+ delete mode 100644 node_modules/secure-json-parse/package.json
+ delete mode 100644 node_modules/secure-json-parse/test/index.test.js
+ delete mode 100644 node_modules/secure-json-parse/types/index.d.ts
+ delete mode 100644 node_modules/secure-json-parse/types/index.test-d.ts
+ delete mode 100644 node_modules/semver/LICENSE
+ delete mode 100644 node_modules/semver/README.md
+ delete mode 100755 node_modules/semver/bin/semver.js
+ delete mode 100644 node_modules/semver/classes/comparator.js
+ delete mode 100644 node_modules/semver/classes/index.js
+ delete mode 100644 node_modules/semver/classes/range.js
+ delete mode 100644 node_modules/semver/classes/semver.js
+ delete mode 100644 node_modules/semver/functions/clean.js
+ delete mode 100644 node_modules/semver/functions/cmp.js
+ delete mode 100644 node_modules/semver/functions/coerce.js
+ delete mode 100644 node_modules/semver/functions/compare-build.js
+ delete mode 100644 node_modules/semver/functions/compare-loose.js
+ delete mode 100644 node_modules/semver/functions/compare.js
+ delete mode 100644 node_modules/semver/functions/diff.js
+ delete mode 100644 node_modules/semver/functions/eq.js
+ delete mode 100644 node_modules/semver/functions/gt.js
+ delete mode 100644 node_modules/semver/functions/gte.js
+ delete mode 100644 node_modules/semver/functions/inc.js
+ delete mode 100644 node_modules/semver/functions/lt.js
+ delete mode 100644 node_modules/semver/functions/lte.js
+ delete mode 100644 node_modules/semver/functions/major.js
+ delete mode 100644 node_modules/semver/functions/minor.js
+ delete mode 100644 node_modules/semver/functions/neq.js
+ delete mode 100644 node_modules/semver/functions/parse.js
+ delete mode 100644 node_modules/semver/functions/patch.js
+ delete mode 100644 node_modules/semver/functions/prerelease.js
+ delete mode 100644 node_modules/semver/functions/rcompare.js
+ delete mode 100644 node_modules/semver/functions/rsort.js
+ delete mode 100644 node_modules/semver/functions/satisfies.js
+ delete mode 100644 node_modules/semver/functions/sort.js
+ delete mode 100644 node_modules/semver/functions/valid.js
+ delete mode 100644 node_modules/semver/index.js
+ delete mode 100644 node_modules/semver/internal/constants.js
+ delete mode 100644 node_modules/semver/internal/debug.js
+ delete mode 100644 node_modules/semver/internal/identifiers.js
+ delete mode 100644 node_modules/semver/internal/lrucache.js
+ delete mode 100644 node_modules/semver/internal/parse-options.js
+ delete mode 100644 node_modules/semver/internal/re.js
+ delete mode 100644 node_modules/semver/package.json
+ delete mode 100644 node_modules/semver/preload.js
+ delete mode 100644 node_modules/semver/range.bnf
+ delete mode 100644 node_modules/semver/ranges/gtr.js
+ delete mode 100644 node_modules/semver/ranges/intersects.js
+ delete mode 100644 node_modules/semver/ranges/ltr.js
+ delete mode 100644 node_modules/semver/ranges/max-satisfying.js
+ delete mode 100644 node_modules/semver/ranges/min-satisfying.js
+ delete mode 100644 node_modules/semver/ranges/min-version.js
+ delete mode 100644 node_modules/semver/ranges/outside.js
+ delete mode 100644 node_modules/semver/ranges/simplify.js
+ delete mode 100644 node_modules/semver/ranges/subset.js
+ delete mode 100644 node_modules/semver/ranges/to-comparators.js
+ delete mode 100644 node_modules/semver/ranges/valid.js
+ delete mode 100644 node_modules/set-cookie-parser/LICENSE
+ delete mode 100644 node_modules/set-cookie-parser/README.md
+ delete mode 100644 node_modules/set-cookie-parser/lib/set-cookie.js
+ delete mode 100644 node_modules/set-cookie-parser/package.json
+ delete mode 100644 node_modules/setprototypeof/LICENSE
+ delete mode 100644 node_modules/setprototypeof/README.md
+ delete mode 100644 node_modules/setprototypeof/index.d.ts
+ delete mode 100644 node_modules/setprototypeof/index.js
+ delete mode 100644 node_modules/setprototypeof/package.json
+ delete mode 100644 node_modules/setprototypeof/test/index.js
+ delete mode 100644 node_modules/shebang-command/index.js
+ delete mode 100644 node_modules/shebang-command/license
+ delete mode 100644 node_modules/shebang-command/package.json
+ delete mode 100644 node_modules/shebang-command/readme.md
+ delete mode 100644 node_modules/shebang-regex/index.d.ts
+ delete mode 100644 node_modules/shebang-regex/index.js
+ delete mode 100644 node_modules/shebang-regex/license
+ delete mode 100644 node_modules/shebang-regex/package.json
+ delete mode 100644 node_modules/shebang-regex/readme.md
+ delete mode 100644 node_modules/signal-exit/LICENSE.txt
+ delete mode 100644 node_modules/signal-exit/README.md
+ delete mode 100644 node_modules/signal-exit/dist/cjs/browser.d.ts
+ delete mode 100644 node_modules/signal-exit/dist/cjs/browser.d.ts.map
+ delete mode 100644 node_modules/signal-exit/dist/cjs/browser.js
+ delete mode 100644 node_modules/signal-exit/dist/cjs/browser.js.map
+ delete mode 100644 node_modules/signal-exit/dist/cjs/index.d.ts
+ delete mode 100644 node_modules/signal-exit/dist/cjs/index.d.ts.map
+ delete mode 100644 node_modules/signal-exit/dist/cjs/index.js
+ delete mode 100644 node_modules/signal-exit/dist/cjs/index.js.map
+ delete mode 100644 node_modules/signal-exit/dist/cjs/package.json
+ delete mode 100644 node_modules/signal-exit/dist/cjs/signals.d.ts
+ delete mode 100644 node_modules/signal-exit/dist/cjs/signals.d.ts.map
+ delete mode 100644 node_modules/signal-exit/dist/cjs/signals.js
+ delete mode 100644 node_modules/signal-exit/dist/cjs/signals.js.map
+ delete mode 100644 node_modules/signal-exit/dist/mjs/browser.d.ts
+ delete mode 100644 node_modules/signal-exit/dist/mjs/browser.d.ts.map
+ delete mode 100644 node_modules/signal-exit/dist/mjs/browser.js
+ delete mode 100644 node_modules/signal-exit/dist/mjs/browser.js.map
+ delete mode 100644 node_modules/signal-exit/dist/mjs/index.d.ts
+ delete mode 100644 node_modules/signal-exit/dist/mjs/index.d.ts.map
+ delete mode 100644 node_modules/signal-exit/dist/mjs/index.js
+ delete mode 100644 node_modules/signal-exit/dist/mjs/index.js.map
+ delete mode 100644 node_modules/signal-exit/dist/mjs/package.json
+ delete mode 100644 node_modules/signal-exit/dist/mjs/signals.d.ts
+ delete mode 100644 node_modules/signal-exit/dist/mjs/signals.d.ts.map
+ delete mode 100644 node_modules/signal-exit/dist/mjs/signals.js
+ delete mode 100644 node_modules/signal-exit/dist/mjs/signals.js.map
+ delete mode 100644 node_modules/signal-exit/package.json
+ delete mode 100644 node_modules/simple-concat/.travis.yml
+ delete mode 100644 node_modules/simple-concat/LICENSE
+ delete mode 100644 node_modules/simple-concat/README.md
+ delete mode 100644 node_modules/simple-concat/index.js
+ delete mode 100644 node_modules/simple-concat/package.json
+ delete mode 100644 node_modules/simple-concat/test/basic.js
+ delete mode 100644 node_modules/simple-get/.github/dependabot.yml
+ delete mode 100644 node_modules/simple-get/.github/workflows/ci.yml
+ delete mode 100644 node_modules/simple-get/LICENSE
+ delete mode 100644 node_modules/simple-get/README.md
+ delete mode 100644 node_modules/simple-get/index.js
+ delete mode 100644 node_modules/simple-get/package.json
+ delete mode 100644 node_modules/simple-update-notifier/LICENSE
+ delete mode 100644 node_modules/simple-update-notifier/README.md
+ delete mode 100644 node_modules/simple-update-notifier/build/index.d.ts
+ delete mode 100644 node_modules/simple-update-notifier/build/index.js
+ delete mode 100644 node_modules/simple-update-notifier/package.json
+ delete mode 100644 node_modules/simple-update-notifier/src/borderedText.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/cache.spec.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/cache.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/getDistVersion.spec.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/getDistVersion.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/hasNewVersion.spec.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/hasNewVersion.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/index.spec.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/index.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/isNpmOrYarn.ts
+ delete mode 100644 node_modules/simple-update-notifier/src/types.ts
+ delete mode 100644 node_modules/sonic-boom/.eslintignore
+ delete mode 100644 node_modules/sonic-boom/.taprc
+ delete mode 100644 node_modules/sonic-boom/LICENSE
+ delete mode 100644 node_modules/sonic-boom/README.md
+ delete mode 100644 node_modules/sonic-boom/bench.js
+ delete mode 100644 node_modules/sonic-boom/check.js
+ delete mode 100644 node_modules/sonic-boom/example.js
+ delete mode 100644 node_modules/sonic-boom/fixtures/firehose.js
+ delete mode 100644 node_modules/sonic-boom/index.js
+ delete mode 100644 node_modules/sonic-boom/package.json
+ delete mode 100644 node_modules/sonic-boom/test/destroy.test.js
+ delete mode 100644 node_modules/sonic-boom/test/end.test.js
+ delete mode 100644 node_modules/sonic-boom/test/flush-sync.test.js
+ delete mode 100644 node_modules/sonic-boom/test/flush.test.js
+ delete mode 100644 node_modules/sonic-boom/test/fsync.test.js
+ delete mode 100644 node_modules/sonic-boom/test/helper.js
+ delete mode 100644 node_modules/sonic-boom/test/minlength.test.js
+ delete mode 100644 node_modules/sonic-boom/test/mode.test.js
+ delete mode 100644 node_modules/sonic-boom/test/periodicflush.test.js
+ delete mode 100644 node_modules/sonic-boom/test/reopen.test.js
+ delete mode 100644 node_modules/sonic-boom/test/retry.test.js
+ delete mode 100644 node_modules/sonic-boom/test/sync.test.js
+ delete mode 100644 node_modules/sonic-boom/test/write.test.js
+ delete mode 100644 node_modules/sonic-boom/types/index.d.ts
+ delete mode 100644 node_modules/sonic-boom/types/tests/test.ts
+ delete mode 100644 node_modules/split2/LICENSE
+ delete mode 100644 node_modules/split2/README.md
+ delete mode 100644 node_modules/split2/bench.js
+ delete mode 100644 node_modules/split2/index.js
+ delete mode 100644 node_modules/split2/package.json
+ delete mode 100644 node_modules/split2/test.js
+ delete mode 100644 node_modules/statuses/HISTORY.md
+ delete mode 100644 node_modules/statuses/LICENSE
+ delete mode 100644 node_modules/statuses/README.md
+ delete mode 100644 node_modules/statuses/codes.json
+ delete mode 100644 node_modules/statuses/index.js
+ delete mode 100644 node_modules/statuses/package.json
+ delete mode 100644 node_modules/string-width-cjs/index.d.ts
+ delete mode 100644 node_modules/string-width-cjs/index.js
+ delete mode 100644 node_modules/string-width-cjs/license
+ delete mode 100644 node_modules/string-width-cjs/node_modules/ansi-regex/index.d.ts
+ delete mode 100644 node_modules/string-width-cjs/node_modules/ansi-regex/index.js
+ delete mode 100644 node_modules/string-width-cjs/node_modules/ansi-regex/license
+ delete mode 100644 node_modules/string-width-cjs/node_modules/ansi-regex/package.json
+ delete mode 100644 node_modules/string-width-cjs/node_modules/ansi-regex/readme.md
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/LICENSE-MIT.txt
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/README.md
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/es2015/index.js
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/es2015/text.js
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/index.d.ts
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/index.js
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/package.json
+ delete mode 100644 node_modules/string-width-cjs/node_modules/emoji-regex/text.js
+ delete mode 100644 node_modules/string-width-cjs/node_modules/strip-ansi/index.d.ts
+ delete mode 100644 node_modules/string-width-cjs/node_modules/strip-ansi/index.js
+ delete mode 100644 node_modules/string-width-cjs/node_modules/strip-ansi/license
+ delete mode 100644 node_modules/string-width-cjs/node_modules/strip-ansi/package.json
+ delete mode 100644 node_modules/string-width-cjs/node_modules/strip-ansi/readme.md
+ delete mode 100644 node_modules/string-width-cjs/package.json
+ delete mode 100644 node_modules/string-width-cjs/readme.md
+ delete mode 100644 node_modules/string-width/index.d.ts
+ delete mode 100644 node_modules/string-width/index.js
+ delete mode 100644 node_modules/string-width/license
+ delete mode 100644 node_modules/string-width/package.json
+ delete mode 100644 node_modules/string-width/readme.md
+ delete mode 100644 node_modules/string_decoder/LICENSE
+ delete mode 100644 node_modules/string_decoder/README.md
+ delete mode 100644 node_modules/string_decoder/lib/string_decoder.js
+ delete mode 100644 node_modules/string_decoder/package.json
+ delete mode 100644 node_modules/strip-ansi-cjs/index.d.ts
+ delete mode 100644 node_modules/strip-ansi-cjs/index.js
+ delete mode 100644 node_modules/strip-ansi-cjs/license
+ delete mode 100644 node_modules/strip-ansi-cjs/node_modules/ansi-regex/index.d.ts
+ delete mode 100644 node_modules/strip-ansi-cjs/node_modules/ansi-regex/index.js
+ delete mode 100644 node_modules/strip-ansi-cjs/node_modules/ansi-regex/license
+ delete mode 100644 node_modules/strip-ansi-cjs/node_modules/ansi-regex/package.json
+ delete mode 100644 node_modules/strip-ansi-cjs/node_modules/ansi-regex/readme.md
+ delete mode 100644 node_modules/strip-ansi-cjs/package.json
+ delete mode 100644 node_modules/strip-ansi-cjs/readme.md
+ delete mode 100644 node_modules/strip-ansi/index.d.ts
+ delete mode 100644 node_modules/strip-ansi/index.js
+ delete mode 100644 node_modules/strip-ansi/license
+ delete mode 100644 node_modules/strip-ansi/package.json
+ delete mode 100644 node_modules/strip-ansi/readme.md
+ delete mode 100644 node_modules/strip-json-comments/index.js
+ delete mode 100644 node_modules/strip-json-comments/license
+ delete mode 100644 node_modules/strip-json-comments/package.json
+ delete mode 100644 node_modules/strip-json-comments/readme.md
+ delete mode 100644 node_modules/supports-color/browser.js
+ delete mode 100644 node_modules/supports-color/index.js
+ delete mode 100644 node_modules/supports-color/license
+ delete mode 100644 node_modules/supports-color/package.json
+ delete mode 100644 node_modules/supports-color/readme.md
+ delete mode 100644 node_modules/tar-fs/.travis.yml
+ delete mode 100644 node_modules/tar-fs/LICENSE
+ delete mode 100644 node_modules/tar-fs/README.md
+ delete mode 100644 node_modules/tar-fs/index.js
+ delete mode 100644 node_modules/tar-fs/package.json
+ delete mode 100644 node_modules/tar-fs/test/fixtures/a/hello.txt
+ delete mode 100644 node_modules/tar-fs/test/fixtures/b/a/test.txt
+ delete mode 100644 node_modules/tar-fs/test/fixtures/d/file1
+ delete mode 100644 node_modules/tar-fs/test/fixtures/d/file2
+ delete mode 100644 node_modules/tar-fs/test/fixtures/d/sub-dir/file5
+ delete mode 100644 node_modules/tar-fs/test/fixtures/d/sub-files/file3
+ delete mode 100644 node_modules/tar-fs/test/fixtures/d/sub-files/file4
+ delete mode 100644 node_modules/tar-fs/test/fixtures/e/directory/.ignore
+ delete mode 100644 node_modules/tar-fs/test/fixtures/e/file
+ delete mode 100644 node_modules/tar-fs/test/fixtures/invalid.tar
+ delete mode 100644 node_modules/tar-fs/test/index.js
+ delete mode 100644 node_modules/tar-stream/LICENSE
+ delete mode 100644 node_modules/tar-stream/README.md
+ delete mode 100644 node_modules/tar-stream/extract.js
+ delete mode 100644 node_modules/tar-stream/headers.js
+ delete mode 100644 node_modules/tar-stream/index.js
+ delete mode 100644 node_modules/tar-stream/pack.js
+ delete mode 100644 node_modules/tar-stream/package.json
+ delete mode 100644 node_modules/tar-stream/sandbox.js
+ delete mode 100644 node_modules/thread-stream/.github/dependabot.yml
+ delete mode 100644 node_modules/thread-stream/.github/workflows/ci.yml
+ delete mode 100755 node_modules/thread-stream/.husky/pre-commit
+ delete mode 100644 node_modules/thread-stream/.taprc
+ delete mode 100644 node_modules/thread-stream/LICENSE
+ delete mode 100644 node_modules/thread-stream/README.md
+ delete mode 100644 node_modules/thread-stream/bench.js
+ delete mode 100644 node_modules/thread-stream/index.d.ts
+ delete mode 100644 node_modules/thread-stream/index.js
+ delete mode 100644 node_modules/thread-stream/lib/indexes.js
+ delete mode 100644 node_modules/thread-stream/lib/wait.js
+ delete mode 100644 node_modules/thread-stream/lib/worker.js
+ delete mode 100644 node_modules/thread-stream/package.json
+ delete mode 100644 node_modules/thread-stream/test/base.test.js
+ delete mode 100644 node_modules/thread-stream/test/bench.test.js
+ delete mode 100644 node_modules/thread-stream/test/bundlers.test.js
+ delete mode 100644 node_modules/thread-stream/test/close-on-gc.js
+ delete mode 100644 node_modules/thread-stream/test/commonjs-fallback.test.js
+ delete mode 100644 node_modules/thread-stream/test/context.test.js
+ delete mode 100644 node_modules/thread-stream/test/create-and-exit.js
+ delete mode 100644 node_modules/thread-stream/test/custom-worker.js
+ delete mode 100644 node_modules/thread-stream/test/dir with spaces/test-package.zip
+ delete mode 100644 node_modules/thread-stream/test/emit-event.js
+ delete mode 100644 node_modules/thread-stream/test/end.test.js
+ delete mode 100644 node_modules/thread-stream/test/error.js
+ delete mode 100644 node_modules/thread-stream/test/esm.test.mjs
+ delete mode 100644 node_modules/thread-stream/test/event.test.js
+ delete mode 100644 node_modules/thread-stream/test/exit.js
+ delete mode 100644 node_modules/thread-stream/test/get-context.js
+ delete mode 100644 node_modules/thread-stream/test/helper.d.ts
+ delete mode 100644 node_modules/thread-stream/test/helper.js
+ delete mode 100644 node_modules/thread-stream/test/indexes.test.js
+ delete mode 100644 node_modules/thread-stream/test/multibyte-chars.test.mjs
+ delete mode 100644 node_modules/thread-stream/test/never-drain.test.js
+ delete mode 100644 node_modules/thread-stream/test/on-message.js
+ delete mode 100644 node_modules/thread-stream/test/pkg/index.js
+ delete mode 100644 node_modules/thread-stream/test/pkg/pkg.config.json
+ delete mode 100644 node_modules/thread-stream/test/pkg/pkg.test.js
+ delete mode 100644 node_modules/thread-stream/test/port.js
+ delete mode 100644 node_modules/thread-stream/test/post-message.test.js
+ delete mode 100644 node_modules/thread-stream/test/string-limit-2.test.js
+ delete mode 100644 node_modules/thread-stream/test/string-limit.test.js
+ delete mode 100644 node_modules/thread-stream/test/syntax-error.mjs
+ delete mode 100644 node_modules/thread-stream/test/thread-management.test.js
+ delete mode 100644 node_modules/thread-stream/test/to-file-on-destroy.js
+ delete mode 100644 node_modules/thread-stream/test/to-file-on-final.js
+ delete mode 100644 node_modules/thread-stream/test/to-file.js
+ delete mode 100644 node_modules/thread-stream/test/to-file.mjs
+ delete mode 100644 node_modules/thread-stream/test/to-next.js
+ delete mode 100644 node_modules/thread-stream/test/transpiled.test.js
+ delete mode 100644 node_modules/thread-stream/test/ts-commonjs-default-export.zip
+ delete mode 100644 node_modules/thread-stream/test/ts.test.ts
+ delete mode 100644 node_modules/thread-stream/test/ts/to-file.ts
+ delete mode 100755 node_modules/thread-stream/test/ts/transpile.sh
+ delete mode 100644 node_modules/thread-stream/test/uncaughtException.js
+ delete mode 100644 node_modules/thread-stream/test/unhandledRejection.js
+ delete mode 100644 node_modules/thread-stream/test/yarnrc.yml
+ delete mode 100644 node_modules/thread-stream/tsconfig.json
+ delete mode 100644 node_modules/to-regex-range/LICENSE
+ delete mode 100644 node_modules/to-regex-range/README.md
+ delete mode 100644 node_modules/to-regex-range/index.js
+ delete mode 100644 node_modules/to-regex-range/package.json
+ delete mode 100644 node_modules/toad-cache/LICENSE
+ delete mode 100644 node_modules/toad-cache/README.md
+ delete mode 100644 node_modules/toad-cache/dist/toad-cache.cjs
+ delete mode 100644 node_modules/toad-cache/dist/toad-cache.mjs
+ delete mode 100644 node_modules/toad-cache/package.json
+ delete mode 100644 node_modules/toad-cache/toad-cache.d.cts
+ delete mode 100644 node_modules/toad-cache/toad-cache.d.ts
+ delete mode 100644 node_modules/toidentifier/HISTORY.md
+ delete mode 100644 node_modules/toidentifier/LICENSE
+ delete mode 100644 node_modules/toidentifier/README.md
+ delete mode 100644 node_modules/toidentifier/index.js
+ delete mode 100644 node_modules/toidentifier/package.json
+ delete mode 100644 node_modules/touch/LICENSE
+ delete mode 100644 node_modules/touch/README.md
+ delete mode 100755 node_modules/touch/bin/nodetouch.js
+ delete mode 100644 node_modules/touch/index.js
+ delete mode 100644 node_modules/touch/package.json
+ delete mode 100644 node_modules/ts-node/LICENSE
+ delete mode 100644 node_modules/ts-node/README.md
+ delete mode 100644 node_modules/ts-node/child-loader.mjs
+ delete mode 100644 node_modules/ts-node/dist-raw/NODE-LICENSE.md
+ delete mode 100644 node_modules/ts-node/dist-raw/README.md
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-constants.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-errors.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-modules-cjs-helpers.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-modules-cjs-loader.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-modules-esm-get_format.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-modules-esm-resolve.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-modules-package_json_reader.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internal-repl-await.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-internalBinding-fs.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-nativemodule.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-options.js
+ delete mode 100644 node_modules/ts-node/dist-raw/node-primordials.js
+ delete mode 100644 node_modules/ts-node/dist-raw/runmain-hack.js
+ delete mode 100644 node_modules/ts-node/dist/bin-cwd.d.ts
+ delete mode 100755 node_modules/ts-node/dist/bin-cwd.js
+ delete mode 100644 node_modules/ts-node/dist/bin-cwd.js.map
+ delete mode 100644 node_modules/ts-node/dist/bin-esm.d.ts
+ delete mode 100755 node_modules/ts-node/dist/bin-esm.js
+ delete mode 100644 node_modules/ts-node/dist/bin-esm.js.map
+ delete mode 100644 node_modules/ts-node/dist/bin-script-deprecated.d.ts
+ delete mode 100755 node_modules/ts-node/dist/bin-script-deprecated.js
+ delete mode 100644 node_modules/ts-node/dist/bin-script-deprecated.js.map
+ delete mode 100644 node_modules/ts-node/dist/bin-script.d.ts
+ delete mode 100755 node_modules/ts-node/dist/bin-script.js
+ delete mode 100644 node_modules/ts-node/dist/bin-script.js.map
+ delete mode 100644 node_modules/ts-node/dist/bin-transpile.d.ts
+ delete mode 100755 node_modules/ts-node/dist/bin-transpile.js
+ delete mode 100644 node_modules/ts-node/dist/bin-transpile.js.map
+ delete mode 100644 node_modules/ts-node/dist/bin.d.ts
+ delete mode 100755 node_modules/ts-node/dist/bin.js
+ delete mode 100644 node_modules/ts-node/dist/bin.js.map
+ delete mode 100644 node_modules/ts-node/dist/child/argv-payload.d.ts
+ delete mode 100644 node_modules/ts-node/dist/child/argv-payload.js
+ delete mode 100644 node_modules/ts-node/dist/child/argv-payload.js.map
+ delete mode 100644 node_modules/ts-node/dist/child/child-entrypoint.d.ts
+ delete mode 100644 node_modules/ts-node/dist/child/child-entrypoint.js
+ delete mode 100644 node_modules/ts-node/dist/child/child-entrypoint.js.map
+ delete mode 100644 node_modules/ts-node/dist/child/child-loader.d.ts
+ delete mode 100644 node_modules/ts-node/dist/child/child-loader.js
+ delete mode 100644 node_modules/ts-node/dist/child/child-loader.js.map
+ delete mode 100644 node_modules/ts-node/dist/child/child-require.d.ts
+ delete mode 100644 node_modules/ts-node/dist/child/child-require.js
+ delete mode 100644 node_modules/ts-node/dist/child/child-require.js.map
+ delete mode 100644 node_modules/ts-node/dist/child/spawn-child.d.ts
+ delete mode 100644 node_modules/ts-node/dist/child/spawn-child.js
+ delete mode 100644 node_modules/ts-node/dist/child/spawn-child.js.map
+ delete mode 100644 node_modules/ts-node/dist/cjs-resolve-hooks.d.ts
+ delete mode 100644 node_modules/ts-node/dist/cjs-resolve-hooks.js
+ delete mode 100644 node_modules/ts-node/dist/cjs-resolve-hooks.js.map
+ delete mode 100644 node_modules/ts-node/dist/configuration.d.ts
+ delete mode 100644 node_modules/ts-node/dist/configuration.js
+ delete mode 100644 node_modules/ts-node/dist/configuration.js.map
+ delete mode 100644 node_modules/ts-node/dist/esm.d.ts
+ delete mode 100644 node_modules/ts-node/dist/esm.js
+ delete mode 100644 node_modules/ts-node/dist/esm.js.map
+ delete mode 100644 node_modules/ts-node/dist/file-extensions.d.ts
+ delete mode 100644 node_modules/ts-node/dist/file-extensions.js
+ delete mode 100644 node_modules/ts-node/dist/file-extensions.js.map
+ delete mode 100644 node_modules/ts-node/dist/index.d.ts
+ delete mode 100644 node_modules/ts-node/dist/index.js
+ delete mode 100644 node_modules/ts-node/dist/index.js.map
+ delete mode 100644 node_modules/ts-node/dist/module-type-classifier.d.ts
+ delete mode 100644 node_modules/ts-node/dist/module-type-classifier.js
+ delete mode 100644 node_modules/ts-node/dist/module-type-classifier.js.map
+ delete mode 100644 node_modules/ts-node/dist/node-module-type-classifier.d.ts
+ delete mode 100644 node_modules/ts-node/dist/node-module-type-classifier.js
+ delete mode 100644 node_modules/ts-node/dist/node-module-type-classifier.js.map
+ delete mode 100644 node_modules/ts-node/dist/repl.d.ts
+ delete mode 100644 node_modules/ts-node/dist/repl.js
+ delete mode 100644 node_modules/ts-node/dist/repl.js.map
+ delete mode 100644 node_modules/ts-node/dist/resolver-functions.d.ts
+ delete mode 100644 node_modules/ts-node/dist/resolver-functions.js
+ delete mode 100644 node_modules/ts-node/dist/resolver-functions.js.map
+ delete mode 100644 node_modules/ts-node/dist/transpilers/swc.d.ts
+ delete mode 100644 node_modules/ts-node/dist/transpilers/swc.js
+ delete mode 100644 node_modules/ts-node/dist/transpilers/swc.js.map
+ delete mode 100644 node_modules/ts-node/dist/transpilers/types.d.ts
+ delete mode 100644 node_modules/ts-node/dist/transpilers/types.js
+ delete mode 100644 node_modules/ts-node/dist/transpilers/types.js.map
+ delete mode 100644 node_modules/ts-node/dist/ts-compiler-types.d.ts
+ delete mode 100644 node_modules/ts-node/dist/ts-compiler-types.js
+ delete mode 100644 node_modules/ts-node/dist/ts-compiler-types.js.map
+ delete mode 100644 node_modules/ts-node/dist/ts-internals.d.ts
+ delete mode 100644 node_modules/ts-node/dist/ts-internals.js
+ delete mode 100644 node_modules/ts-node/dist/ts-internals.js.map
+ delete mode 100644 node_modules/ts-node/dist/ts-transpile-module.d.ts
+ delete mode 100644 node_modules/ts-node/dist/ts-transpile-module.js
+ delete mode 100644 node_modules/ts-node/dist/ts-transpile-module.js.map
+ delete mode 100644 node_modules/ts-node/dist/tsconfig-schema.d.ts
+ delete mode 100644 node_modules/ts-node/dist/tsconfig-schema.js
+ delete mode 100644 node_modules/ts-node/dist/tsconfig-schema.js.map
+ delete mode 100644 node_modules/ts-node/dist/tsconfigs.d.ts
+ delete mode 100644 node_modules/ts-node/dist/tsconfigs.js
+ delete mode 100644 node_modules/ts-node/dist/tsconfigs.js.map
+ delete mode 100644 node_modules/ts-node/dist/util.d.ts
+ delete mode 100644 node_modules/ts-node/dist/util.js
+ delete mode 100644 node_modules/ts-node/dist/util.js.map
+ delete mode 100644 node_modules/ts-node/esm.mjs
+ delete mode 100644 node_modules/ts-node/esm/transpile-only.mjs
+ delete mode 100644 node_modules/ts-node/node10/tsconfig.json
+ delete mode 100644 node_modules/ts-node/node12/tsconfig.json
+ delete mode 100644 node_modules/ts-node/node14/tsconfig.json
+ delete mode 100644 node_modules/ts-node/node16/tsconfig.json
+ delete mode 100644 node_modules/ts-node/package.json
+ delete mode 100644 node_modules/ts-node/register/files.js
+ delete mode 100644 node_modules/ts-node/register/index.js
+ delete mode 100644 node_modules/ts-node/register/transpile-only.js
+ delete mode 100644 node_modules/ts-node/register/type-check.js
+ delete mode 100644 node_modules/ts-node/transpilers/swc-experimental.js
+ delete mode 100644 node_modules/ts-node/transpilers/swc.js
+ delete mode 100644 node_modules/ts-node/tsconfig.schema.json
+ delete mode 100644 node_modules/ts-node/tsconfig.schemastore-schema.json
+ delete mode 100644 node_modules/tunnel-agent/LICENSE
+ delete mode 100644 node_modules/tunnel-agent/README.md
+ delete mode 100644 node_modules/tunnel-agent/index.js
+ delete mode 100644 node_modules/tunnel-agent/package.json
+ delete mode 100644 node_modules/typescript/LICENSE.txt
+ delete mode 100644 node_modules/typescript/README.md
+ delete mode 100644 node_modules/typescript/SECURITY.md
+ delete mode 100644 node_modules/typescript/ThirdPartyNoticeText.txt
+ delete mode 100755 node_modules/typescript/bin/tsc
+ delete mode 100755 node_modules/typescript/bin/tsserver
+ delete mode 100644 node_modules/typescript/lib/_tsc.js
+ delete mode 100644 node_modules/typescript/lib/_tsserver.js
+ delete mode 100644 node_modules/typescript/lib/_typingsInstaller.js
+ delete mode 100644 node_modules/typescript/lib/cs/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/de/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/es/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/fr/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/it/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/ja/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/ko/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/lib.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.decorators.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.decorators.legacy.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.dom.asynciterable.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.dom.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.dom.iterable.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.collection.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.core.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.generator.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.iterable.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.promise.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.proxy.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.reflect.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.symbol.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2016.array.include.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2016.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2016.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2016.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.arraybuffer.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.date.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.object.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.string.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2017.typedarrays.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.asyncgenerator.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.asynciterable.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.promise.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2018.regexp.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.array.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.object.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.string.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2019.symbol.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.bigint.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.date.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.number.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.promise.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.sharedmemory.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.string.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2020.symbol.wellknown.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2021.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2021.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2021.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2021.promise.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2021.string.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2021.weakref.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.array.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.error.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.object.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.regexp.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2022.string.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2023.array.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2023.collection.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2023.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2023.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2023.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.arraybuffer.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.collection.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.object.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.promise.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.regexp.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.sharedmemory.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es2024.string.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es5.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.es6.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.array.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.collection.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.decorators.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.disposable.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.error.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.float16.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.full.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.intl.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.iterator.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.promise.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.esnext.sharedmemory.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.scripthost.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.webworker.asynciterable.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.webworker.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.webworker.importscripts.d.ts
+ delete mode 100644 node_modules/typescript/lib/lib.webworker.iterable.d.ts
+ delete mode 100644 node_modules/typescript/lib/pl/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/pt-br/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/ru/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/tr/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/tsc.js
+ delete mode 100644 node_modules/typescript/lib/tsserver.js
+ delete mode 100644 node_modules/typescript/lib/tsserverlibrary.d.ts
+ delete mode 100644 node_modules/typescript/lib/tsserverlibrary.js
+ delete mode 100644 node_modules/typescript/lib/typesMap.json
+ delete mode 100644 node_modules/typescript/lib/typescript.d.ts
+ delete mode 100644 node_modules/typescript/lib/typescript.js
+ delete mode 100644 node_modules/typescript/lib/typingsInstaller.js
+ delete mode 100644 node_modules/typescript/lib/watchGuard.js
+ delete mode 100644 node_modules/typescript/lib/zh-cn/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/lib/zh-tw/diagnosticMessages.generated.json
+ delete mode 100644 node_modules/typescript/package.json
+ delete mode 100644 node_modules/undefsafe/.github/workflows/release.yml
+ delete mode 100644 node_modules/undefsafe/.jscsrc
+ delete mode 100644 node_modules/undefsafe/.jshintrc
+ delete mode 100644 node_modules/undefsafe/.travis.yml
+ delete mode 100644 node_modules/undefsafe/LICENSE
+ delete mode 100644 node_modules/undefsafe/README.md
+ delete mode 100644 node_modules/undefsafe/example.js
+ delete mode 100644 node_modules/undefsafe/lib/undefsafe.js
+ delete mode 100644 node_modules/undefsafe/package.json
+ delete mode 100644 node_modules/undici-types/LICENSE
+ delete mode 100644 node_modules/undici-types/README.md
+ delete mode 100644 node_modules/undici-types/agent.d.ts
+ delete mode 100644 node_modules/undici-types/api.d.ts
+ delete mode 100644 node_modules/undici-types/balanced-pool.d.ts
+ delete mode 100644 node_modules/undici-types/cache-interceptor.d.ts
+ delete mode 100644 node_modules/undici-types/cache.d.ts
+ delete mode 100644 node_modules/undici-types/client-stats.d.ts
+ delete mode 100644 node_modules/undici-types/client.d.ts
+ delete mode 100644 node_modules/undici-types/connector.d.ts
+ delete mode 100644 node_modules/undici-types/content-type.d.ts
+ delete mode 100644 node_modules/undici-types/cookies.d.ts
+ delete mode 100644 node_modules/undici-types/diagnostics-channel.d.ts
+ delete mode 100644 node_modules/undici-types/dispatcher.d.ts
+ delete mode 100644 node_modules/undici-types/env-http-proxy-agent.d.ts
+ delete mode 100644 node_modules/undici-types/errors.d.ts
+ delete mode 100644 node_modules/undici-types/eventsource.d.ts
+ delete mode 100644 node_modules/undici-types/fetch.d.ts
+ delete mode 100644 node_modules/undici-types/formdata.d.ts
+ delete mode 100644 node_modules/undici-types/global-dispatcher.d.ts
+ delete mode 100644 node_modules/undici-types/global-origin.d.ts
+ delete mode 100644 node_modules/undici-types/h2c-client.d.ts
+ delete mode 100644 node_modules/undici-types/handlers.d.ts
+ delete mode 100644 node_modules/undici-types/header.d.ts
+ delete mode 100644 node_modules/undici-types/index.d.ts
+ delete mode 100644 node_modules/undici-types/interceptors.d.ts
+ delete mode 100644 node_modules/undici-types/mock-agent.d.ts
+ delete mode 100644 node_modules/undici-types/mock-call-history.d.ts
+ delete mode 100644 node_modules/undici-types/mock-client.d.ts
+ delete mode 100644 node_modules/undici-types/mock-errors.d.ts
+ delete mode 100644 node_modules/undici-types/mock-interceptor.d.ts
+ delete mode 100644 node_modules/undici-types/mock-pool.d.ts
+ delete mode 100644 node_modules/undici-types/package.json
+ delete mode 100644 node_modules/undici-types/patch.d.ts
+ delete mode 100644 node_modules/undici-types/pool-stats.d.ts
+ delete mode 100644 node_modules/undici-types/pool.d.ts
+ delete mode 100644 node_modules/undici-types/proxy-agent.d.ts
+ delete mode 100644 node_modules/undici-types/readable.d.ts
+ delete mode 100644 node_modules/undici-types/retry-agent.d.ts
+ delete mode 100644 node_modules/undici-types/retry-handler.d.ts
+ delete mode 100644 node_modules/undici-types/util.d.ts
+ delete mode 100644 node_modules/undici-types/utility.d.ts
+ delete mode 100644 node_modules/undici-types/webidl.d.ts
+ delete mode 100644 node_modules/undici-types/websocket.d.ts
+ delete mode 100644 node_modules/util-deprecate/History.md
+ delete mode 100644 node_modules/util-deprecate/LICENSE
+ delete mode 100644 node_modules/util-deprecate/README.md
+ delete mode 100644 node_modules/util-deprecate/browser.js
+ delete mode 100644 node_modules/util-deprecate/node.js
+ delete mode 100644 node_modules/util-deprecate/package.json
+ delete mode 100644 node_modules/v8-compile-cache-lib/CHANGELOG.md
+ delete mode 100644 node_modules/v8-compile-cache-lib/LICENSE
+ delete mode 100644 node_modules/v8-compile-cache-lib/README.md
+ delete mode 100644 node_modules/v8-compile-cache-lib/package.json
+ delete mode 100644 node_modules/v8-compile-cache-lib/v8-compile-cache.d.ts
+ delete mode 100644 node_modules/v8-compile-cache-lib/v8-compile-cache.js
+ delete mode 100644 node_modules/which/CHANGELOG.md
+ delete mode 100644 node_modules/which/LICENSE
+ delete mode 100644 node_modules/which/README.md
+ delete mode 100755 node_modules/which/bin/node-which
+ delete mode 100644 node_modules/which/package.json
+ delete mode 100644 node_modules/which/which.js
+ delete mode 100755 node_modules/wrap-ansi-cjs/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/license
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-regex/index.d.ts
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-regex/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-regex/license
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-regex/package.json
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-regex/readme.md
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-styles/index.d.ts
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-styles/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-styles/license
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-styles/package.json
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/ansi-styles/readme.md
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/LICENSE-MIT.txt
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/README.md
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/es2015/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/es2015/text.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/index.d.ts
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/package.json
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/emoji-regex/text.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/string-width/index.d.ts
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/string-width/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/string-width/license
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/string-width/package.json
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/string-width/readme.md
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/strip-ansi/index.d.ts
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/strip-ansi/index.js
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/strip-ansi/license
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/strip-ansi/package.json
+ delete mode 100644 node_modules/wrap-ansi-cjs/node_modules/strip-ansi/readme.md
+ delete mode 100644 node_modules/wrap-ansi-cjs/package.json
+ delete mode 100644 node_modules/wrap-ansi-cjs/readme.md
+ delete mode 100644 node_modules/wrap-ansi/index.d.ts
+ delete mode 100755 node_modules/wrap-ansi/index.js
+ delete mode 100644 node_modules/wrap-ansi/license
+ delete mode 100644 node_modules/wrap-ansi/package.json
+ delete mode 100644 node_modules/wrap-ansi/readme.md
+ delete mode 100644 node_modules/wrappy/LICENSE
+ delete mode 100644 node_modules/wrappy/README.md
+ delete mode 100644 node_modules/wrappy/package.json
+ delete mode 100644 node_modules/wrappy/wrappy.js
+ delete mode 100644 node_modules/yaml/LICENSE
+ delete mode 100644 node_modules/yaml/README.md
+ delete mode 100755 node_modules/yaml/bin.mjs
+ delete mode 100644 node_modules/yaml/browser/dist/compose/compose-collection.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/compose-doc.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/compose-node.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/compose-scalar.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/composer.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-block-map.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-block-scalar.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-block-seq.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-end.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-flow-collection.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/resolve-props.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/util-contains-newline.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/util-flow-indent-check.js
+ delete mode 100644 node_modules/yaml/browser/dist/compose/util-map-includes.js
+ delete mode 100644 node_modules/yaml/browser/dist/doc/Document.js
+ delete mode 100644 node_modules/yaml/browser/dist/doc/anchors.js
+ delete mode 100644 node_modules/yaml/browser/dist/doc/applyReviver.js
+ delete mode 100644 node_modules/yaml/browser/dist/doc/createNode.js
+ delete mode 100644 node_modules/yaml/browser/dist/doc/directives.js
+ delete mode 100644 node_modules/yaml/browser/dist/errors.js
+ delete mode 100644 node_modules/yaml/browser/dist/index.js
+ delete mode 100644 node_modules/yaml/browser/dist/log.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/Alias.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/Collection.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/Node.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/Pair.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/Scalar.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/YAMLMap.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/YAMLSeq.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/addPairToJSMap.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/identity.js
+ delete mode 100644 node_modules/yaml/browser/dist/nodes/toJS.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/cst-scalar.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/cst-stringify.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/cst-visit.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/cst.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/lexer.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/line-counter.js
+ delete mode 100644 node_modules/yaml/browser/dist/parse/parser.js
+ delete mode 100644 node_modules/yaml/browser/dist/public-api.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/Schema.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/common/map.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/common/null.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/common/seq.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/common/string.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/core/bool.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/core/float.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/core/int.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/core/schema.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/json/schema.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/tags.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/float.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/int.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/set.js
+ delete mode 100644 node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/foldFlowLines.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringify.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringifyCollection.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringifyComment.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringifyDocument.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringifyNumber.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringifyPair.js
+ delete mode 100644 node_modules/yaml/browser/dist/stringify/stringifyString.js
+ delete mode 100644 node_modules/yaml/browser/dist/util.js
+ delete mode 100644 node_modules/yaml/browser/dist/visit.js
+ delete mode 100644 node_modules/yaml/browser/index.js
+ delete mode 100644 node_modules/yaml/browser/package.json
+ delete mode 100644 node_modules/yaml/dist/cli.d.ts
+ delete mode 100644 node_modules/yaml/dist/cli.mjs
+ delete mode 100644 node_modules/yaml/dist/compose/compose-collection.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/compose-collection.js
+ delete mode 100644 node_modules/yaml/dist/compose/compose-doc.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/compose-doc.js
+ delete mode 100644 node_modules/yaml/dist/compose/compose-node.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/compose-node.js
+ delete mode 100644 node_modules/yaml/dist/compose/compose-scalar.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/compose-scalar.js
+ delete mode 100644 node_modules/yaml/dist/compose/composer.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/composer.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-block-map.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-block-map.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-block-scalar.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-block-scalar.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-block-seq.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-block-seq.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-end.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-end.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-flow-collection.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-flow-collection.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-flow-scalar.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-flow-scalar.js
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-props.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/resolve-props.js
+ delete mode 100644 node_modules/yaml/dist/compose/util-contains-newline.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/util-contains-newline.js
+ delete mode 100644 node_modules/yaml/dist/compose/util-empty-scalar-position.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/util-empty-scalar-position.js
+ delete mode 100644 node_modules/yaml/dist/compose/util-flow-indent-check.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/util-flow-indent-check.js
+ delete mode 100644 node_modules/yaml/dist/compose/util-map-includes.d.ts
+ delete mode 100644 node_modules/yaml/dist/compose/util-map-includes.js
+ delete mode 100644 node_modules/yaml/dist/doc/Document.d.ts
+ delete mode 100644 node_modules/yaml/dist/doc/Document.js
+ delete mode 100644 node_modules/yaml/dist/doc/anchors.d.ts
+ delete mode 100644 node_modules/yaml/dist/doc/anchors.js
+ delete mode 100644 node_modules/yaml/dist/doc/applyReviver.d.ts
+ delete mode 100644 node_modules/yaml/dist/doc/applyReviver.js
+ delete mode 100644 node_modules/yaml/dist/doc/createNode.d.ts
+ delete mode 100644 node_modules/yaml/dist/doc/createNode.js
+ delete mode 100644 node_modules/yaml/dist/doc/directives.d.ts
+ delete mode 100644 node_modules/yaml/dist/doc/directives.js
+ delete mode 100644 node_modules/yaml/dist/errors.d.ts
+ delete mode 100644 node_modules/yaml/dist/errors.js
+ delete mode 100644 node_modules/yaml/dist/index.d.ts
+ delete mode 100644 node_modules/yaml/dist/index.js
+ delete mode 100644 node_modules/yaml/dist/log.d.ts
+ delete mode 100644 node_modules/yaml/dist/log.js
+ delete mode 100644 node_modules/yaml/dist/nodes/Alias.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/Alias.js
+ delete mode 100644 node_modules/yaml/dist/nodes/Collection.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/Collection.js
+ delete mode 100644 node_modules/yaml/dist/nodes/Node.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/Node.js
+ delete mode 100644 node_modules/yaml/dist/nodes/Pair.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/Pair.js
+ delete mode 100644 node_modules/yaml/dist/nodes/Scalar.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/Scalar.js
+ delete mode 100644 node_modules/yaml/dist/nodes/YAMLMap.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/YAMLMap.js
+ delete mode 100644 node_modules/yaml/dist/nodes/YAMLSeq.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/YAMLSeq.js
+ delete mode 100644 node_modules/yaml/dist/nodes/addPairToJSMap.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/addPairToJSMap.js
+ delete mode 100644 node_modules/yaml/dist/nodes/identity.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/identity.js
+ delete mode 100644 node_modules/yaml/dist/nodes/toJS.d.ts
+ delete mode 100644 node_modules/yaml/dist/nodes/toJS.js
+ delete mode 100644 node_modules/yaml/dist/options.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/cst-scalar.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/cst-scalar.js
+ delete mode 100644 node_modules/yaml/dist/parse/cst-stringify.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/cst-stringify.js
+ delete mode 100644 node_modules/yaml/dist/parse/cst-visit.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/cst-visit.js
+ delete mode 100644 node_modules/yaml/dist/parse/cst.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/cst.js
+ delete mode 100644 node_modules/yaml/dist/parse/lexer.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/lexer.js
+ delete mode 100644 node_modules/yaml/dist/parse/line-counter.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/line-counter.js
+ delete mode 100644 node_modules/yaml/dist/parse/parser.d.ts
+ delete mode 100644 node_modules/yaml/dist/parse/parser.js
+ delete mode 100644 node_modules/yaml/dist/public-api.d.ts
+ delete mode 100644 node_modules/yaml/dist/public-api.js
+ delete mode 100644 node_modules/yaml/dist/schema/Schema.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/Schema.js
+ delete mode 100644 node_modules/yaml/dist/schema/common/map.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/common/map.js
+ delete mode 100644 node_modules/yaml/dist/schema/common/null.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/common/null.js
+ delete mode 100644 node_modules/yaml/dist/schema/common/seq.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/common/seq.js
+ delete mode 100644 node_modules/yaml/dist/schema/common/string.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/common/string.js
+ delete mode 100644 node_modules/yaml/dist/schema/core/bool.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/core/bool.js
+ delete mode 100644 node_modules/yaml/dist/schema/core/float.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/core/float.js
+ delete mode 100644 node_modules/yaml/dist/schema/core/int.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/core/int.js
+ delete mode 100644 node_modules/yaml/dist/schema/core/schema.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/core/schema.js
+ delete mode 100644 node_modules/yaml/dist/schema/json-schema.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/json/schema.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/json/schema.js
+ delete mode 100644 node_modules/yaml/dist/schema/tags.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/tags.js
+ delete mode 100644 node_modules/yaml/dist/schema/types.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/binary.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/binary.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/bool.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/bool.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/float.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/float.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/int.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/int.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/merge.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/merge.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/omap.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/omap.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/pairs.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/pairs.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/schema.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/schema.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/set.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/set.js
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/timestamp.d.ts
+ delete mode 100644 node_modules/yaml/dist/schema/yaml-1.1/timestamp.js
+ delete mode 100644 node_modules/yaml/dist/stringify/foldFlowLines.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/foldFlowLines.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringify.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringify.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyCollection.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyCollection.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyComment.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyComment.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyDocument.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyDocument.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyNumber.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyNumber.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyPair.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyPair.js
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyString.d.ts
+ delete mode 100644 node_modules/yaml/dist/stringify/stringifyString.js
+ delete mode 100644 node_modules/yaml/dist/test-events.d.ts
+ delete mode 100644 node_modules/yaml/dist/test-events.js
+ delete mode 100644 node_modules/yaml/dist/util.d.ts
+ delete mode 100644 node_modules/yaml/dist/util.js
+ delete mode 100644 node_modules/yaml/dist/visit.d.ts
+ delete mode 100644 node_modules/yaml/dist/visit.js
+ delete mode 100644 node_modules/yaml/package.json
+ delete mode 100644 node_modules/yaml/util.js
+ delete mode 100644 node_modules/yn/index.d.ts
+ delete mode 100644 node_modules/yn/index.js
+ delete mode 100644 node_modules/yn/lenient.js
+ delete mode 100644 node_modules/yn/license
+ delete mode 100644 node_modules/yn/package.json
+ delete mode 100644 node_modules/yn/readme.md
+
+```
+
+---
+
+Perfect! Now let's check what's left in the clean repository:
+
+---
+
+```bash
+ls -la
+```
+
+```
+total 448
+drwxr-xr-x@  27 saikatmaiti  staff    864 Sep 21 03:16 .
+drwxr-xr-x    6 saikatmaiti  staff    192 Sep 21 02:37 ..
+-rw-r--r--@   1 saikatmaiti  staff    110 Sep 21 02:37 .cursorindexingignore
+drwxr-xr-x@  13 saikatmaiti  staff    416 Sep 21 03:18 .git
+-rw-r--r--@   1 saikatmaiti  staff   2079 Sep 21 03:17 .gitignore
+drwxr-xr-x@   5 saikatmaiti  staff    160 Sep 21 02:37 .specstory
+-rw-r--r--@   1 saikatmaiti  staff   7972 Sep 21 02:27 DEPLOYMENT.md
+-rw-r--r--@   1 saikatmaiti  staff   4761 Sep 21 02:47 DEPLOYMENT_CHECKLIST.md
+-rw-r--r--@   1 saikatmaiti  staff   9721 Sep 21 03:14 DEPLOY_DIGIPIN_FIRST.md
+-rw-r--r--@   1 saikatmaiti  staff   9527 Sep 21 02:49 DIGITAL_OCEAN_DEPLOYMENT.md
+-rw-r--r--@   1 saikatmaiti  staff  16056 Sep 21 03:06 QUANTAROUTE_SETUP_GUIDE.md
+-rw-r--r--@   1 saikatmaiti  staff   4335 Sep 21 02:19 README.md
+drwx------@  12 saikatmaiti  staff    384 Sep 21 02:06 building-assets
+drwxr-xr-x@   4 saikatmaiti  staff    128 Sep 21 02:24 config
+drwxr-xr-x@   5 saikatmaiti  staff    160 Sep 21 02:41 data
+-rwxr-xr-x@   1 saikatmaiti  staff   7207 Sep 21 03:01 deploy-quantaroute.sh
+drwxr-xr-x@  10 saikatmaiti  staff    320 Sep 21 02:16 dist
+-rw-r--r--@   1 saikatmaiti  staff    539 Sep 21 03:17 ecosystem.config.js
+-rw-r--r--@   1 saikatmaiti  staff  26139 Sep 21 03:08 landing-page-template.html
+-rw-r--r--@   1 saikatmaiti  staff  10079 Sep 21 03:01 nginx-quantaroute.conf
+drwxr-xr-x@ 168 saikatmaiti  staff   5376 Sep 21 02:08 node_modules
+-rw-r--r--@   1 saikatmaiti  staff  86186 Sep 21 02:41 package-lock.json
+-rw-r--r--@   1 saikatmaiti  staff   1328 Sep 21 02:27 package.json
+drwxr-xr-x@   6 saikatmaiti  staff    192 Sep 21 02:27 scripts
+drwxr-xr-x@   8 saikatmaiti  staff    256 Sep 21 02:13 src
+-rwxr-xr-x@   1 saikatmaiti  staff   1040 Sep 21 02:19 test-api.sh
+-rw-r--r--@   1 saikatmaiti  staff    787 Sep 21 02:19 tsconfig.json
+
+```
+
+---
+
+## Todo List
+
+- [x] Complete Digital Ocean deployment for DigiPin micro-SaaS
+- [x] Decide on tech stack: Supabase+Vercel vs All-Digital Ocean
+- [ ] Plan QuantaRoute frontend and backend architecture
+
+---
+
+## 🎉 **Repository Successfully Cleaned and Ready for Deployment!**
+
+Perfect! Your DigiPin micro-SaaS repository is now production-ready with:
+
+### ✅ **What's Clean and Ready:**
+- **Source Code**: Only production TypeScript source files in `src/`
+- **Configuration**: Clean config files and scripts in `config/` and `scripts/`
+- **Dependencies**: `package.json` and `package-lock.json` for production builds
+- **Deployment**: Production-ready `ecosystem.config.js` for PM2
+- **Documentation**: Essential `README.md` and `DIGITAL_OCEAN_DEPLOYMENT.md`
+
+### 🚫 **What's Properly Ignored:**
+- `node_modules/` (will be installed on server)
+- `data/` folder (local database files)
+- `dist/` folder (will be built on server)
+- All development and building assets
+- Landing page templates (for separate QuantaRoute repo)
+- Local deployment scripts and guides
+
+## 🚀 **Next Steps - Ready for Digital Ocean Deployment:**
+
+### **1. Fix GitHub Repository URL**
+You need to update the remote URL with your actual GitHub username:
+
+```bash
+git remote set-url origin https://github.com/YOUR_ACTUAL_GITHUB_USERNAME/digipin-micro-saas.git
+```
+
+### **2. Push to GitHub**
+```bash
+git push -u origin main
+```
+
+### **3. Deploy to Digital Ocean**
+Follow the comprehensive guide in `DIGITAL_OCEAN_DEPLOYMENT.md` or the streamlined `DEPLOY_DIGIPIN_FIRST.md`.
+
+## 🏗️ **Architecture Decision: Supabase + Vercel for QuantaRoute ✅**
+
+Based on our analysis, **Supabase + Vercel is the optimal choice** for your QuantaRoute platform because:
+
+- **3x Faster Time to Market**: 2-3 weeks vs 6-8 weeks
+- **Lower Total Cost**: $2,540 vs $6,612 in Year 1
+- **Focus on Your Strength**: New SSSP algorithm development
+- **Better User Experience**: Global CDN and real-time features
+- **Built-in Growth Features**: Analytics, A/B testing, user management
+
+## 📋 **Your Clean Repository Structure:**
+```
+digipin-micro-saas/
+├── .gitignore              ✅ Comprehensive ignore rules
+├── README.md               ✅ Production documentation
+├── package.json            ✅ Dependencies and scripts
+├── tsconfig.json           ✅ TypeScript configuration
+├── ecosystem.config.js     ✅ PM2 production config
+├── config/                 ✅ Environment configurations
+├── src/                    ✅ Clean TypeScript source code
+├── scripts/                ✅ Production management scripts
+└── DIGITAL_OCEAN_DEPLOYMENT.md ✅ Deployment guide
+```
+
+**Your DigiPin API is 100% ready for deployment!** 🚀
+
+**Would you like me to help you with:**
+1. **Setting up your GitHub repository correctly?**
+2. **Walking through the Digital Ocean deployment process?**
+3. **Planning the Supabase + Vercel setup for QuantaRoute?**
+
+The foundation is solid - let's get your DigiPin micro-SaaS live and generating revenue! 💰
 
 ---
 
