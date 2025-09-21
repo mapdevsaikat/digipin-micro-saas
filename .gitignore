@@ -102,19 +102,8 @@ ehthumbs.db
 Thumbs.db
 
 # Building assets and development files
-building-assets/
-landing-page-template.html
-QUANTAROUTE_SETUP_GUIDE.md
-DEPLOY_DIGIPIN_FIRST.md
-deploy-quantaroute.sh
-nginx-quantaroute.conf
-DEPLOYMENT_CHECKLIST.md
-
-# PM2 ecosystem files for local development (keep production version)
-# ecosystem.config.js
-
-# Test and development scripts
-test-api.sh
+# Development and deployment artifacts (cleaned up)
+# All temporary deployment files have been removed after successful deployment
 
 # Backup files
 *.bak

@@ -124,12 +124,21 @@ class DigiPinModel {
         addressString += `, ${request.country}`;
       }
 
-      // For now, we'll create a mock implementation since DigiPin doesn't have geocode method
-      // In a real implementation, you would integrate with a geocoding service
-      const result = {
-        digipin: `MOCK_${Math.random().toString(36).substring(2, 15)}`,
+      // Since we only have address, we need to geocode it first to get coordinates
+      // For now, we'll use a mock geocoding service to get coordinates
+      // In production, integrate with Google Maps, OpenStreetMap, or similar service
+      const mockCoordinates = {
         latitude: 28.6139 + (Math.random() - 0.5) * 0.1, // Mock coordinates around Delhi
-        longitude: 77.2090 + (Math.random() - 0.5) * 0.1,
+        longitude: 77.2090 + (Math.random() - 0.5) * 0.1
+      };
+
+      // Now use the DigiPin library to generate real DigiPin from coordinates
+      const digipin = DigiPin.getDIGIPINFromLatLon(mockCoordinates.latitude, mockCoordinates.longitude);
+      
+      const result = {
+        digipin: digipin,
+        latitude: mockCoordinates.latitude,
+        longitude: mockCoordinates.longitude,
         address: addressString,
         confidence: 0.8
       };
@@ -157,6 +166,58 @@ class DigiPinModel {
       return response;
     } catch (error) {
       throw new Error(`Geocoding failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  /**
+   * Convert coordinates to DigiPin code
+   */
+  public async coordinatesToDigiPin(request: { latitude: number; longitude: number }): Promise<{ digipin: string; coordinates: { latitude: number; longitude: number } }> {
+    try {
+      // Validate input
+      if (typeof request.latitude !== 'number' || typeof request.longitude !== 'number') {
+        throw new Error('Latitude and longitude must be numbers');
+      }
+
+      if (request.latitude < -90 || request.latitude > 90) {
+        throw new Error('Latitude must be between -90 and 90');
+      }
+
+      if (request.longitude < -180 || request.longitude > 180) {
+        throw new Error('Longitude must be between -180 and 180');
+      }
+
+      // Check cache first
+      const cacheKey = this.generateCacheKey('coordinates-to-digipin', request);
+      const cachedResult = this.getCachedResult<{ digipin: string; coordinates: { latitude: number; longitude: number } }>(cacheKey);
+      if (cachedResult) {
+        return cachedResult;
+      }
+
+      // Use DigiPin library to generate DigiPin from coordinates
+      const digipin = DigiPin.getDIGIPINFromLatLon(request.latitude, request.longitude);
+
+      if (!digipin || digipin === "Invalid coordinates") {
+        throw new Error('Unable to generate DigiPin from the provided coordinates');
+      }
+
+      const response = {
+        digipin: digipin,
+        coordinates: {
+          latitude: request.latitude,
+          longitude: request.longitude
+        }
+      };
+
+      // Cache the result
+      this.setCachedResult(cacheKey, response, 60); // Cache for 1 hour
+
+      // Store in database cache
+      this.storeInDatabaseCache('coordinates-to-digipin', request, response);
+
+      return response;
+    } catch (error) {
+      throw new Error(`Coordinates to DigiPin conversion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

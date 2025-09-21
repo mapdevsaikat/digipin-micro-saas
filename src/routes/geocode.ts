@@ -134,4 +134,139 @@ export default async function geocodeRoutes(fastify: FastifyInstance) {
       );
     }
   });
+
+  // Coordinates to DigiPin endpoint - Convert lat/lon to DigiPin
+  fastify.post('/v1/coordinates-to-digipin', {
+    preHandler: [apiKeyAuth, tieredRateLimit],
+    schema: {
+      description: 'Convert coordinates (latitude/longitude) to DigiPin code',
+      tags: ['Geocoding'],
+      security: [{ apiKey: [] }],
+      body: {
+        type: 'object',
+        required: ['latitude', 'longitude'],
+        properties: {
+          latitude: {
+            type: 'number',
+            minimum: -90,
+            maximum: 90,
+            description: 'Latitude coordinate'
+          },
+          longitude: {
+            type: 'number',
+            minimum: -180,
+            maximum: 180,
+            description: 'Longitude coordinate'
+          }
+        }
+      },
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            data: {
+              type: 'object',
+              properties: {
+                digipin: { type: 'string' },
+                coordinates: {
+                  type: 'object',
+                  properties: {
+                    latitude: { type: 'number' },
+                    longitude: { type: 'number' }
+                  }
+                }
+              }
+            }
+          }
+        },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            error: { type: 'string' },
+            message: { type: 'string' },
+            code: { type: 'string' }
+          }
+        },
+        500: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            error: { type: 'string' },
+            message: { type: 'string' },
+            code: { type: 'string' }
+          }
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const startTime = Date.now();
+    let statusCode = 200;
+    let errorMessage: string | undefined;
+
+    try {
+      const body = request.body as { latitude: number; longitude: number };
+      
+      if (typeof body.latitude !== 'number' || typeof body.longitude !== 'number') {
+        statusCode = 400;
+        errorMessage = 'Latitude and longitude must be numbers';
+        return reply.status(400).send({
+          success: false,
+          error: 'Bad Request',
+          message: 'Latitude and longitude must be numbers',
+          code: 'INVALID_COORDINATES'
+        });
+      }
+
+      if (body.latitude < -90 || body.latitude > 90) {
+        statusCode = 400;
+        errorMessage = 'Latitude must be between -90 and 90';
+        return reply.status(400).send({
+          success: false,
+          error: 'Bad Request',
+          message: 'Latitude must be between -90 and 90',
+          code: 'INVALID_LATITUDE'
+        });
+      }
+
+      if (body.longitude < -180 || body.longitude > 180) {
+        statusCode = 400;
+        errorMessage = 'Longitude must be between -180 and 180';
+        return reply.status(400).send({
+          success: false,
+          error: 'Bad Request',
+          message: 'Longitude must be between -180 and 180',
+          code: 'INVALID_LONGITUDE'
+        });
+      }
+
+      const result = await digipinModel.coordinatesToDigiPin(body);
+
+      return reply.send({
+        success: true,
+        data: result
+      });
+
+    } catch (error) {
+      statusCode = 500;
+      errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      return reply.status(500).send({
+        success: false,
+        error: 'Internal Server Error',
+        message: errorMessage,
+        code: 'COORDINATES_TO_DIGIPIN_ERROR'
+      });
+    } finally {
+      // Log the request
+      await logRequest(
+        request,
+        reply,
+        (request as any).apiKeyInfo?.id || null,
+        statusCode,
+        errorMessage
+      );
+    }
+  });
 }

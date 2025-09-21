@@ -12,6 +12,7 @@ import reverseRoutes from './routes/reverse';
 import batchRoutes from './routes/batch';
 import validateRoutes from './routes/validate';
 import usageRoutes from './routes/usage';
+import officialCompatibilityRoutes from './routes/official-compatibility';
 
 const fastify = Fastify({
   logger: {
@@ -71,7 +72,9 @@ fastify.register(swagger, {
     tags: [
       { name: 'Geocoding', description: 'Address to DigiPin conversion' },
       { name: 'Reverse Geocoding', description: 'DigiPin to coordinates conversion' },
+      { name: 'Official Compatibility', description: 'Official DigiPin API compatible endpoints' },
       { name: 'Validation', description: 'DigiPin format validation' },
+      { name: 'Usage', description: 'API usage tracking and monitoring' },
       { name: 'Health', description: 'Health check endpoints' }
     ],
     securityDefinitions: {
@@ -106,6 +109,7 @@ fastify.register(reverseRoutes);
 fastify.register(batchRoutes);
 fastify.register(validateRoutes);
 fastify.register(usageRoutes);
+fastify.register(officialCompatibilityRoutes);
 
 // Health check endpoint
 fastify.get('/health', {
