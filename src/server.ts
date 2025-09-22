@@ -90,7 +90,7 @@ fastify.register(swagger, {
 });
 
 fastify.register(swaggerUi, {
-  routePrefix: '/docs',
+  routePrefix: '/v1/digipin/docs',
   staticCSP: false,
   uiConfig: {
     docExpansion: 'list',
@@ -111,7 +111,51 @@ fastify.register(validateRoutes);
 fastify.register(usageRoutes);
 fastify.register(officialCompatibilityRoutes);
 
-// Health check endpoint
+// Root endpoint
+fastify.get('/', {
+  schema: {
+    description: 'Root endpoint with API information',
+    tags: ['Health'],
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+          version: { type: 'string' },
+          documentation: { type: 'string' }
+        }
+      }
+    }
+  }
+}, async (request, reply) => {
+  return {
+    message: 'QuantaRoute API Gateway',
+    version: '1.0.0',
+    apiUrl: process.env.NODE_ENV === 'production' ? 'https://api.quantaroute.com' : 'http://localhost:3000',
+    website: 'https://quantaroute.com',
+    products: {
+      digipin: {
+        version: 'v1',
+        baseUrl: '/v1/digipin',
+        documentation: '/v1/digipin/docs',
+        description: 'DigiPin geocoding services'
+      },
+      routing: {
+        version: 'v1',
+        baseUrl: '/v1/routing',
+        documentation: '/v1/routing/docs',
+        description: 'Advanced routing solutions (coming soon)',
+        status: 'coming_soon'
+      }
+    }
+  };
+});
+
+// Backward compatibility redirects
+fastify.get('/docs', async (request, reply) => {
+  return reply.redirect('/v1/digipin/docs');
+});
+
 fastify.get('/health', {
   schema: {
     description: 'Health check endpoint',
@@ -132,36 +176,6 @@ fastify.get('/health', {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
-  };
-});
-
-// Root endpoint
-fastify.get('/', {
-  schema: {
-    description: 'Root endpoint with API information',
-    tags: ['Health'],
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          message: { type: 'string' },
-          version: { type: 'string' },
-          documentation: { type: 'string' }
-        }
-      }
-    }
-  }
-}, async (request, reply) => {
-  return {
-    message: 'QuantaRoute DigiPin API',
-    version: '1.0.0',
-    documentation: '/docs',
-    website: 'https://quantaroute.com',
-    apiUrl: process.env.NODE_ENV === 'production' ? 'https://api.quantaroute.com' : 'http://localhost:3000',
-    products: {
-      digipin: '/',
-      routing: 'https://quantaroute.com/routing'
-    }
   };
 });
 

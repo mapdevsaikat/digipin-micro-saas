@@ -7,7 +7,7 @@ export default async function batchRoutes(fastify: FastifyInstance) {
   const digipinModel = new DigiPinModel();
 
   // Batch geocode endpoint - Process multiple addresses
-  fastify.post('/v1/batch', {
+  fastify.post('/v1/digipin/batch', {
     schema: {
       description: 'Process multiple geocoding requests in batch',
       tags: ['Geocoding'],

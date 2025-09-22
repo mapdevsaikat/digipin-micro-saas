@@ -6,7 +6,7 @@ import { tieredRateLimit } from '../middleware/rateLimiter';
 export default async function officialCompatibilityRoutes(fastify: FastifyInstance) {
   
   // Official-style encode endpoint - Convert coordinates to DigiPin
-  fastify.get('/api/digipin/encode', {
+  fastify.get('/v1/digipin/encode', {
     preHandler: [apiKeyAuth, tieredRateLimit],
     schema: {
       description: 'Convert latitude and longitude to DIGIPIN (Official API Compatible)',
@@ -119,7 +119,7 @@ export default async function officialCompatibilityRoutes(fastify: FastifyInstan
   });
 
   // Official-style decode endpoint - Convert DigiPin to coordinates
-  fastify.get('/api/digipin/decode', {
+  fastify.get('/v1/digipin/decode', {
     preHandler: [apiKeyAuth, tieredRateLimit],
     schema: {
       description: 'Convert DIGIPIN to latitude and longitude (Official API Compatible)',

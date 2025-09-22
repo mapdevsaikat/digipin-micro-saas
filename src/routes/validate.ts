@@ -7,7 +7,7 @@ export default async function validateRoutes(fastify: FastifyInstance) {
   const digipinModel = new DigiPinModel();
 
   // Validate DigiPin endpoint
-  fastify.get('/v1/validate/:digipin', {
+  fastify.get('/v1/digipin/validate/:digipin', {
     schema: {
       description: 'Validate DigiPin format and check if it corresponds to a real location',
       tags: ['Validation'],

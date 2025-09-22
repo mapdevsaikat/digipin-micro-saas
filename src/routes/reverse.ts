@@ -7,7 +7,7 @@ export default async function reverseRoutes(fastify: FastifyInstance) {
   const digipinModel = new DigiPinModel();
 
   // Reverse geocode endpoint - Convert DigiPin to coordinates and address
-  fastify.post('/v1/reverse', {
+  fastify.post('/v1/digipin/reverse', {
     schema: {
       description: 'Convert DigiPin code to coordinates and address',
       tags: ['Reverse Geocoding'],

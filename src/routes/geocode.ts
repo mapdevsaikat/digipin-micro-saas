@@ -7,7 +7,7 @@ export default async function geocodeRoutes(fastify: FastifyInstance) {
   const digipinModel = new DigiPinModel();
 
   // Geocode endpoint - Convert address to DigiPin
-  fastify.post('/v1/geocode', {
+  fastify.post('/v1/digipin/geocode', {
     schema: {
       description: 'Convert address to DigiPin code',
       tags: ['Geocoding'],
@@ -136,7 +136,7 @@ export default async function geocodeRoutes(fastify: FastifyInstance) {
   });
 
   // Coordinates to DigiPin endpoint - Convert lat/lon to DigiPin
-  fastify.post('/v1/coordinates-to-digipin', {
+  fastify.post('/v1/digipin/coordinates-to-digipin', {
     preHandler: [apiKeyAuth, tieredRateLimit],
     schema: {
       description: 'Convert coordinates (latitude/longitude) to DigiPin code',

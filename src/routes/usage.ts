@@ -5,7 +5,7 @@ import { getRateLimitStatus } from '../middleware/rateLimiter';
 export default async function usageRoutes(fastify: FastifyInstance) {
   
   // Get usage information for the authenticated API key
-  fastify.get('/v1/usage', {
+  fastify.get('/v1/digipin/usage', {
     schema: {
       description: 'Get usage information for the authenticated API key',
       tags: ['Usage'],

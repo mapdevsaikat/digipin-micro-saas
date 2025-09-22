@@ -18322,6 +18322,1151 @@ DNS propagation usually takes 1-24 hours, but often works within minutes.
 
 ---
 
+```bash
+cat << 'EOF'
+📋 DNS Records to Add in GoDaddy:
+
+1. Go to your GoDaddy Domain Manager
+2. Select 'quantaroute.com' 
+3. Click 'DNS' > 'Manage DNS'
+4. Add these A Records:
+
+   Type: A Record
+   Name: api
+   Value: 139.59.38.131
+   TTL: 1 Hour (or default)
+
+5. Save changes
+
+This will make 'api.quantaroute.com' point to your Digital Ocean server.
+
+DNS propagation usually takes 1-24 hours, but often works within minutes.
+EOF
+```
+
+```
+📋 DNS Records to Add in GoDaddy:
+
+1. Go to your GoDaddy Domain Manager
+2. Select 'quantaroute.com' 
+3. Click 'DNS' > 'Manage DNS'
+4. Add these A Records:
+
+   Type: A Record
+   Name: api
+   Value: 139.59.38.131
+   TTL: 1 Hour (or default)
+
+5. Save changes
+
+This will make 'api.quantaroute.com' point to your Digital Ocean server.
+
+DNS propagation usually takes 1-24 hours, but often works within minutes.
+
+```
+
+---
+
+### **Step 2: Update Nginx Configuration**
+
+Let's prepare the nginx configuration for the subdomain:
+
+---
+
+```bash
+ssh root@139.59.38.131 "
+echo '🔧 Updating Nginx for api.quantaroute.com subdomain...'
+
+# Create new nginx config for the subdomain
+cat > /etc/nginx/sites-available/api-quantaroute << 'EOF'
+server {
+    listen 80;
+    server_name api.quantaroute.com;
+    
+    # Redirect HTTP to HTTPS
+    return 301 https://\$server_name\$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name api.quantaroute.com;
+
+    # SSL configuration (will be updated by certbot)
+    ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+    ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+
+    # SSL settings
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384;
+    ssl_prefer_server_ciphers on;
+
+    # Proxy all requests to Node.js app
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
+        
+        # Handle CORS
+        add_header Access-Control-Allow-Origin * always;
+        add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
+        add_header Access-Control-Allow-Headers 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,x-api-key,Authorization' always;
+        
+        # Handle preflight requests
+        if (\$request_method = 'OPTIONS') {
+            add_header Access-Control-Allow-Origin * always;
+            add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
+            add_header Access-Control-Allow-Headers 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,x-api-key,Authorization' always;
+            add_header Access-Control-Max-Age 1728000 always;
+            add_header Content-Type 'text/plain; charset=utf-8' always;
+            add_header Content-Length 0 always;
+            return 204;
+        }
+    }
+}
+
+# Fallback server for direct IP access (optional - can be removed later)
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+    return 301 https://api.quantaroute.com\$request_uri;
+}
+
+server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
+
+    ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+    ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+
+    # Redirect IP access to subdomain
+    return 301 https://api.quantaroute.com\$request_uri;
+}
+EOF
+
+echo '✅ Nginx configuration created for api.quantaroute.com'
+echo '⏳ Waiting for you to configure DNS first...'
+"
+```
+
+```
+🔧 Updating Nginx for api.quantaroute.com subdomain...
+✅ Nginx configuration created for api.quantaroute.com
+⏳ Waiting for you to configure DNS first...
+
+```
+
+---
+
+### **Step 3: Create Let's Encrypt Setup Script**
+
+---
+
+```bash
+ssh root@139.59.38.131 "
+cat > /root/setup-subdomain-ssl.sh << 'EOF'
+#!/bin/bash
+echo '🔐 Setting up SSL for api.quantaroute.com...'
+
+# Enable the new site configuration
+ln -sf /etc/nginx/sites-available/api-quantaroute /etc/nginx/sites-enabled/default
+
+# Test nginx configuration
+nginx -t
+if [ \$? -ne 0 ]; then
+    echo '❌ Nginx configuration test failed!'
+    exit 1
+fi
+
+# Reload nginx
+systemctl reload nginx
+
+# Install certbot nginx plugin if not already installed
+apt update
+apt install -y python3-certbot-nginx
+
+# Get SSL certificate for the subdomain
+certbot --nginx -d api.quantaroute.com --non-interactive --agree-tos --email mapdevsaikat@gmail.com
+
+# Test auto-renewal
+certbot renew --dry-run
+
+echo '✅ SSL setup complete for api.quantaroute.com!'
+echo '🌐 Your API is now available at:'
+echo '   - https://api.quantaroute.com'
+echo '   - https://api.quantaroute.com/docs'
+echo ''
+echo '🎯 IP address is now hidden behind the subdomain!'
+EOF
+
+chmod +x /root/setup-subdomain-ssl.sh
+echo '✅ SSL setup script created at /root/setup-subdomain-ssl.sh'
+"
+```
+
+```
+✅ SSL setup script created at /root/setup-subdomain-ssl.sh
+
+```
+
+---
+
+### **Step 4: Update Application Configuration**
+
+Now let's update your application to use the new subdomain:
+
+---
+
+<details><summary>Edit file: src/server.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -67,5 +67,5 @@
+        version: '1.0.0'
+      },
+-     host: process.env.NODE_ENV === 'production' ? '139.59.38.131' : 'localhost:3000',
++     host: process.env.NODE_ENV === 'production' ? 'api.quantaroute.com' : 'localhost:3000',
+      basePath: '',
+      schemes: process.env.NODE_ENV === 'production' ? ['https'] : ['http'],
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/server.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -158,5 +158,5 @@
+      documentation: '/docs',
+      website: 'https://quantaroute.com',
+-     apiUrl: process.env.NODE_ENV === 'production' ? 'https://139.59.38.131' : 'http://localhost:3000',
++     apiUrl: process.env.NODE_ENV === 'production' ? 'https://api.quantaroute.com' : 'http://localhost:3000',
+      products: {
+        digipin: '/',
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: README.md</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 2, lines removed: 2
+
+```diff
+@@ -5,6 +5,6 @@
+  ## 🌟 Live API
+  
+- **Production URL**: `https://139.59.38.131`
+- **Documentation**: `https://139.59.38.131/docs`
++ **Production URL**: `https://api.quantaroute.com`
++ **Documentation**: `https://api.quantaroute.com/docs`
+  **Website**: `https://quantaroute.com` (Frontend hosted on Vercel)
+  
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: README.md</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 2, lines removed: 2
+
+```diff
+@@ -66,10 +66,10 @@
+  ### Production API Base URL
+  ```
+- https://139.59.38.131
++ https://api.quantaroute.com
+  ```
+  
+  ### Documentation & Testing
+  ```
+- https://139.59.38.131/docs
++ https://api.quantaroute.com/docs
+  ```
+  
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: README.md</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -318,5 +318,5 @@
+  ## 🚀 Production Ready
+  
+- This API is **live and production-ready** at `https://139.59.38.131`
++ This API is **live and production-ready** at `https://api.quantaroute.com`
+  
+  ### Deployment Features
+```
+
+</details>
+
+---
+
+Now let's build and commit these changes:
+
+---
+
+```bash
+npm run build
+```
+
+```
+
+> digipin-micro-saas@1.0.0 build
+> tsc
+
+
+```
+
+---
+
+```bash
+git add . && git commit -m "Setup subdomain configuration to hide IP address
+
+- Configure api.quantaroute.com subdomain for API access
+- Update server.ts to use api.quantaroute.com in production
+- Update README.md with professional subdomain URLs
+- Create nginx configuration for subdomain with SSL support
+- Add Let's Encrypt setup script for proper SSL certificate
+- Hide raw IP address behind professional subdomain"
+```
+
+```
+[main fd72c5e] Setup subdomain configuration to hide IP address
+ 3 files changed, 550 insertions(+), 7 deletions(-)
+
+```
+
+---
+
+```bash
+git push origin main
+```
+
+```
+To github.com:mapdevsaikat/digipin-micro-saas.git
+   9a76033..fd72c5e  main -> main
+
+```
+
+---
+
+## 🎯 **Next Steps for You:**
+
+### **1. Configure DNS in GoDaddy (5 minutes):**
+
+1. Go to [GoDaddy Domain Manager](https://dcc.godaddy.com/manage)
+2. Select `quantaroute.com`
+3. Click **DNS** → **Manage DNS**
+4. Add new **A Record**:
+   - **Type**: A
+   - **Name**: `api`
+   - **Value**: `139.59.38.131`
+   - **TTL**: 1 Hour (default)
+5. **Save** changes
+
+### **2. Test DNS Propagation:**
+
+---
+
+```bash
+echo "🧪 DNS Test Commands (run these after configuring DNS):
+
+# Test from your local machine:
+nslookup api.quantaroute.com
+
+# Or use dig:
+dig api.quantaroute.com
+
+# Expected result: Should show 139.59.38.131
+
+# Online DNS checker:
+# Visit: https://dnschecker.org/#A/api.quantaroute.com
+"
+```
+
+```
+🧪 DNS Test Commands (run these after configuring DNS):
+
+# Test from your local machine:
+nslookup api.quantaroute.com
+
+# Or use dig:
+dig api.quantaroute.com
+
+# Expected result: Should show 139.59.38.131
+
+# Online DNS checker:
+# Visit: https://dnschecker.org/#A/api.quantaroute.com
+
+
+```
+
+---
+
+### **3. Once DNS is Working, Run SSL Setup:**
+
+```bash
+# After DNS propagates (usually 5-30 minutes), run:
+ssh root@139.59.38.131 "/root/setup-subdomain-ssl.sh"
+```
+
+### **4. Deploy Updated Application:**
+
+```bash
+ssh root@139.59.38.131 "cd /var/www/digipin-api && git pull origin main && npm run build && ./node_modules/pm2/bin/pm2 restart digipin-api"
+```
+
+## 🎉 **Final Result:**
+
+Once DNS propagates, your API will be available at:
+- ✅ **`https://api.quantaroute.com`** (professional subdomain)
+- ✅ **`https://api.quantaroute.com/docs`** (Swagger UI)
+- ✅ **No IP address exposure** (IP redirects to subdomain)
+- ✅ **Proper SSL certificate** from Let's Encrypt
+- ✅ **Professional appearance** for your API
+
+## 🔒 **Security Benefits:**
+
+1. **IP Address Hidden** - Raw IP no longer exposed
+2. **Professional Domain** - Looks more trustworthy
+3. **Proper SSL** - Real certificate instead of self-signed
+4. **Brand Consistency** - Matches your quantaroute.com domain
+
+**Let me know when you've configured the DNS, and I'll help you complete the SSL setup!** 🚀
+
+---
+
+_**User (2025-09-22 11:19Z)**_
+
+I am sorry that I have not explain the requirement properly to you. QuantaRotue platform is having two product, one is quantaroute routing api (under progress) and this digipin. so if i use api.quantaroute domain it can be a little bit missleading for the users. before jumping into code change,, let's plan the change and then progress.
+
+---
+
+_**Assistant**_
+
+Ah, you're absolutely right! I apologize for not understanding the full architecture properly. Let me clarify the requirements and plan this correctly.
+
+## 🏗️ **QuantaRoute Platform Architecture**
+
+You have **two separate products** under the QuantaRoute brand:
+
+1. **QuantaRoute Routing API** (under development)
+2. **DigiPin API** (current project)
+
+Using `api.quantaroute.com` would indeed be misleading as it doesn't specify which API.
+
+## 🎯 **Better Domain Structure Options:**
+
+Let me propose a few options for your consideration:
+
+### **Option 1: Product-Specific Subdomains**
+```
+https://digipin.quantaroute.com          # DigiPin API
+https://digipin.quantaroute.com/docs     # DigiPin Documentation
+
+https://routing.quantaroute.com          # Routing API (future)
+https://routing.quantaroute.com/docs     # Routing Documentation (future)
+
+https://quantaroute.com                  # Main website/landing page
+```
+
+### **Option 2: API with Product Paths**
+```
+https://api.quantaroute.com/digipin      # DigiPin API
+https://api.quantaroute.com/digipin/docs # DigiPin Documentation
+
+https://api.quantaroute.com/routing      # Routing API (future)
+https://api.quantaroute.com/routing/docs # Routing Documentation (future)
+
+https://quantaroute.com                  # Main website/landing page
+```
+
+### **Option 3: Versioned API Structure**
+```
+https://api.quantaroute.com/v1/digipin      # DigiPin API v1
+https://api.quantaroute.com/v1/digipin/docs # DigiPin Documentation
+
+https://api.quantaroute.com/v1/routing      # Routing API v1 (future)
+https://api.quantaroute.com/v1/routing/docs # Routing Documentation (future)
+
+https://quantaroute.com                     # Main website/landing page
+```
+
+## 🤔 **Questions for Planning:**
+
+1. **Which domain structure do you prefer?** (Option 1, 2, or 3)
+
+2. **Current Setup Consideration**: 
+   - Your main `quantaroute.com` is on Vercel
+   - DigiPin API is on Digital Ocean
+   - Will the Routing API also be on Digital Ocean or separate infrastructure?
+
+3. **User Experience**: 
+   - How do you want users to discover and access these APIs?
+   - Should there be a unified API documentation portal?
+
+4. **Branding**: 
+   - Do you want each product to feel separate or unified under QuantaRoute?
+
+## 💡 **My Recommendation:**
+
+I lean towards **Option 1: Product-Specific Subdomains** because:
+
+✅ **Clear separation** between products  
+✅ **Easy to remember** (`digipin.quantaroute.com`)  
+✅ **Scalable** for future products  
+✅ **SEO-friendly** for each product  
+✅ **Independent deployment** and management  
+
+## 📋 **Implementation Plan (after you choose):**
+
+1. **DNS Configuration**: Add appropriate A records in GoDaddy
+2. **Nginx Configuration**: Update server routing for chosen structure
+3. **SSL Certificates**: Set up Let's Encrypt for chosen domains
+4. **Application Updates**: Update server.ts and README.md
+5. **Testing**: Verify all endpoints work correctly
+
+**Which option do you prefer, or do you have a different structure in mind?** 🎯
+
+---
+
+_**User (2025-09-22 11:19Z)**_
+
+1. Which domain structure do you prefer?
+Option 3: Versioned API Structure looks insutry practice for me, any major future update can be go with v2, v2 in the future. clearly showign that it is an api, becasue the backend in DigitalOcean is purely for the API hosting. do you aagree?
+
+2. Current Setup Consideration:
+Your main quantaroute.com is on Vercel - YES
+DigiPin API is on Digital Ocean - YES
+Will the Routing API also be on Digital Ocean or separate infrastructure? - YES, most probably at the begining, AWS in the future based on the load.
+
+3. User Experience:
+How do you want users to discover and access these APIs? - end point
+Should there be a unified API documentation portal? - quantaroute and digipin seperated
+
+4. Branding:
+Do you want each product to feel separate or unified under QuantaRoute? - under QuantaRoute as these are related.
+
+
+---
+
+_**Assistant**_
+
+Perfect! I completely agree with your choices. **Option 3: Versioned API Structure** is indeed the industry standard and best practice. Let me break down why this is excellent:
+
+## 🎯 **Why Option 3 is Perfect:**
+
+✅ **Industry Standard**: `/v1/`, `/v2/` is how major APIs work (Stripe, GitHub, etc.)  
+✅ **Future-Proof**: Easy to introduce breaking changes with new versions  
+✅ **Clear API Identity**: `api.quantaroute.com` clearly indicates it's an API server  
+✅ **Unified Infrastructure**: All APIs on one Digital Ocean server initially  
+✅ **Scalable**: Can migrate individual products to AWS later without changing URLs  
+✅ **Professional**: Matches enterprise API expectations  
+
+## 📋 **Final Architecture Plan:**
+
+```
+🌐 Frontend (Vercel):
+├── https://quantaroute.com                    # Main website & landing
+└── Separate documentation for each product
+
+🚀 API Server (Digital Ocean):
+├── https://api.quantaroute.com/v1/digipin     # DigiPin API v1
+├── https://api.quantaroute.com/v1/digipin/docs # DigiPin Documentation
+├── https://api.quantaroute.com/v1/routing     # Routing API v1 (future)
+└── https://api.quantaroute.com/v1/routing/docs # Routing Documentation (future)
+```
+
+## 🔧 **Implementation Plan:**
+
+### **Step 1: DNS Configuration (GoDaddy)**
+```
+Type: A Record
+Name: api
+Value: 139.59.38.131
+TTL: 1 Hour
+```
+
+### **Step 2: Update Application Structure**
+- Server routes: `/v1/digipin/*` instead of direct `/v1/*`
+- Swagger UI: Available at `/v1/digipin/docs`
+- Root endpoint: Shows available API versions and products
+
+### **Step 3: Nginx Configuration**
+- Handle `api.quantaroute.com` domain
+- Proxy `/v1/digipin/*` to Node.js app
+- Future: Proxy `/v1/routing/*` to routing service
+
+### **Step 4: SSL & Security**
+- Let's Encrypt certificate for `api.quantaroute.com`
+- Hide IP address completely
+
+## 🚀 **Migration Benefits:**
+
+1. **AWS Migration**: Later you can move routing to AWS, update nginx to proxy:
+   ```
+   /v1/digipin/* → Digital Ocean (current)
+   /v1/routing/* → AWS Load Balancer (future)
+   ```
+
+2. **Version Management**: 
+   ```
+   /v1/digipin/* → Current stable version
+   /v2/digipin/* → Future version with breaking changes
+   ```
+
+**Should I proceed with implementing this versioned API structure? I'll start with:**
+
+1. ✅ DNS setup instructions
+2. ✅ Update application routes to `/v1/digipin/*`  
+3. ✅ Configure nginx for `api.quantaroute.com`
+4. ✅ Update all documentation and README
+
+**Ready to implement this professional API structure?** 🎯
+
+---
+
+_**User (2025-09-22 11:19Z)**_
+
+Subdomain is created in godaddy. https://api.quantaroute.com
+
+---
+
+_**Assistant**_
+
+Excellent! Let's test the DNS propagation and then implement the versioned API structure.
+
+## 🧪 **Step 1: Test DNS Propagation**
+
+---
+
+```bash
+echo "🧪 Testing DNS propagation for api.quantaroute.com..." && echo "" && nslookup api.quantaroute.com
+```
+
+```
+🧪 Testing DNS propagation for api.quantaroute.com...
+
+Server:		2401:4900:50:9::7b9
+Address:	2401:4900:50:9::7b9#53
+
+Non-authoritative answer:
+Name:	api.quantaroute.com
+Address: 15.197.142.173
+Name:	api.quantaroute.com
+Address: 3.33.152.147
+
+
+```
+
+---
+
+I see the DNS is resolving, but it's showing different IP addresses (15.197.142.173 and 3.33.152.147) instead of your Digital Ocean server (139.59.38.131). This suggests the DNS record might not be configured correctly or there might be some default forwarding.
+
+Let me check if it's accessible:
+
+---
+
+```bash
+curl -s -I https://api.quantaroute.com/ || echo "HTTPS failed, trying HTTP:" && curl -s -I http://api.quantaroute.com/ || echo "Both failed - DNS pointing to wrong IP"
+```
+
+```
+HTTPS failed, trying HTTP:
+HTTP/1.1 405 Not Allowed
+Server: awselb/2.0
+Date: Mon, 22 Sep 2025 12:31:55 GMT
+Content-Length: 0
+Connection: keep-alive
+WAFRule: 0
+
+
+```
+
+---
+
+I see the issue! The DNS is pointing to AWS load balancers (probably Vercel's infrastructure) instead of your Digital Ocean server. This suggests that GoDaddy might have some default forwarding or the A record wasn't set correctly.
+
+## 🔧 **Let's Fix the DNS Configuration:**
+
+The current DNS is pointing to:
+- `15.197.142.173` and `3.33.152.147` (AWS/Vercel infrastructure)
+
+But it should point to:
+- `139.59.38.131` (Your Digital Ocean server)
+
+## 📋 **DNS Fix Steps:**
+
+1. **Go back to GoDaddy DNS Management**
+2. **Check the A record for `api`**
+3. **Make sure it shows:**
+   - Type: `A`
+   - Name: `api` 
+   - Value: `139.59.38.131`
+   - TTL: `1 Hour`
+
+4. **Remove any CNAME records** for `api` subdomain
+5. **Save changes**
+
+Let me also create a temporary test to verify your Digital Ocean server is ready:
+
+---
+
+```bash
+echo "🧪 Testing Digital Ocean server directly:" && curl -s https://139.59.38.131/ | jq .
+```
+
+```
+🧪 Testing Digital Ocean server directly:
+
+```
+
+---
+
+```bash
+curl -s -k https://139.59.38.131/ | jq .
+```
+
+```
+{
+  "message": "QuantaRoute DigiPin API",
+  "version": "1.0.0",
+  "documentation": "/docs"
+}
+
+```
+
+---
+
+Perfect! Your Digital Ocean server is working correctly. The issue is definitely with the DNS configuration.
+
+## 🎯 **Action Required:**
+
+**Please double-check your GoDaddy DNS settings:**
+
+1. Go to GoDaddy Domain Manager → `quantaroute.com` → DNS
+2. Look for the `api` A record
+3. **It should show EXACTLY:**
+   ```
+   Type: A
+   Name: api
+   Value: 139.59.38.131
+   TTL: 1 Hour
+   ```
+
+4. **Delete any CNAME records** for `api` if they exist
+5. Save and wait 5-10 minutes for propagation
+
+## 🔍 **Common Issues:**
+
+- **CNAME conflict**: If there's a CNAME record for `api`, it overrides A records
+- **Proxy services**: Some DNS providers have proxy/CDN services that redirect
+- **Wrong IP**: Make sure it's exactly `139.59.38.131`
+
+## ⏳ **While DNS Propagates:**
+
+Let me prepare the versioned API structure so we're ready once DNS is working:
+
+---
+
+## Todo List
+
+- [-] Fix GoDaddy DNS A record to point api.quantaroute.com to 139.59.38.131
+- [ ] Update application routes to /v1/digipin/* structure
+- [ ] Configure nginx for api.quantaroute.com with SSL
+- [ ] Update README and documentation with versioned API URLs
+
+---
+
+**Can you check the GoDaddy DNS settings and confirm the A record is pointing to `139.59.38.131`?** 
+
+Once that's fixed, I'll help you implement the versioned API structure! 🚀
+
+---
+
+_**User (2025-09-22 11:19Z)**_
+
+here it is
+
+---
+
+_**Assistant**_
+
+I can see the issue! You have **two A records** for the `api` subdomain, both pointing to AWS/Vercel IP addresses instead of your Digital Ocean server:
+
+- `15.197.142.173` (AWS)
+- `3.33.152.147` (AWS)
+
+But you need it to point to: `139.59.38.131` (Your Digital Ocean server)
+
+## 🔧 **Fix Required:**
+
+**You need to:**
+
+1. **Delete both existing A records** for `api` (the ones shown in the screenshot)
+2. **Create a new A record:**
+   - Type: `A`
+   - Name: `api`
+   - Value: `139.59.38.131` ← **This is your Digital Ocean IP**
+   - TTL: `600 seconds` (or default)
+
+## 📋 **Step-by-Step:**
+
+1. **Click the checkbox** next to both `api` A records in your screenshot
+2. **Delete them** (there should be a delete button/option)
+3. **Add new A record:**
+   - Click "Add" or "+" button
+   - Select Type: `A`
+   - Name: `api`
+   - Value: `139.59.38.131`
+   - Save
+
+## ⚠️ **Why this happened:**
+
+Those AWS IPs (`15.197.142.173`, `3.33.152.147`) are probably from:
+- Vercel's default DNS when you connected the domain
+- Some automatic DNS setup that created these records
+
+## 🧪 **After you fix it:**
+
+Wait 5-10 minutes, then test:
+
+```bash
+nslookup api.quantaroute.com
+# Should show: 139.59.38.131
+```
+
+**Can you delete those two AWS A records and create a new one pointing to `139.59.38.131`?** 
+
+Once that's done, we'll have the correct DNS setup and can proceed with the versioned API implementation! 🚀
+
+---
+
+_**User (2025-09-22 11:19Z)**_
+
+It is done, check now, "https://api.quantaroute.com/" accessible via this link
+
+---
+
+_**Assistant**_
+
+Perfect! Let me test the DNS and accessibility now:
+
+---
+
+```bash
+echo "🧪 Testing updated DNS for api.quantaroute.com..." && echo "" && nslookup api.quantaroute.com
+```
+
+```
+🧪 Testing updated DNS for api.quantaroute.com...
+
+Server:		2401:4900:50:9::7b9
+Address:	2401:4900:50:9::7b9#53
+
+Non-authoritative answer:
+Name:	api.quantaroute.com
+Address: 139.59.38.131
+
+
+```
+
+---
+
+Excellent! DNS is now pointing to the correct IP `139.59.38.131`. Let me test the accessibility:
+
+---
+
+```bash
+echo "🧪 Testing HTTPS access to api.quantaroute.com..." && echo "" && curl -s -k https://api.quantaroute.com/ | jq .
+```
+
+```
+🧪 Testing HTTPS access to api.quantaroute.com...
+
+{
+  "message": "QuantaRoute DigiPin API",
+  "version": "1.0.0",
+  "documentation": "/docs"
+}
+
+```
+
+---
+
+🎉 **Perfect! DNS is working correctly!** Now let's implement the versioned API structure.
+
+---
+
+## Todo List
+
+- [x] Fix GoDaddy DNS A record to point api.quantaroute.com to 139.59.38.131
+- [ ] Update application routes to /v1/digipin/* structure
+- [ ] Configure nginx for api.quantaroute.com with SSL
+- [ ] Update README and documentation with versioned API URLs
+
+---
+
+## 🚀 **Now let's implement the versioned API structure:**
+
+### **Step 1: Update Application Routes to `/v1/digipin/*`**
+
+---
+
+## Todo List
+
+- [x] Fix GoDaddy DNS A record to point api.quantaroute.com to 139.59.38.131
+- [-] Update application routes to /v1/digipin/* structure
+- [ ] Configure nginx for api.quantaroute.com with SSL
+- [ ] Update README and documentation with versioned API URLs
+
+---
+
+Let me check the current route structure first:
+
+---
+
+
+
+---
+
+Perfect! I can see the current route structure. Now let me update all routes to use the `/v1/digipin/*` structure:
+
+---
+
+<details><summary>Edit file: src/routes/geocode.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -8,5 +8,5 @@
+  
+    // Geocode endpoint - Convert address to DigiPin
+-   fastify.post('/v1/geocode', {
++   fastify.post('/v1/digipin/geocode', {
+      schema: {
+        description: 'Convert address to DigiPin code',
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/routes/geocode.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -137,5 +137,5 @@
+  
+    // Coordinates to DigiPin endpoint - Convert lat/lon to DigiPin
+-   fastify.post('/v1/coordinates-to-digipin', {
++   fastify.post('/v1/digipin/coordinates-to-digipin', {
+      preHandler: [apiKeyAuth, tieredRateLimit],
+      schema: {
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/routes/reverse.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -8,5 +8,5 @@
+  
+    // Reverse geocode endpoint - Convert DigiPin to coordinates and address
+-   fastify.post('/v1/reverse', {
++   fastify.post('/v1/digipin/reverse', {
+      schema: {
+        description: 'Convert DigiPin code to coordinates and address',
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/routes/batch.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -8,5 +8,5 @@
+  
+    // Batch geocode endpoint - Process multiple addresses
+-   fastify.post('/v1/batch', {
++   fastify.post('/v1/digipin/batch', {
+      schema: {
+        description: 'Process multiple geocoding requests in batch',
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/routes/validate.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -8,5 +8,5 @@
+  
+    // Validate DigiPin endpoint
+-   fastify.get('/v1/validate/:digipin', {
++   fastify.get('/v1/digipin/validate/:digipin', {
+      schema: {
+        description: 'Validate DigiPin format and check if it corresponds to a real location',
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/routes/usage.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -6,5 +6,5 @@
+    
+    // Get usage information for the authenticated API key
+-   fastify.get('/v1/usage', {
++   fastify.get('/v1/digipin/usage', {
+      schema: {
+        description: 'Get usage information for the authenticated API key',
+```
+
+</details>
+
+---
+
+Now let's update the official compatibility routes to also use the versioned structure:
+
+---
+
+<details><summary>Edit file: src/routes/official-compatibility.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -7,5 +7,5 @@
+    
+    // Official-style encode endpoint - Convert coordinates to DigiPin
+-   fastify.get('/api/digipin/encode', {
++   fastify.get('/v1/digipin/encode', {
+      preHandler: [apiKeyAuth, tieredRateLimit],
+      schema: {
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: src/routes/official-compatibility.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -120,5 +120,5 @@
+  
+    // Official-style decode endpoint - Convert DigiPin to coordinates
+-   fastify.get('/api/digipin/decode', {
++   fastify.get('/v1/digipin/decode', {
+      preHandler: [apiKeyAuth, tieredRateLimit],
+      schema: {
+```
+
+</details>
+
+---
+
+Now let's update the Swagger UI route prefix to be under the versioned structure:
+
+---
+
+<details><summary>Edit file: src/server.ts</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -91,5 +91,5 @@
+  
+  fastify.register(swaggerUi, {
+-   routePrefix: '/docs',
++   routePrefix: '/v1/digipin/docs',
+    staticCSP: false,
+    uiConfig: {
+```
+
+</details>
+
+---
+
 
 
 ---
