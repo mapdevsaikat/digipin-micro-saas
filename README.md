@@ -4,8 +4,9 @@ A production-ready micro-SaaS API for DigiPin geocoding services, providing both
 
 ## 🌟 Live API
 
-**Production URL**: `https://www.quantaroute.com/digipin`
-**Documentation**: `https://www.quantaroute.com/digipin/docs`
+**Production URL**: `http://139.59.38.131`
+**Documentation**: `http://139.59.38.131/docs`
+**Website**: `https://quantaroute.com` (Frontend hosted on Vercel)
 
 ## ✨ Features
 
@@ -64,12 +65,17 @@ The system comes with pre-configured test API keys:
 
 ### Production API Base URL
 ```
-https://www.quantaroute.com/digipin
+http://139.59.38.131
 ```
 
 ### Documentation & Testing
 ```
-https://www.quantaroute.com/digipin/docs
+http://139.59.38.131/docs
+```
+
+### Frontend Website
+```
+https://quantaroute.com
 ```
 
 ## 🚀 Official DigiPin API Compatibility
@@ -311,7 +317,7 @@ curl -X POST http://localhost:3000/v1/geocode \
 
 ## 🚀 Production Ready
 
-This API is **live and production-ready** at `https://www.quantaroute.com/digipin`
+This API is **live and production-ready** at `http://139.59.38.131`
 
 ### Deployment Features
 - ✅ **Digital Ocean VPS**: Deployed on optimized cloud infrastructure
