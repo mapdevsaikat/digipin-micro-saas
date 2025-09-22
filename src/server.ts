@@ -64,8 +64,8 @@ fastify.register(swagger, {
       description: 'DigiPin geocoding services powered by QuantaRoute - Advanced geospatial solutions',
       version: '1.0.0'
     },
-    host: process.env.NODE_ENV === 'production' ? 'quantaroute.com' : 'localhost:3000',
-    basePath: process.env.NODE_ENV === 'production' ? '/api/digipin' : '',
+    host: process.env.NODE_ENV === 'production' ? 'www.quantaroute.com' : 'localhost:3000',
+    basePath: process.env.NODE_ENV === 'production' ? '/digipin' : '',
     schemes: process.env.NODE_ENV === 'production' ? ['https'] : ['http', 'https'],
     consumes: ['application/json'],
     produces: ['application/json'],
@@ -157,10 +157,10 @@ fastify.get('/', {
     message: 'QuantaRoute DigiPin API',
     version: '1.0.0',
     documentation: `${basePath}/docs`,
-    website: 'https://quantaroute.com',
+    website: 'https://www.quantaroute.com',
     products: {
       digipin: `${basePath}/`,
-      routing: 'https://quantaroute.com/routing'
+      routing: 'https://www.quantaroute.com/routing'
     }
   };
 });

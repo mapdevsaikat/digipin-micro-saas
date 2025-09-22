@@ -15971,3 +15971,15 @@ Should we start planning the QuantaRoute repository structure and landing page? 
 
 ---
 
+_**User (2025-09-22 10:31Z)**_
+
+can you help me to fix the documentation once forever. in the actual website it is mapped like "https://www.quantaroute.com/digipin/docs" I want the same in the backend logic.
+
+---
+
+_**Assistant**_
+
+
+
+---
+
