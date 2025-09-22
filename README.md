@@ -5,7 +5,7 @@ A production-ready micro-SaaS API for DigiPin geocoding services, providing both
 ## 🌟 Live API
 
 **Production URL**: `https://api.quantaroute.com`
-**Documentation**: `https://api.quantaroute.com/docs`
+**Documentation**: `https://api.quantaroute.com/v1/digipin/docs`
 **Website**: `https://quantaroute.com` (Frontend hosted on Vercel)
 
 ## ✨ Features
@@ -23,12 +23,14 @@ A production-ready micro-SaaS API for DigiPin geocoding services, providing both
 - **Real DigiPin Generation**: Uses official DigiPin library (no mock data)
 
 ### Enterprise SaaS Features
+- **Versioned API Structure**: Professional `/v1/digipin/*` endpoints following industry standards
 - **API Key Authentication**: Secure API access with tiered usage limits
 - **Rate Limiting**: Tier-based rate limiting (free, paid, enterprise)
 - **Usage Analytics**: Comprehensive request logging and usage tracking
 - **Caching System**: In-memory and database caching for improved performance
 - **Production Monitoring**: Health checks, uptime monitoring, and error tracking
 - **Interactive Documentation**: Swagger UI with live API testing
+- **Backward Compatibility**: Automatic redirects for legacy endpoints
 
 ## Quick Start
 
@@ -70,7 +72,7 @@ https://api.quantaroute.com
 
 ### Documentation & Testing
 ```
-https://api.quantaroute.com/docs
+https://api.quantaroute.com/v1/digipin/docs
 ```
 
 ### Frontend Website
@@ -84,7 +86,7 @@ For developers migrating from or integrating with the official DigiPin API:
 
 ### Encode Coordinates to DigiPin
 ```bash
-GET /api/digipin/encode?latitude=28.6139&longitude=77.2090
+GET https://api.quantaroute.com/v1/digipin/encode?latitude=28.6139&longitude=77.2090
 x-api-key: your-api-key
 
 # Response
@@ -93,7 +95,7 @@ x-api-key: your-api-key
 
 ### Decode DigiPin to Coordinates  
 ```bash
-GET /api/digipin/decode?digipin=39J-438-TJC7
+GET https://api.quantaroute.com/v1/digipin/decode?digipin=39J-438-TJC7
 x-api-key: your-api-key
 
 # Response
@@ -109,7 +111,7 @@ GET /health
 
 ### Address to DigiPin
 ```bash
-POST /v1/geocode
+POST https://api.quantaroute.com/v1/digipin/geocode
 Content-Type: application/json
 x-api-key: your-api-key
 
@@ -134,7 +136,7 @@ x-api-key: your-api-key
 
 ### Coordinates to DigiPin
 ```bash
-POST /v1/coordinates-to-digipin
+POST https://api.quantaroute.com/v1/digipin/coordinates-to-digipin
 Content-Type: application/json
 x-api-key: your-api-key
 
@@ -158,7 +160,7 @@ x-api-key: your-api-key
 
 ### Reverse Geocoding
 ```bash
-POST /v1/reverse
+POST https://api.quantaroute.com/v1/digipin/reverse
 Content-Type: application/json
 x-api-key: your-api-key
 
@@ -169,7 +171,7 @@ x-api-key: your-api-key
 
 ### Batch Geocoding
 ```bash
-POST /v1/batch
+POST https://api.quantaroute.com/v1/digipin/batch
 Content-Type: application/json
 x-api-key: your-api-key
 
@@ -187,13 +189,13 @@ x-api-key: your-api-key
 
 ### Validation
 ```bash
-GET /v1/validate/ABC123DEF456
+GET https://api.quantaroute.com/v1/digipin/validate/ABC123DEF456
 x-api-key: your-api-key
 ```
 
 ### Usage Analytics
 ```bash
-GET /v1/usage
+GET https://api.quantaroute.com/v1/digipin/usage
 x-api-key: your-api-key
 
 # Response
@@ -309,7 +311,7 @@ npm run build
 ```bash
 # Test individual endpoints
 curl -X GET http://localhost:3000/health
-curl -X POST http://localhost:3000/v1/geocode \
+curl -X POST https://api.quantaroute.com/v1/digipin/geocode \
   -H "Content-Type: application/json" \
   -H "x-api-key: free_test_key_hash_12345" \
   -d '{"address": "123 Main Street, New Delhi"}'
