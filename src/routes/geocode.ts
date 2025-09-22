@@ -269,4 +269,137 @@ export default async function geocodeRoutes(fastify: FastifyInstance) {
       );
     }
   });
+
+  // Autocomplete endpoint - Get address suggestions
+  fastify.get('/v1/digipin/autocomplete', {
+    preHandler: [apiKeyAuth, tieredRateLimit],
+    schema: {
+      description: 'Get address autocomplete suggestions',
+      tags: ['Geocoding'],
+      security: [{ apiKey: [] }],
+      querystring: {
+        type: 'object',
+        required: ['q'],
+        properties: {
+          q: {
+            type: 'string',
+            description: 'Search query (minimum 3 characters)',
+            minLength: 3
+          },
+          limit: {
+            type: 'integer',
+            description: 'Maximum number of suggestions (default: 5, max: 10)',
+            minimum: 1,
+            maximum: 10,
+            default: 5
+          }
+        }
+      },
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            data: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  displayName: { type: 'string' },
+                  address: { type: 'string' },
+                  coordinates: {
+                    type: 'object',
+                    properties: {
+                      latitude: { type: 'number' },
+                      longitude: { type: 'number' }
+                    }
+                  },
+                  confidence: { type: 'number' },
+                  addressComponents: {
+                    type: 'object',
+                    properties: {
+                      house_number: { type: 'string' },
+                      road: { type: 'string' },
+                      neighbourhood: { type: 'string' },
+                      suburb: { type: 'string' },
+                      city: { type: 'string' },
+                      state: { type: 'string' },
+                      postcode: { type: 'string' },
+                      country: { type: 'string' },
+                      country_code: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            error: { type: 'string' },
+            message: { type: 'string' },
+            code: { type: 'string' }
+          }
+        },
+        500: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            error: { type: 'string' },
+            message: { type: 'string' },
+            code: { type: 'string' }
+          }
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const startTime = Date.now();
+    let statusCode = 200;
+    let errorMessage: string | undefined;
+
+    try {
+      const query = request.query as { q: string; limit?: number };
+      
+      if (!query.q || query.q.trim().length < 3) {
+        statusCode = 400;
+        errorMessage = 'Query parameter "q" is required and must be at least 3 characters';
+        return reply.status(400).send({
+          success: false,
+          error: 'Bad Request',
+          message: 'Query parameter "q" is required and must be at least 3 characters',
+          code: 'INVALID_QUERY'
+        });
+      }
+
+      const limit = Math.min(query.limit || 5, 10);
+      const suggestions = await digipinModel.getAutocompleteSuggestions(query.q, limit);
+
+      return reply.send({
+        success: true,
+        data: suggestions
+      });
+
+    } catch (error) {
+      statusCode = 500;
+      errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      return reply.status(500).send({
+        success: false,
+        error: 'Internal Server Error',
+        message: errorMessage,
+        code: 'AUTOCOMPLETE_ERROR'
+      });
+    } finally {
+      // Log the request
+      await logRequest(
+        request,
+        reply,
+        (request as any).apiKeyInfo?.id || null,
+        statusCode,
+        errorMessage
+      );
+    }
+  });
 }

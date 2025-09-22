@@ -2,6 +2,7 @@ import DigiPin from 'digipin';
 import Database from 'better-sqlite3';
 import DatabaseConnection from '../database/connection';
 import crypto from 'crypto';
+import GeocodingService from '../services/GeocodingService';
 
 export interface GeocodeRequest {
   address: string;
@@ -19,6 +20,24 @@ export interface GeocodeResponse {
   };
   address: string;
   confidence: number;
+  displayName: string;
+  addressComponents: {
+    house_number?: string;
+    road?: string;
+    neighbourhood?: string;
+    suburb?: string;
+    city?: string;
+    state?: string;
+    postcode?: string;
+    country?: string;
+    country_code?: string;
+  };
+  alternatives?: Array<{
+    digipin: string;
+    coordinates: { latitude: number; longitude: number };
+    address: string;
+    confidence: number;
+  }>;
 }
 
 export interface ReverseGeocodeRequest {
@@ -32,6 +51,18 @@ export interface ReverseGeocodeResponse {
     longitude: number;
   };
   confidence: number;
+  displayName: string;
+  addressComponents: {
+    house_number?: string;
+    road?: string;
+    neighbourhood?: string;
+    suburb?: string;
+    city?: string;
+    state?: string;
+    postcode?: string;
+    country?: string;
+    country_code?: string;
+  };
 }
 
 export interface ValidationResponse {
@@ -58,9 +89,11 @@ class DigiPinModel {
   private db: Database.Database;
   private cache: Map<string, any> = new Map();
   private cacheExpiry: Map<string, number> = new Map();
+  private geocodingService: GeocodingService;
 
   constructor() {
     this.db = DatabaseConnection.getInstance().getDatabase();
+    this.geocodingService = new GeocodingService();
   }
 
   /**
@@ -93,7 +126,7 @@ class DigiPinModel {
   }
 
   /**
-   * Convert address to DigiPin code
+   * Convert address to DigiPin code using real geocoding service
    */
   public async geocode(request: GeocodeRequest): Promise<GeocodeResponse> {
     try {
@@ -109,52 +142,54 @@ class DigiPinModel {
         return cachedResult;
       }
 
-      // Build address string
-      let addressString = request.address.trim();
-      if (request.city) {
-        addressString += `, ${request.city}`;
-      }
-      if (request.state) {
-        addressString += `, ${request.state}`;
-      }
-      if (request.pincode) {
-        addressString += `, ${request.pincode}`;
-      }
-      if (request.country) {
-        addressString += `, ${request.country}`;
+      // Use real geocoding service (Nominatim)
+      const geocodeResults = await this.geocodingService.geocode(
+        request.address,
+        request.city,
+        request.state,
+        request.pincode,
+        request.country
+      );
+
+      if (!geocodeResults || geocodeResults.length === 0) {
+        throw new Error('No results found for the provided address');
       }
 
-      // Since we only have address, we need to geocode it first to get coordinates
-      // For now, we'll use a mock geocoding service to get coordinates
-      // In production, integrate with Google Maps, OpenStreetMap, or similar service
-      const mockCoordinates = {
-        latitude: 28.6139 + (Math.random() - 0.5) * 0.1, // Mock coordinates around Delhi
-        longitude: 77.2090 + (Math.random() - 0.5) * 0.1
-      };
+      // Get the best result (first one, as they're sorted by confidence)
+      const bestResult = geocodeResults[0];
+      if (!bestResult) {
+        throw new Error('No valid geocoding results found');
+      }
 
-      // Now use the DigiPin library to generate real DigiPin from coordinates
-      const digipin = DigiPin.getDIGIPINFromLatLon(mockCoordinates.latitude, mockCoordinates.longitude);
+      // Generate DigiPin from the geocoded coordinates
+      const digipin = DigiPin.getDIGIPINFromLatLon(bestResult.latitude, bestResult.longitude);
       
-      const result = {
-        digipin: digipin,
-        latitude: mockCoordinates.latitude,
-        longitude: mockCoordinates.longitude,
-        address: addressString,
-        confidence: 0.8
-      };
-
-      if (!result || !result.digipin) {
-        throw new Error('Unable to geocode the provided address');
+      if (!digipin) {
+        throw new Error('Unable to generate DigiPin from geocoded coordinates');
       }
 
-      const response: GeocodeResponse = {
-        digipin: result.digipin,
+      // Prepare alternatives (up to 3 additional results)
+      const alternatives = geocodeResults.slice(1, 4).map(result => ({
+        digipin: DigiPin.getDIGIPINFromLatLon(result.latitude, result.longitude),
         coordinates: {
           latitude: result.latitude,
           longitude: result.longitude
         },
-        address: result.address || addressString,
-        confidence: result.confidence || 0.8
+        address: result.displayName,
+        confidence: result.confidence
+      })).filter(alt => alt.digipin); // Only include valid DigiPins
+
+      const response: GeocodeResponse = {
+        digipin: digipin,
+        coordinates: {
+          latitude: bestResult.latitude,
+          longitude: bestResult.longitude
+        },
+        address: bestResult.address,
+        confidence: bestResult.confidence,
+        displayName: bestResult.displayName,
+        addressComponents: bestResult.addressComponents,
+        alternatives: alternatives.length > 0 ? alternatives : undefined
       };
 
       // Cache the result
@@ -222,7 +257,7 @@ class DigiPinModel {
   }
 
   /**
-   * Convert DigiPin code to coordinates and address
+   * Convert DigiPin code to coordinates and address using real geocoding service
    */
   public async reverseGeocode(request: ReverseGeocodeRequest): Promise<ReverseGeocodeResponse> {
     try {
@@ -238,31 +273,28 @@ class DigiPinModel {
         return cachedResult;
       }
 
-      // Use DigiPin library for reverse geocoding
+      // Use DigiPin library to get coordinates from DigiPin
       const digipinResult = DigiPin.getLatLonFromDIGIPIN(request.digipin.trim());
       
       if (digipinResult === "Invalid DIGIPIN") {
         throw new Error('Invalid DigiPin format');
       }
-      
-      const result = {
-        address: `Mock address for ${request.digipin}`,
-        latitude: digipinResult.latitude,
-        longitude: digipinResult.longitude,
-        confidence: 0.8
-      };
 
-      if (!result || !result.address) {
-        throw new Error('Unable to reverse geocode the provided DigiPin');
-      }
+      // Use real reverse geocoding service to get address from coordinates
+      const reverseResult = await this.geocodingService.reverseGeocode(
+        digipinResult.latitude,
+        digipinResult.longitude
+      );
 
       const response: ReverseGeocodeResponse = {
-        address: result.address,
+        address: reverseResult.address,
         coordinates: {
-          latitude: result.latitude,
-          longitude: result.longitude
+          latitude: digipinResult.latitude,
+          longitude: digipinResult.longitude
         },
-        confidence: result.confidence || 0.8
+        confidence: reverseResult.confidence,
+        displayName: reverseResult.displayName,
+        addressComponents: reverseResult.addressComponents
       };
 
       // Cache the result
@@ -423,6 +455,51 @@ class DigiPinModel {
     } catch (error) {
       // Log error but don't fail the main operation
       console.error('Failed to store in database cache:', error);
+    }
+  }
+
+  /**
+   * Get autocomplete suggestions for address input
+   */
+  public async getAutocompleteSuggestions(query: string, limit: number = 5): Promise<Array<{
+    displayName: string;
+    address: string;
+    coordinates: { latitude: number; longitude: number };
+    confidence: number;
+    addressComponents: any;
+  }>> {
+    try {
+      if (!query || query.trim().length < 3) {
+        return [];
+      }
+
+      // Check cache first
+      const cacheKey = this.generateCacheKey('autocomplete', { query, limit });
+      const cachedResult = this.getCachedResult<any[]>(cacheKey);
+      if (cachedResult) {
+        return cachedResult;
+      }
+
+      // Get suggestions from geocoding service
+      const suggestions = await this.geocodingService.getAutocompleteSuggestions(query, limit);
+
+      const results = suggestions.map(suggestion => ({
+        displayName: suggestion.displayName,
+        address: suggestion.address,
+        coordinates: {
+          latitude: suggestion.latitude,
+          longitude: suggestion.longitude
+        },
+        confidence: suggestion.confidence,
+        addressComponents: suggestion.addressComponents
+      }));
+
+      // Cache the result for 30 minutes
+      this.setCachedResult(cacheKey, results, 30);
+
+      return results;
+    } catch (error) {
+      throw new Error(`Autocomplete failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
