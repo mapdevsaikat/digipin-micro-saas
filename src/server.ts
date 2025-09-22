@@ -31,9 +31,11 @@ fastify.register(helmet, {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      imgSrc: ["'self'", "data:", "https:", "validator.swagger.io"],
+      fontSrc: ["'self'", "https:", "data:"],
+      connectSrc: ["'self'", "https:", "http:"],
     },
   },
 });
@@ -89,18 +91,16 @@ fastify.register(swagger, {
 
 fastify.register(swaggerUi, {
   routePrefix: '/docs',
+  staticCSP: false,
   uiConfig: {
-    docExpansion: 'full',
+    docExpansion: 'list',
     deepLinking: false
   },
   uiHooks: {
     onRequest: function (request, reply, next) { next() },
     preHandler: function (request, reply, next) { next() }
   },
-  staticCSP: true,
-  transformStaticCSP: (header) => header,
-  transformSpecification: (swaggerObject, request, reply) => { return swaggerObject },
-  transformSpecificationClone: true
+  transformSpecificationClone: false
 });
 
 // Register API routes
